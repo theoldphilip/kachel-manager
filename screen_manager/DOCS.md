@@ -1,60 +1,56 @@
-# Installation and everyday use
+# Kachel Manager
 
-## LOOKING FOR FUNDING
+## Installieren
 
-I have a day job that pays the bills, and it comes first. Tessera keeps getting bigger, and I simply don't have the time it needs. To keep it alive, I need funding: so I can give it the time it deserves, or hire someone to help. If you can help, [send me an email](mailto:maxgramser@gmail.com?subject=Funding%20for%20Tessera).
+1. Repository `https://github.com/theoldphilip/kachel-manager` unter **Einstellungen → Add-ons → Add-on Store → ⋮ →
+   Repositories** hinzufügen.
+2. **Kachel Manager** installieren und starten. Auf der Info-Seite **Watchdog** einschalten: Home Assistant startet
+   das Add-on dann neu, falls es einmal stehen bleibt.
+3. **Kachel** in der Seitenleiste öffnen. Das Add-on läuft über Home Assistant Ingress und braucht kein eigenes
+   Login und kein Token.
 
-Max, maker of Tessera
+## Ein Tablet verbinden
 
-Tessera is the new name for ESP Screens; the app and your screens are the same. The [quick start](https://tessera-maxgramser.on-forge.com/docs/quick-start) and [the manual](https://tessera-maxgramser.on-forge.com/docs/) are on the Tessera website, with [the screens that work](https://tessera-maxgramser.on-forge.com/screens).
+Ein Kachel-Gerät hat in Home Assistant die Auswahl **Managed by**. Steht sie auf **Kachel Manager**, meldet das Tablet
+sein Postfach als Text „Kachel inbox“, und der Kachel Manager zeigt es in der Seitenleiste. Steht sie auf
+**Tessera**, gehört es dem Tessera-Add-on. So nimmt keiner das Gerät des anderen.
 
-Looking for e-ink? Tessera is for colour LCD touch screens. [Tesserae (tesserae.ink)](https://tesserae.ink) is a separate open-source project with a similar name, for calm dashboards on e-ink panels.
+Beim Umstellen bleibt das bisherige Layout auf dem Tablet stehen, bis der Kachel Manager ein neues schickt.
 
-Open **New screen** in the sidebar to install a screen: connect it via USB to the
-Home Assistant machine, choose the board, name and USB port, then click **Install**.
-The profile with unique keys goes into the ESPHome folder of the HA configuration,
-any missing Wi-Fi goes into `secrets.yaml` (existing secrets are left untouched), and the
-build and flash run in the same window. Once the screen is on your Wi-Fi, Tessera adds it to Home Assistant
-and lets it perform actions, with nothing to do in Home Assistant. A screen built elsewhere, whose YAML isn't in Home
-Assistant's ESPHome folder, is added by hand under **Settings → Devices & services** (docs/EASY_SETUP.md, "Adding a
-screen by hand"). Is the Home Assistant machine out of reach of the screen, such as a server or a
-virtual machine? Plug it into your own computer and choose **This computer** under **Install via**:
-Tessera builds the firmware and the page puts it on the screen, in Chrome or Edge with Home
-Assistant opened over https. Or choose **Download** and put it on the screen with
-[ESPHome Web](https://web.esphome.io). Each screen has its own profile. **Firmware & USB** in the sidebar is
-for existing profiles: check, build or reinstall via USB, the IP address (OTA), this computer
-or Download. Existing ESPHome profiles in the HA config folder are
-found automatically.
+## Layout
 
-**Alerts** in the sidebar is the cheatsheet, with a form to try an alert
-(an alert on one screen, or on every screen with the `esp_screens_show_alert` event). Its **One screen** part
-lists what to fill in after `screen:` for each screen, for an alert with a camera picture on one screen.
-**Settings** in the sidebar has the nightly firmware updates (the Update badge of a screen lists what's new, a
-running update shows its progress) and **Claude**: install the Tessera skill for Claude Code in Home Assistant, or
-download it for claude.ai, and ask Claude for the alert automation. On the app's own Info page in Home Assistant, turn
-on **Watchdog**: Home Assistant then starts Tessera again if it ever stops or stops answering.
+Im Tab **Layout** stehen die Seiten des Tablets mit ihren Kacheln. Eine Entität aus Home Assistant wird zur Kachel,
+ein Tipp auf eine Kachel öffnet rechts ihre Einstellungen. Die Leiste oben auf jeder Seite ist die Kopfzeile: links
+der Name, rechts Uhrzeit, Datum oder Entitäten.
 
-Tap the bar at the top of any page in the mockup to set the **Top bar** of a screen: the name on the left, up
-to six items on the right (time, analog clock, date, or an entity with an icon, such as
-temperature, a door, the alarm, or "last changed"). Drag to reorder, tap
-to configure; firmware 0.2.32 or newer renders them. Firmware 0.38.0 adds two items the screen reads itself: its
-Wi-Fi signal and a warning that appears while Home Assistant or Tessera is away.
+## Gerät
 
-Once a screen shows up in the sidebar, choose its tiles in Tessera.
-Tap a tile and its settings open in a drawer on the right, with the mockup still in view: click behavior, larger values, mini-sliders, a wider tile or one over the whole page, backgrounds.
-The mockup shows what Home Assistant reports right now: values, On or Off, positions, the song that plays. **Identify** in the ··· menu blinks a screen so you know which one it is; the same menu copies the layout of another screen, or exports and imports one as JSON. ⌘K searches screens, entities and actions.
-**Screen settings**, the tab next to Layout, has brightness, Dark mode and standby, the night hours, and the
-clock, back to page 1, swiping, the page buttons and the rotation. **Read current data** in the ··· menu of a screen helps with
-missing attributes or an offline screen. A new card needs new firmware on the screen: press **Update** on it.
-The ··· menu of a screen also has **Override YAML** for a persistent, hardware-specific
-`<screen>.local.yaml` file. It is loaded after the shared package and does not
-replace the managed name, credentials, Wi-Fi, OTA or package connection.
+Unter **Bildschirmeinstellungen → Gerät** stehen die Einstellungen, die das Tablet selbst in Home Assistant meldet:
 
-The screen carries the same settings itself (firmware 0.2.44 or newer): hold the top bar for
-about a second and a half, or put the built-in **Settings** card on a page. What is changed
-there appears here within a second, and the other way around.
+- **Updates:** installierte Version, Update-Kanal, Suche nach Updates, automatische Updates, die Version im anderen
+  Slot. Ein Update fragt vor dem Installieren, weil das Tablet danach neu startet. Den Slot wechselt der Kachel
+  Manager nicht, er zeigt ihn nur.
+- **Akku:** Ladestand, Ladegerät, Akkuschutz, volle Leistung.
+- **Bildschirm:** Helligkeit, Dimmen bei Ruhe, Nachtmodus und Nachtstunden (auch am Wochenende), aus bei leerem
+  Raum, Textgröße, Uhrzeit-Format, Einstellungssperre.
+- **Seiten:** Startseite, zurück zur Startseite, blättern mit.
 
-In Home Assistant every screen also has a **Wake** and a **Sleep** button (firmware 0.2.45 or
-newer). Press them from an automation with `button.press`: Wake lights the screen up and restarts the
-standby time, Sleep puts the screen in standby right away, also with Auto standby off. Wake is not a
-touch, so an open card or a later page still goes back to page 1 on time (firmware 0.2.56 or newer).
+Dieselben Einstellungen stehen in Home Assistant beim Gerät des Tablets. Eine Änderung hier oder dort erscheint
+sofort auf beiden Seiten. Was ein Gerät nicht hat (der Fire etwa kein automatisches Update), fehlt.
+
+## Automationen
+
+Die Ereignisse des Kachel Managers beginnen mit `kachel_` (etwa `kachel_show_alert`), damit sie sich nicht mit
+Tesseras mischen. Ob ein Tablet ein Ereignis schon anzeigt, hängt von seiner echod-Version ab. Das Layout jedes Tablets steht im Sensor `sensor.kachel_<gerät>`. Tesseras Ereignisse
+(`esp_screens_*`) bleiben bei Tessera.
+
+## Was nicht dabei ist
+
+Alles für ESP32-Bildschirme bleibt beim Tessera-Add-on: Firmware bauen und flashen, neue Bildschirme über USB,
+Firmware-Updates, Build-Server und Video. Der Kachel Manager öffnet keinen Port im Netz und braucht kein USB.
+
+## Herkunft
+
+Fork von [Tessera](https://github.com/MaxGramser/homeassistant_espscreen) von Max Gramser, Lizenz AGPL-3.0. Quelle
+und Änderungen: [theoldphilip/kachel-manager](https://github.com/theoldphilip/kachel-manager), Änderungen im
+CHANGELOG unter „Kachel Manager“.

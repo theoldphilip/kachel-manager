@@ -197,7 +197,7 @@ def fake_ha(target_lookup=True):
     class HA(HomeAssistant):
         def __init__(self):
             super().__init__(None, 'http://supervisor/core/api', 'token')
-            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'}]
             self.states = {'text.d1_tiles': {'state': 'Synced'}, 'sensor.d1_node': {'state': 'living-room'}, 'sensor.d1_fw': {'state': '0.2.58'}}
@@ -273,8 +273,8 @@ class AskingHomeAssistant(unittest.IsolatedAsyncioTestCase):
             await m.check_supported('text.d1_tiles', {'title': 'Renamed', 'tiles': [tiles[0], {**tiles[1], 'options': {'tap': 'toggle'}}]})
             # Claude in Home Assistant gets the same answer.
             m.ha.tile_events = asyncio.Queue()
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'light.hood', 'inline': 'slider'}))
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'cover.garage', 'tap': 'toggle'}))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'light.hood', 'inline': 'slider'}))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'cover.garage', 'tap': 'toggle'}))
             worker = asyncio.create_task(m.tile_loop())
             for _ in range(200):
                 await asyncio.sleep(0.01)

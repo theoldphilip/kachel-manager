@@ -15,7 +15,7 @@ from build_queue import Build  # noqa: E402
 
 BIG = next(board for board, shape in core.SHAPES.items() if shape.get('own_icons'))
 SMALL = next(board for board, shape in core.SHAPES.items() if not shape.get('own_icons'))
-INBOX, FOUR_MB = 'text.big_tile_settings', 'text.small_tile_settings'
+INBOX, FOUR_MB = 'text.big_kachel_inbox', 'text.small_kachel_inbox'
 # Names the fixed set does not have.
 EXTRA = [name for name in sorted(tile_icons.mdi()) if name not in tile_icons.GLYPHS][:3]
 

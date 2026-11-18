@@ -6,7 +6,7 @@ import { actionYaml, allScreensYaml, choiceYaml, fieldValue, limitText, oneScree
 
 // What the add-on says of alerts (alert_reference), its fields as it names them, with generic boards.
 const reference: AlertReference = {
-  event: "esphome.screen_alert", broadcast: { show: "esp_screens_show_alert", dismiss: "esp_screens_dismiss_alert" },
+  event: "esphome.screen_alert", broadcast: { show: "kachel_show_alert", dismiss: "kachel_dismiss_alert" },
   fields: [
     { name: "title", type: "string", example: "Someone is at the door" }, { name: "subtitle", type: "string", example: "Door 3, back" },
     { name: "icon", type: "string", example: "doorbell" }, { name: "color", type: "string", example: "orange" },
@@ -78,7 +78,7 @@ describe("the YAML to copy", () => {
 
   it("gives the event for every screen, for one of them (a picture only where it draws one), and with two buttons", () => {
     expect(allScreensYaml(reference)).toMatchInlineSnapshot(`
-      "event: esp_screens_show_alert
+      "event: kachel_show_alert
       event_data:
         title: "Someone is at the door"
         subtitle: "Door 3, back"
@@ -90,7 +90,7 @@ describe("the YAML to copy", () => {
         # camera: camera.front_door   # a Guition shows its picture on the card"
     `);
     expect(oneScreenYaml(reference, { node: "hall", name: "Hall", pictures: true })).toMatchInlineSnapshot(`
-      "event: esp_screens_show_alert
+      "event: kachel_show_alert
       event_data:
         screen: hall
         title: "Someone is at the door"
@@ -103,7 +103,7 @@ describe("the YAML to copy", () => {
         camera: camera.front_door"
     `);
     expect(oneScreenYaml(reference, { name: "Small one", pictures: false })).toMatchInlineSnapshot(`
-      "event: esp_screens_show_alert
+      "event: kachel_show_alert
       event_data:
         screen: "Small one"
         title: "Someone is at the door"
@@ -115,12 +115,12 @@ describe("the YAML to copy", () => {
         flash: true"
     `);
     expect(oneScreenYaml({}, undefined)).toMatchInlineSnapshot(`
-      "event: esp_screens_show_alert
+      "event: kachel_show_alert
       event_data:
         screen: kitchen-screen"
     `);
     expect(choiceYaml(reference)).toMatchInlineSnapshot(`
-      "event: esp_screens_show_alert
+      "event: kachel_show_alert
       event_data:
         title: "Someone is at the door"
         icon: doorbell

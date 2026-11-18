@@ -15,7 +15,7 @@ export type AlertReference = {
 };
 export type AlertScreen = { node?: string; name: string; pictures?: boolean };
 
-const SHOW = "esp_screens_show_alert";
+const SHOW = "kachel_show_alert";
 const ACTION = "esphome.<device_name>_show_alert";
 /** A text as a YAML string in double quotes. */
 export const yamlString = (text: unknown) => `"${String(text).replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
@@ -130,7 +130,7 @@ export function buttonFields(first: AlertButtonChoice, second: AlertButtonChoice
 }
 
 /** What the wizard says of how its alert reaches the screens. It is always the event for every screen
- * (esp_screens_show_alert): the only way that carries a camera, a button's action or a choice of screens, and the app
+ * (kachel_show_alert): the only way that carries a camera, a button's action or a choice of screens, and the app
  * gives each screen the form its firmware knows (show_alert, or show_alert_choice for two buttons) and the picture only
  * where it draws one. Each note is a key of editor.alerts.wizard.route with the screens it concerns. */
 export type RouteScreen = { name: string; choice: boolean; pictures: boolean };

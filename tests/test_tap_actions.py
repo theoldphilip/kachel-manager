@@ -189,8 +189,8 @@ class SavingAndTheEditor(unittest.IsolatedAsyncioTestCase):
             ha.services = DESCRIBED
             m = Manager(with_screen_grid(ha), path)
             ha.tile_events = asyncio.Queue()
-            ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'cover.curtains', 'action': 'cover.set_cover_position'}))
-            ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'cover.curtains', 'action': 'cover.set_cover_position', 'data': {'position': 70}}))
+            ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'cover.curtains', 'action': 'cover.set_cover_position'}))
+            ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'cover.curtains', 'action': 'cover.set_cover_position', 'data': {'position': 70}}))
             worker = asyncio.create_task(m.tile_loop())
             for _ in range(200):
                 await asyncio.sleep(0.01)

@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'screen_manager/app'))
 from firmware import Firmware  # noqa: E402
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:
@@ -164,6 +165,7 @@ class OverrideTests(unittest.TestCase):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class OverrideRoutes(unittest.IsolatedAsyncioTestCase):
     async def test_the_page_reads_saves_and_is_told_when_the_text_is_too_big(self):
         with tempfile.TemporaryDirectory() as tmp:

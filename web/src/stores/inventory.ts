@@ -50,6 +50,9 @@ export const useInventoryStore = defineStore("inventory", () => {
   // Plugins are on in the dev app (editor_features.plugins, docs/PLUGINS.md) and in `npm run dev`: a person with a released
   // add-on never sees the page or the tab. The add-on takes plugin tiles and items only then.
   const pluginsEnabled = computed(() => import.meta.env.DEV || inventory.value.editor_features?.plugins === true);
+  // Kachel Manager: what only an ESP32 screen needs (New screen, Firmware & USB, updates, the build server, Video in Home
+  // Assistant) shows only when the add-on says so; the Kachel Manager says no (screen_manager/app/kachel.py).
+  const espScreens = computed(() => inventory.value.editor_features?.esp_screens !== false);
   // An entity by its id, the first one of that id as the list has it: a card asks for its own many times as it is drawn,
   // where looking through the whole list each time took long on a page of many tiles.
   const entityIndex = computed(() => {
@@ -274,7 +277,7 @@ export const useInventoryStore = defineStore("inventory", () => {
   }
 
   return {
-    inventory, reachable, loaded, connected, tallerTilesEnabled, pluginsEnabled,
+    inventory, reachable, loaded, connected, tallerTilesEnabled, pluginsEnabled, espScreens,
     ...lookups({ entityOf }),
     persistVirtualScreens, createVirtualScreen, onArrival, refresh, applyLive, takeBuildServer, installClaudeSkill, installVideo, restartForVideo, start,
   };

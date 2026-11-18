@@ -6,8 +6,10 @@ from pathlib import Path
 from aiohttp.test_utils import TestClient, TestServer
 from test_screen_owned_settings import fake_ha, Manager, with_screen_grid
 from server import create_app
+from kachel_esp import esp_on   # Kachel Manager
 
 
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class FirmwareAddresses(unittest.IsolatedAsyncioTestCase):
     def manager(self, directory):
         ha = fake_ha()
@@ -45,7 +47,7 @@ class FirmwareAddresses(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as tmp:
             m = self.manager(tmp)
             m.ha.registry += [
-                {'entity_id': 'text.second', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd2'},
+                {'entity_id': 'text.second', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd2'},
                 {'entity_id': 'sensor.second_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd2'},
                 {'entity_id': 'sensor.second_ip', 'platform': 'esphome', 'original_name': 'IP address', 'device_id': 'd2'},
             ]

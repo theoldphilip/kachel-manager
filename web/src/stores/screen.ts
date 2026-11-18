@@ -87,7 +87,7 @@ export const useScreenStore = defineStore("screen", () => {
   async function sendTestAlert(target: string, data: Record<string, unknown>) {
     return (await send("alerts/test", "POST", { screen: target, data })) as { sent: number; failed: number; skipped: number; unusable?: string[] };
   }
-  // Events, Doorbell, Try it: one ring as esp_screens_doorbell sends it, to one screen or to every screen.
+  // Events, Doorbell, Try it: one ring as kachel_doorbell sends it, to one screen or to every screen.
   async function sendTestDoorbell(target: string, data: Record<string, unknown>) {
     return (await send("doorbell/test", "POST", { screen: target, data })) as { sent: number; alerts: number; failed: number; skipped: number; unusable?: string[] };
   }

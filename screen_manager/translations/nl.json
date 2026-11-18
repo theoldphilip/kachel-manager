@@ -1305,15 +1305,15 @@
         },
         "camera": {
           "label": "Camera",
-          "help": "Een camera- of afbeeldingsentiteit. Elk scherm behalve de CYD toont met firmware 0.2.57+ het beeld van dat moment op de kaart, in de verhouding van de camera zelf (boven de tekst, of ernaast op een breed, laag scherm); een tik erop opent de camera schermvullend. De CYD toont de alert zonder beeld. Alleen via de gebeurtenis esp_screens_show_alert."
+          "help": "Een camera- of afbeeldingsentiteit. Elk scherm behalve de CYD toont met firmware 0.2.57+ het beeld van dat moment op de kaart, in de verhouding van de camera zelf (boven de tekst, of ernaast op een breed, laag scherm); een tik erop opent de camera schermvullend. De CYD toont de alert zonder beeld. Alleen via de gebeurtenis kachel_show_alert."
         },
         "action": {
           "label": "Actie",
-          "help": "Een Home Assistant-actie, zoals script.open_gate of light.turn_off, eenmaal uitgevoerd zodra de knop op een van de schermen wordt ingedrukt. `data` geeft de velden (entity_id, brightness, ...). Bij een time-out of een nieuwe alert blijft hij achterwege. Alleen via de gebeurtenis esp_screens_show_alert."
+          "help": "Een Home Assistant-actie, zoals script.open_gate of light.turn_off, eenmaal uitgevoerd zodra de knop op een van de schermen wordt ingedrukt. `data` geeft de velden (entity_id, brightness, ...). Bij een time-out of een nieuwe alert blijft hij achterwege. Alleen via de gebeurtenis kachel_show_alert."
         },
         "screen": {
           "label": "Scherm",
-          "help": "Welk scherm de melding krijgt: de apparaatnaam (zoals kitchen-screen), de naam die Home Assistant toont, of een ruimte, die elk scherm daarin bereikt. Een lijst, zoals [kitchen-screen, hallway], bereikt er meerdere. Laat het weg voor alle schermen. Een naam die bij geen scherm past stuurt niets; het log van Tessera Screen Manager noemt dan de schermen die het kent. Alleen via de events esp_screens_show_alert en esp_screens_dismiss_alert."
+          "help": "Welk scherm de melding krijgt: de apparaatnaam (zoals kitchen-screen), de naam die Home Assistant toont, of een ruimte, die elk scherm daarin bereikt. Een lijst, zoals [kitchen-screen, hallway], bereikt er meerdere. Laat het weg voor alle schermen. Een naam die bij geen scherm past stuurt niets; het log van Tessera Screen Manager noemt dan de schermen die het kent. Alleen via de events kachel_show_alert en kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Knopkleur",
@@ -1330,7 +1330,7 @@
         },
         "button2_action": {
           "label": "Actie tweede knop",
-          "help": "Een Home Assistant-actie die één keer wordt uitgevoerd als de tweede knop op een scherm wordt ingedrukt, zoals `action` voor de eerste. `button2_data` geeft de velden. Alleen via het event esp_screens_show_alert."
+          "help": "Een Home Assistant-actie die één keer wordt uitgevoerd als de tweede knop op een scherm wordt ingedrukt, zoals `action` voor de eerste. `button2_data` geeft de velden. Alleen via het event kachel_show_alert."
         }
       },
       "endings": {

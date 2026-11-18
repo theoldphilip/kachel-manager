@@ -28,7 +28,7 @@ class PageApiTests(unittest.IsolatedAsyncioTestCase):
                     response = await client.get('/api/inventory' + suffix)
                     self.assertEqual(response.status, 200)
                     # Plugins are in every editor since 0.4.87 (core.plugins_enabled), whatever SCREEN_EDITOR_ENV says.
-                    self.assertEqual((await response.json())['editor_features'], {'tall_tiles': expected, 'plugins': True})
+                    self.assertEqual((await response.json())['editor_features'], {'tall_tiles': expected, 'plugins': True, 'esp_screens': False})  # Kachel Manager: esp_screens
             finally:
                 await client.close()
 

@@ -36,7 +36,7 @@ describe("what starts an automation", () => {
 });
 
 describe("the doorbell's automation", () => {
-  const reference: DoorbellReference = { show: "esp_screens_doorbell", timeout: { default: 60, min: 10, max: 600 },
+  const reference: DoorbellReference = { show: "kachel_doorbell", timeout: { default: 60, min: 10, max: 600 },
     suggestions: [{ trigger: "binary_sensor.porch_visitor", kind: "on", camera: "camera.porch", name: "Porch Visitor" }] };
 
   it("follows what the add-on said of the doorbell, and the screens and timeout chosen", () => {
@@ -45,7 +45,7 @@ describe("the doorbell's automation", () => {
       screens: ["hallway", "kitchen"], timeout: 90 });
     expect(automation.alias.startsWith("Tessera: ")).toBe(true);
     expect(automation.triggers).toEqual([{ trigger: "state", entity_id: "binary_sensor.porch_visitor", from: "off", to: "on" }]);
-    expect(automation.actions).toEqual([{ event: "esp_screens_doorbell", event_data: { camera: "camera.porch", screen: ["hallway", "kitchen"], timeout: 90 } }]);
+    expect(automation.actions).toEqual([{ event: "kachel_doorbell", event_data: { camera: "camera.porch", screen: ["hallway", "kitchen"], timeout: 90 } }]);
     expect(automationYaml(automation)).toContain("    from: \"off\"\n    to: \"on\"");
   });
 
@@ -56,7 +56,7 @@ describe("the doorbell's automation", () => {
     expect(doorFields({ kind: "lock" })).toEqual({});
     expect(doorFields({ kind: "none", lock: "lock.front_door" })).toEqual({});
     const automation = doorbellAutomation(reference, { trigger: "binary_sensor.porch_visitor", camera: "camera.porch", door: { kind: "lock", lock: "lock.front_door" } });
-    expect(automation.actions).toEqual([{ event: "esp_screens_doorbell", event_data: { camera: "camera.porch", lock: "lock.front_door" } }]);
+    expect(automation.actions).toEqual([{ event: "kachel_doorbell", event_data: { camera: "camera.porch", lock: "lock.front_door" } }]);
     // Quiet only when asked: the sound is on by default and the automation leaves it out.
     expect(doorbellAutomation(reference, { camera: "camera.porch", sound: false }).actions[0].event_data).toEqual({ camera: "camera.porch", sound: false });
     expect(doorbellAutomation(reference, { camera: "camera.porch", sound: true }).actions[0].event_data).toEqual({ camera: "camera.porch" });

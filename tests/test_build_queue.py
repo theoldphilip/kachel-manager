@@ -10,6 +10,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'screen_manager/app'))
 from build_queue import BuildQueue, Round  # noqa: E402
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 
@@ -276,6 +277,7 @@ class ThePageHears(unittest.TestCase):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class TheApp(unittest.IsolatedAsyncioTestCase):
     """The whole app: what a person asks while something builds waits its turn instead of being refused."""
 
@@ -367,6 +369,7 @@ class TheApp(unittest.IsolatedAsyncioTestCase):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class RealESPHomeJobs(unittest.IsolatedAsyncioTestCase):
     """The whole route with the app's own Firmware and an ESPHome that only pretends (test_firmware_download.fake_cli):
     what the editor asks over HTTP waits its turn, the live stream says every step, and every build keeps its own log."""

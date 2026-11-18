@@ -73,7 +73,7 @@ const actions = computed(() => [choice.first, ...(two.value ? [choice.second] : 
 const route = computed(() => alertRoute({ two: two.value, actions: actions.value, camera: Boolean(choice.camera) },
   chosen.value.map((s) => ({ name: s.name, choice: versionAtLeast(firmwareVersion(s), choiceFirmware.value), pictures: Boolean(s.pictures) }))));
 const routeText = (note: { key: string; screens?: string[] }) => t(`editor.alerts.wizard.route.${note.key}`,
-  { screens: note.screens?.join(", ") || "", event: alerts.value?.broadcast?.show || "esp_screens_show_alert", version: choiceFirmware.value });
+  { screens: note.screens?.join(", ") || "", event: alerts.value?.broadcast?.show || "kachel_show_alert", version: choiceFirmware.value });
 
 // The card as the screen draws it: its colour, its icon, its words and its buttons, the second left of the first.
 const colour = computed(() => alerts.value?.colors?.find((c) => c.name === form.color)?.color);

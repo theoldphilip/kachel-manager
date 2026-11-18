@@ -60,12 +60,12 @@ class CoverMessages(unittest.TestCase):
         self.assertIsNone(extras({'entity': BLIND}, states, device=device))
 
     def test_a_restarting_screen_is_not_named_unavailable(self):
-        registry = [{'entity_id': 'text.studio_1_tile_settings', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+        registry = [{'entity_id': 'text.studio_1_kachel_inbox', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                     {'entity_id': 'sensor.studio_1_device_name', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                     {'entity_id': 'sensor.studio_1_ip_address', 'platform': 'esphome', 'original_name': 'IP address', 'device_id': 'd1'}]
         devices = [{'id': 'd1', 'name': 'Studio 1'}]
         for state in ('unavailable', 'unknown'):
-            states = {'text.studio_1_tile_settings': {'state': 'unavailable'}, 'sensor.studio_1_device_name': {'state': state},
+            states = {'text.studio_1_kachel_inbox': {'state': 'unavailable'}, 'sensor.studio_1_device_name': {'state': state},
                       'sensor.studio_1_ip_address': {'state': 'unavailable'}}
             screen = discover_screens(registry, states, devices, [])[0]
             self.assertEqual((screen['node'], screen['ip']), (None, None), state)
@@ -100,7 +100,7 @@ class CoverSync(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(published, [])
             ha.states['text.node'] = {'state': 'office-1'}
             await m.publish_layouts()
-            self.assertEqual(published, ['sensor.esp_screens_office_1'])
+            self.assertEqual(published, ['sensor.kachel_office_1'])
 
 
 class SlatsOpenAt(unittest.TestCase):
@@ -117,7 +117,7 @@ class SlatsOpenAt(unittest.TestCase):
             with self.assertRaises(ValueError):
                 core.validate_layout(bad)
         self.assertEqual(list(core.COVER_TILT_OPEN), ['100', '50'])
-        # An event may set it too (esp_screens_add_tile and friends), and the page document carries it as an interaction.
+        # An event may set it too (kachel_add_tile and friends), and the page document carries it as an interaction.
         self.assertEqual(core.tile_options({'tilt_open': '50'}), {'tilt_open': '50'})
         self.assertEqual(page_layout.INTERACTION['tilt_open'], 'tilt_open')
 

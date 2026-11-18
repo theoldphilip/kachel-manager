@@ -9,6 +9,7 @@ from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'screen_manager/app'))
 from firmware import Firmware  # noqa: E402
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:
@@ -216,6 +217,7 @@ class DownloadJobs(unittest.IsolatedAsyncioTestCase):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class DownloadRoute(unittest.IsolatedAsyncioTestCase):
     async def test_the_page_downloads_the_built_file_and_the_card_says_so(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {**fake_cli(tmp), 'ESPHOME_FAKE_SLEEP': '0.3',

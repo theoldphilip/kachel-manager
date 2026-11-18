@@ -16,6 +16,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))
 from firmware import Firmware  # noqa: E402
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:
@@ -58,6 +59,7 @@ def with_entries(ha, entry='e1', refuse=None):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class RemoveScreenTests(unittest.IsolatedAsyncioTestCase):
     def manager(self, tmp, stored=None, updates=None, ha=None):
         if stored is not None:
@@ -88,7 +90,7 @@ class RemoveScreenTests(unittest.IsolatedAsyncioTestCase):
                              (True, 'Office 1', 'office-1.yaml', []))
             # Out of Home Assistant, and the layout sensor this app published with it.
             self.assertEqual(manager.ha.deleted, ['e1'])
-            self.assertEqual(manager.ha.states_removed, ['sensor.esp_screens_office_1'])
+            self.assertEqual(manager.ha.states_removed, ['sensor.kachel_office_1'])
             self.assertEqual(manager.screens(), [])
             # Out of the ESPHome folder: the profile, its sidecar and what it built.
             self.assertEqual(manager.firmware.profiles(), [])
@@ -106,10 +108,10 @@ class RemoveScreenTests(unittest.IsolatedAsyncioTestCase):
             # Offline: the screen's own "Device name" sensor says nothing, so its node is unknown. The layout
             # sensor this app published carries the screen's name, which finds it anyway.
             manager.ha.states['sensor.node'] = {'state': 'unavailable'}
-            manager.ha.states['sensor.esp_screens_office_1'] = {'state': '1', 'attributes': {'friendly_name': 'Office 1 tiles'}}
-            manager.ha.states['sensor.esp_screens_kitchen'] = {'state': '3', 'attributes': {'friendly_name': 'Kitchen tiles'}}
+            manager.ha.states['sensor.kachel_office_1'] = {'state': '1', 'attributes': {'friendly_name': 'Office 1 tiles'}}
+            manager.ha.states['sensor.kachel_kitchen'] = {'state': '3', 'attributes': {'friendly_name': 'Kitchen tiles'}}
             await manager.remove_screen(INBOX)
-            self.assertEqual(manager.ha.states_removed, ['sensor.esp_screens_office_1'])
+            self.assertEqual(manager.ha.states_removed, ['sensor.kachel_office_1'])
 
     async def test_a_screen_from_elsewhere_keeps_the_esphome_folder_as_it_is(self):
         with tempfile.TemporaryDirectory() as tmp:

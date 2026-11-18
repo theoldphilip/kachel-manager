@@ -22,7 +22,7 @@ class Upgrade02133(unittest.TestCase):
                 path.write_text(json.dumps({'version': 1, 'screens': {'text.old': raw}}))
                 ha = SimpleNamespace(online=False, registry=[], states={}, devices=[], areas=[], changed=asyncio.Event())
                 manager = Manager(ha, path)
-                ha.registry = [{'entity_id': 'text.old', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'old'}]
+                ha.registry = [{'entity_id': 'text.old', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'old'}]
                 ha.states = {'text.old': {'state': 'Ready'}}
                 screen = manager.screens()[0]
                 original = path.read_bytes()
@@ -67,7 +67,7 @@ class Upgrade02133(unittest.TestCase):
             ha = SimpleNamespace(online=False, registry=[], states={}, devices=[], areas=[], changed=asyncio.Event())
             manager = Manager(ha, path)
             self.assertTrue(all(r['format'] == 'legacy-v1' for r in manager.store.records().values()))
-            ha.registry = [{'entity_id': 'text.' + name, 'platform': 'esphome', 'original_name': 'Tile settings',
+            ha.registry = [{'entity_id': 'text.' + name, 'platform': 'esphome', 'original_name': 'Kachel inbox',
                             'device_id': name} for name in cases]
             ha.states = {'text.' + name: {'state': 'Ready'} for name in cases}
             manager.screens()

@@ -1,9 +1,9 @@
 """A doorbell's ring on the screens (docs/DOORBELL.md), from an event of Home Assistant's, as the alerts are.
 
-An automation fires `esp_screens_doorbell` with the doorbell's camera, its trigger whatever rings at that house (a
+An automation fires `kachel_doorbell` with the doorbell's camera, its trigger whatever rings at that house (a
 doorbell's event entity, Reolink's Visitor sensor, a button, a motion sensor), and the screens it names, every screen when
 it names none. A screen whose hello says `doorbell` (module doorbell, a P4 that streams) wakes, chimes and opens the camera
-live with its sound; any other screen gets the camera's alert with its picture. `esp_screens_dismiss_doorbell` closes it.
+live with its sound; any other screen gets the camera's alert with its picture. `kachel_dismiss_doorbell` closes it.
 
 A screen reports how the ring ended there (esphome.screen_doorbell): the first that answers it (a touch, or its close key)
 closes it on the others; when nobody answered, the ring is missed, and the top bar of the doorbell screens shows it
@@ -22,12 +22,12 @@ from core import _whole, alert_action
 from i18n import t
 
 FEATURE = 'doorbell'
-SHOW, DISMISS = 'esp_screens_doorbell', 'esp_screens_dismiss_doorbell'
+SHOW, DISMISS = 'kachel_doorbell', 'kachel_dismiss_doorbell'
 EVENTS = (SHOW, DISMISS)
 EVENT = 'esphome.screen_doorbell'
 # Once per ring, what an automation of its own follows (a phone's notification of a missed ring): the app fires one of
 # these when the first screen answers it, or when nobody did before its timeout, with its camera, title and the screen.
-ANSWERED, MISSED = 'esp_screens_doorbell_answered', 'esp_screens_doorbell_missed'
+ANSWERED, MISSED = 'kachel_doorbell_answered', 'kachel_doorbell_missed'
 # What the screen reports (module_doorbell.cpp). answered and closed end a ring for every screen.
 ENDINGS = (('answered', 'Someone touched the view: the ring is answered and closes on the other screens'),
            ('closed', 'Its close key, or something else that closed it, such as a new alert'),
@@ -72,7 +72,7 @@ LOCK_ENTITY = re.compile(r'lock\.[a-z0-9_]+')
 
 
 def request(data):
-    """(camera, title, timeout, unusable) of an esp_screens_doorbell event's data; camera None when it names none."""
+    """(camera, title, timeout, unusable) of an kachel_doorbell event's data; camera None when it names none."""
     data = data if isinstance(data, dict) else {}
     unusable = []
     camera = data.get('camera')
@@ -313,7 +313,7 @@ class Doorbells:
         return ring['screens'], ring['alerts']
 
     def open(self):
-        """The rings nobody answered yet, newest first: what esp_screens_dismiss_doorbell closes."""
+        """The rings nobody answered yet, newest first: what kachel_dismiss_doorbell closes."""
         return [key for key, ring in sorted(self.rings.items(), key=lambda item: -item[1]['since']) if not ring['answered']]
 
     def unanswered(self, key):

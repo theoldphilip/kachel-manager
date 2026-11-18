@@ -70,7 +70,7 @@ def fake_ha(firmware='0.2.104', owned=True, guition=True):
         online = True
 
         def __init__(self):
-            self.registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'},
                              {'entity_id': 'sensor.node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'light.a', 'platform': 'hue', 'original_name': 'Lamp A'}]
@@ -454,7 +454,7 @@ class LayoutSensors(unittest.IsolatedAsyncioTestCase):
             m = Manager(with_screen_grid(fake_ha()), Path(tmp) / 'screens.json')
             m.save('text.screen', {'title': 'Office 1', 'tiles': [{'entity': 'light.a', 'name': ''}]})
             await m.publish_layouts()
-            self.assertIn('sensor.esp_screens_office_1', m.ha.published)
+            self.assertIn('sensor.kachel_office_1', m.ha.published)
             m.ha.published.clear()
             await m.publish_layouts()
             self.assertEqual(m.ha.published, {}, 'an unchanged layout is not written twice')
@@ -467,7 +467,7 @@ class LayoutSensors(unittest.IsolatedAsyncioTestCase):
             m.ha.changed.set()
             await asyncio.sleep(0.6)
             task.cancel()
-            self.assertIn('sensor.esp_screens_office_1', m.ha.published)
+            self.assertIn('sensor.kachel_office_1', m.ha.published)
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')

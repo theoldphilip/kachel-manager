@@ -201,7 +201,7 @@ def fake_ha(shape='800x480 3x3 217dpi standard', board='waveshare43'):
         online = True
 
         def __init__(self):
-            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_shape', 'platform': 'esphome', 'original_name': 'Screen layout', 'device_id': 'd1'},

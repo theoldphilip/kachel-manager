@@ -59,7 +59,7 @@ class Versions(unittest.TestCase):
         self.assertEqual(firmware_features(None), {'tile_limit': 10, 'page_limit': 8, 'full_page': False, 'page_tiles_repeat': False, 'entity_tiles_repeat': False, 'no_title': False, 'climate_range': False})
 
     def test_discovery_falls_back_to_the_registry(self):
-        registry = [{'entity_id': 'text.hall_tile_settings', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+        registry = [{'entity_id': 'text.hall_kachel_inbox', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                     {'entity_id': 'sensor.hall_screen_firmware', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'}]
         devices = [{'id': 'd1', 'name': 'Hall', 'sw_version': REGISTRY}]
         for sensor, known in (('0.2.64', '0.2.64'), ('unavailable', '0.2.63'), ('0.2.65-dev', '0.2.63')):

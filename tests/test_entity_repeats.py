@@ -2,7 +2,7 @@
 its slider on page 3. Every copy is a tile of its own, with its own index on the screen and its own settings; only the
 bedside clock stays once, as its keys name it. A layout with copies needs firmware 0.16.0, which says so in its hello
 (`tile_repeats`), so an older screen gets the usual "Install screen firmware" refusal. From that firmware
-`esp_screens_add_tile` always puts a new tile on the screen; remove and move name the copy they mean by its spot or page.
+`kachel_add_tile` always puts a new tile on the screen; remove and move name the copy they mean by its spot or page.
 """
 import asyncio
 from copy import deepcopy
@@ -203,8 +203,8 @@ class Through(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as tmp:
             m = self.manager(tmp, '0.16.0')
             m.save('text.d1_tiles', layout(tile('light.a', 0), tile('light.b', 1)))
-            answers = await self.events(m, ('esp_screens_add_tile', {'entity': 'light.a', 'page': 2, 'name': 'Hall lamp'}),
-                                        ('esp_screens_remove_tile', {'entity': 'light.a', 'page': 1}))
+            answers = await self.events(m, ('kachel_add_tile', {'entity': 'light.a', 'page': 2, 'name': 'Hall lamp'}),
+                                        ('kachel_remove_tile', {'entity': 'light.a', 'page': 1}))
             self.assertEqual([(a['ok'], a['page'], a['slot']) for a in answers], [(True, 2, 6), (True, 1, 0)], answers)
             self.assertEqual(places(m.layouts['text.d1_tiles']), [('light.b', 1), ('light.a', 6)])
             self.assertEqual(m.layouts['text.d1_tiles']['tiles'][1]['name'], 'Hall lamp')
@@ -213,7 +213,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as tmp:
             m = self.manager(tmp, '0.15.0')
             m.save('text.d1_tiles', layout(tile('light.a', 0), tile('light.b', 1)))
-            answers = await self.events(m, ('esp_screens_add_tile', {'entity': 'light.a', 'page': 2}))
+            answers = await self.events(m, ('kachel_add_tile', {'entity': 'light.a', 'page': 2}))
             self.assertEqual((answers[0]['ok'], answers[0]['slot']), (True, 6), answers)
             self.assertEqual(places(m.layouts['text.d1_tiles']), [('light.b', 1), ('light.a', 6)])
             with self.assertRaisesRegex(ValueError, 'Install screen firmware 0.16.0 or newer first'):

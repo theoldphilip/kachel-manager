@@ -21,6 +21,7 @@ import firmware
 from firmware import Firmware
 import updates
 from updates import Updater, parse_version
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 
@@ -43,7 +44,7 @@ class VersionSourceTests(unittest.TestCase):
         self.assertIsNone(parse_version('1.2'))
 
     def test_discovery_reports_node_and_address(self):
-        registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+        registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                     {'entity_id': 'text.node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                     {'entity_id': 'text.ip', 'platform': 'esphome', 'original_name': 'IP address', 'device_id': 'd1'},
                     {'entity_id': 'text.fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'}]
@@ -139,17 +140,18 @@ class FakeFirmware:
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class UpdaterTests(unittest.IsolatedAsyncioTestCase):
     def setup_manager(self, path, outcome='success'):
         from server import Manager
         class HA:
             online = True
             time_zone = timezone.utc
-            registry = [{'entity_id': 'text.screen1', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            registry = [{'entity_id': 'text.screen1', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                         {'entity_id': 'text.node1', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                         {'entity_id': 'text.ip1', 'platform': 'esphome', 'original_name': 'IP address', 'device_id': 'd1'},
                         {'entity_id': 'text.fw1', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'},
-                        {'entity_id': 'text.screen2', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd2'},
+                        {'entity_id': 'text.screen2', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd2'},
                         {'entity_id': 'text.fw2', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd2'}]
             devices = [{'id': 'd1', 'name': 'Living room'}, {'id': 'd2', 'name': 'Kitchen'}]
             areas = []

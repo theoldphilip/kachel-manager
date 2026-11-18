@@ -54,7 +54,7 @@ def fake_ha(firmware='0.2.33', node='office-1'):
         online = True
 
         def __init__(self):
-            self.registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'},
                              {'entity_id': 'text.node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'light.a', 'platform': 'hue'}, {'entity_id': 'light.b', 'platform': 'hue'},

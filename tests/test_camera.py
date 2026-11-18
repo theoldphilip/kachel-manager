@@ -352,10 +352,10 @@ class Rules(unittest.TestCase):
         cyd = profiles.text('checkout/cyd.yaml')
         self.assertNotIn('picture_fetch::', cyd, 'the CYD downloads no pictures: it takes no features/camera.yaml')
         self.assertNotIn('camera_full.load', cyd, 'the CYD downloads no pictures: it takes no features/camera.yaml')
-        # The add-on's port is published, and the Docker route passes it on with the host network.
+        # Kachel Manager: no camera port on the LAN, it stays Tessera's; a Kachel screen fetches its own pictures
+        # (screen_manager/app/kachel.py).
         config = yaml.safe_load((ROOT / 'screen_manager/config.yaml').read_text())
-        self.assertEqual(config.get('ports', {}).get(f'{picture_links.PORT}/tcp'), picture_links.PORT,
-                         f'screen_manager/config.yaml publishes the camera port, {picture_links.PORT}/tcp')
+        self.assertNotIn('ports', config, f'the camera port {picture_links.PORT}/tcp stays Tessera\'s')
 
     def test_the_first_picture_waits_for_no_tick(self):
         """Firmware 0.2.73+: the camera asks when it opens and loads the link when it comes, not on the next 250 ms tick;
@@ -836,7 +836,7 @@ def fake_ha(image=None):
             self.registry, self.devices, self.states = [], [], {}
             for device, node, firmware, guition in (('d1', 'hall', '0.2.57', True), ('d2', 'desk', '0.2.57', False),
                                                     ('d3', 'attic', '0.2.56', True)):
-                self.registry += [{'entity_id': f'text.{device}_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': device},
+                self.registry += [{'entity_id': f'text.{device}_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': device},
                                   {'entity_id': f'sensor.{device}_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': device},
                                   {'entity_id': f'sensor.{device}_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': device}]
                 if guition:
@@ -1281,7 +1281,7 @@ class PictureCards(unittest.TestCase):
 class LiveTiles(unittest.TestCase):
     """A live picture on a camera tile (app 0.2.91, firmware 0.2.77): the page's tiles as one strip."""
 
-    def test_the_live_display_and_its_pace_are_tile_settings(self):
+    def test_the_live_display_and_its_pace_are_kachel_inbox(self):
         from core import LIVE_MIN_FIRMWARE, LIVE_REFRESH, LIVE_REFRESH_DEFAULT
         import catalogue
         import live_stream

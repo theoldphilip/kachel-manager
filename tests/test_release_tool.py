@@ -144,19 +144,19 @@ class TheName(unittest.TestCase):
     def test_dev_names_the_app_dev(self):
         # On dev the CHANGELOG starts with "## Unreleased"; the release commit has its version there and the plain name.
         on_dev = CHANGELOG.startswith('## Unreleased')
-        self.assertEqual(release.name_of(CONFIG), 'Tessera Screen Manager (dev)' if on_dev else 'Tessera Screen Manager')
+        self.assertEqual(release.name_of(CONFIG), 'Kachel Manager (dev)' if on_dev else 'Kachel Manager')
 
     def test_a_release_takes_the_mark_off_and_dev_puts_it_back(self):
         # From dev's file also on a release commit, whose own file has the plain name already.
         dev = release.with_name(CONFIG, dev=True)
         stable = release.with_name(dev, dev=False)
-        self.assertEqual(release.name_of(stable), 'Tessera Screen Manager')
+        self.assertEqual(release.name_of(stable), 'Kachel Manager')
         self.assertEqual(release.with_name(stable, dev=False), stable)
         self.assertEqual(release.with_name(stable, dev=True), dev)
-        self.assertEqual(release.name_of(release.with_name(stable, dev=True)), 'Tessera Screen Manager (dev)')
+        self.assertEqual(release.name_of(release.with_name(stable, dev=True)), 'Kachel Manager (dev)')
         self.assertEqual(len(stable.splitlines()), len(dev.splitlines()))
         # Only the app's own name: the version and everything else stay as they are.
-        self.assertEqual(stable.replace('Tessera Screen Manager', ''), dev.replace('Tessera Screen Manager (dev)', ''))
+        self.assertEqual(stable.replace('Kachel Manager', ''), dev.replace('Kachel Manager (dev)', ''))
 
 
 class TheCandidate(unittest.TestCase):

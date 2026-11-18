@@ -339,7 +339,7 @@ class Editor(unittest.IsolatedAsyncioTestCase):
             manager = Manager(with_screen_grid(ha), Path(tmp) / 'screens.json')
             i18n.set_screens('xx', 'point')
             with self.assertRaises(ValueError) as caught:
-                await manager.tile_event('esp_screens_add_tile', {'entity': 'foo.bar'})
+                await manager.tile_event('kachel_add_tile', {'entity': 'foo.bar'})
             self.assertEqual(str(caught.exception), 'foo.bar cannot go on a screen.')
 
 

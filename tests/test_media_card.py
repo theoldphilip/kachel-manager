@@ -274,13 +274,13 @@ class Answer(unittest.TestCase):
         online = True
 
         def __init__(self, firmware='0.2.64', guition=True):
-            self.registry = [{'entity_id': 'text.hall_tile_settings', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.hall_kachel_inbox', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.hall_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'sensor.hall_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'}]
             if guition:
                 self.registry.append({'entity_id': 'select.hall_type', 'platform': 'esphome', 'original_name': 'Guition screen type', 'device_id': 'd1'})
             self.devices, self.areas = [{'id': 'd1', 'name': 'Hall'}], []
-            self.states = {'text.hall_tile_settings': {'state': 'Synced'}, 'sensor.hall_node': {'state': 'hall'}, 'sensor.hall_fw': {'state': firmware},
+            self.states = {'text.hall_kachel_inbox': {'state': 'Synced'}, 'sensor.hall_node': {'state': 'hall'}, 'sensor.hall_fw': {'state': firmware},
                            'media_player.office': {'state': 'playing', 'attributes': SONOS},
                            'media_player.radio': {'state': 'playing', 'attributes': {'media_title': 'Radio 2', 'supported_features': 8321599}}}
             self.sent, self.responses, self.time_zone, self.changed = [], set(), None, asyncio.Event()
@@ -301,7 +301,7 @@ class Answer(unittest.TestCase):
     def manager(self, ha):
         import tempfile
         manager = Manager(with_screen_grid(ha), Path(tempfile.mkdtemp()) / 'screens.json')
-        manager.save('text.hall_tile_settings', {'title': 'Hall', 'tiles': [{'entity': 'media_player.office', 'name': ''}, {'entity': 'media_player.radio', 'name': ''}]})
+        manager.save('text.hall_kachel_inbox', {'title': 'Hall', 'tiles': [{'entity': 'media_player.office', 'name': ''}, {'entity': 'media_player.radio', 'name': ''}]})
         return manager
 
     def test_a_guition_card_gets_a_link_a_stream_an_empty_one_and_a_stranger_nothing(self):
@@ -309,7 +309,7 @@ class Answer(unittest.TestCase):
         manager = self.manager(ha)
 
         async def scenario():
-            await manager.answer_camera({'inbox': 'text.hall_tile_settings', 'entity': 'media_player.office', 'size': '160', 'bg': 'E7E7E7'})
+            await manager.answer_camera({'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.office', 'size': '160', 'bg': 'E7E7E7'})
             self.assertEqual(len(ha.sent), 1)
             message = ha.sent[0][1]
             self.assertEqual((message['op'], message['t'], message['e']), ('camera', 'cover', 'media_player.office'))
@@ -322,18 +322,18 @@ class Answer(unittest.TestCase):
                 self.assertEqual(image.size, (160, 160))
                 self.assertEqual(image.getpixel((0, 0)), (0xE7, 0xE7, 0xE7))
             # A stream without a picture: an empty link, so the card keeps its placeholder and stops asking.
-            await manager.answer_camera({'inbox': 'text.hall_tile_settings', 'entity': 'media_player.radio', 'size': '160', 'bg': 'E7E7E7'})
+            await manager.answer_camera({'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.radio', 'size': '160', 'bg': 'E7E7E7'})
             self.assertEqual(ha.sent[1][1], {'v': 1, 'op': 'camera', 't': 'cover', 'e': 'media_player.radio', 'u': ''})
             # A size out of range, a request without a size: no answer.
-            for request in ({'inbox': 'text.hall_tile_settings', 'entity': 'media_player.office', 'size': '2000', 'bg': 'E7E7E7'},
-                            {'inbox': 'text.hall_tile_settings', 'entity': 'media_player.office'}):
+            for request in ({'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.office', 'size': '2000', 'bg': 'E7E7E7'},
+                            {'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.office'}):
                 await manager.answer_camera(request)
             self.assertEqual(len(ha.sent), 2)
             # A player that is not on the screen's layout: refused, an empty link (the card keeps its placeholder), and
             # nothing of that player is fetched.
             fetched = []
             manager.snapshots.fetch_cover = lambda entity: fetched.append(entity)
-            await manager.answer_camera({'inbox': 'text.hall_tile_settings', 'entity': 'media_player.other', 'size': '160', 'bg': 'E7E7E7'})
+            await manager.answer_camera({'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.other', 'size': '160', 'bg': 'E7E7E7'})
             self.assertEqual(ha.sent[2][1], {'v': 1, 'op': 'camera', 't': 'cover', 'e': 'media_player.other', 'u': ''})
             self.assertEqual(fetched, [])
 
@@ -343,7 +343,7 @@ class Answer(unittest.TestCase):
         # A board without pictures, and firmware before the first that draws any (0.2.57): no answer.
         for ha in (self.HA(firmware='0.2.56'), self.HA(guition=False)):
             manager = self.manager(ha)
-            asyncio.run(manager.answer_camera({'inbox': 'text.hall_tile_settings', 'entity': 'media_player.office', 'size': '160', 'bg': 'E7E7E7'}))
+            asyncio.run(manager.answer_camera({'inbox': 'text.hall_kachel_inbox', 'entity': 'media_player.office', 'size': '160', 'bg': 'E7E7E7'}))
             self.assertEqual(ha.sent, [])
 
 

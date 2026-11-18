@@ -1624,7 +1624,7 @@ describe("Alerts: one screen through the event (app 0.2.133)", () => {
         layout: { title: "Desk", tiles: [] }, alert_action: "esphome.desk_show_alert" },
     ];
     inv.alerts = {
-      min_firmware: "0.2.31", broadcast: { show: "esp_screens_show_alert", dismiss: "esp_screens_dismiss_alert" },
+      min_firmware: "0.2.31", broadcast: { show: "kachel_show_alert", dismiss: "kachel_dismiss_alert" },
       fields: [{ name: "title", type: "string", label: "Title", help: "", example: "Someone is at the door" }],
       camera: { name: "camera", label: "Camera", help: "", example: "camera.front_door" },
       screen: { name: "screen", label: "Screen", help: "Which screen gets the alert.", example: "kitchen-screen" },
@@ -1655,10 +1655,10 @@ describe("Alerts: one screen through the event (app 0.2.133)", () => {
     const { default: AlertsView } = await import("../src/components/AlertsView.vue");
     const page = mount(AlertsView);
     expect(page.find("#alerts-one-example").text()).toBe(
-      "event: esp_screens_show_alert\nevent_data:\n  screen: living-screen\n  title: \"Someone is at the door\"\n  camera: camera.front_door");
+      "event: kachel_show_alert\nevent_data:\n  screen: living-screen\n  title: \"Someone is at the door\"\n  camera: camera.front_door");
     await page.find("#alerts-one-screen").setValue("desk");
     expect(page.find("#alerts-one-example").text()).toBe(
-      "event: esp_screens_show_alert\nevent_data:\n  screen: desk\n  title: \"Someone is at the door\"");
+      "event: kachel_show_alert\nevent_data:\n  screen: desk\n  title: \"Someone is at the door\"");
     expect(page.find("[data-jump='alerts-one']").text()).toBe("One screen");
     expect(page.text()).toContain("screen: [living-screen, desk]");
     page.unmount();

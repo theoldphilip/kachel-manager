@@ -12,6 +12,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from kachel_esp import esp_on   # Kachel Manager
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))
@@ -28,6 +29,7 @@ MAC = 'aa:bb:cc:dd:ee:ff'
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'aiohttp is not installed')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class AKnownBoard(unittest.IsolatedAsyncioTestCase):
     def manager(self, tmp):
         (Path(tmp) / 'screens.json').write_text(json.dumps({'version': 1, 'screens': {}}))
@@ -53,7 +55,7 @@ class AKnownBoard(unittest.IsolatedAsyncioTestCase):
             # Home Assistant's registry as it is now: the device's list of integrations may be behind in the app.
             self.refreshed += 1
             ha.devices[1]['config_entries'] = ['E-other']
-            ha.registry = [{'entity_id': 'text.living_room_tile_settings', 'device_id': 'd-old', 'config_entry_id': 'E1'}]
+            ha.registry = [{'entity_id': 'text.living_room_kachel_inbox', 'device_id': 'd-old', 'config_entry_id': 'E1'}]
         ha.esphome_entries, ha.delete_config_entry, ha.registries = esphome_entries, delete_config_entry, registries
         manager = Manager(ha, Path(tmp) / 'screens.json')
         manager.firmware = Firmware(Path(tmp) / 'esphome', Path(tmp) / 'data')

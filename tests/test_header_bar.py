@@ -429,7 +429,7 @@ class ManagerTests(unittest.IsolatedAsyncioTestCase):
     def manager(self, path, firmware='0.2.32'):
         class HA:
             online = True
-            registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd'},
+            registry = [{'entity_id': 'text.screen', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd'},
                         {'entity_id': 'sensor.fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd'},
                         {'entity_id': 'sensor.t', 'options': {'sensor': {'suggested_display_precision': 1}}},
                         {'entity_id': 'binary_sensor.door'}, {'entity_id': 'light.a'}]

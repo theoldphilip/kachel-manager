@@ -130,7 +130,7 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
       <button type="button" class="btn quiet" id="close-settings" @click="ui.go('')">{{ t("editor.settings.back") }}</button>
     </div>
     <div class="card-grid">
-      <section class="card">
+      <section v-if="inv.espScreens" class="card">
         <h2>{{ t("editor.settings.screens.title") }}</h2>
         <p>{{ t("editor.settings.screens.text") }}</p>
         <div class="tools">
@@ -138,7 +138,7 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
           <button type="button" class="tool" @click="ui.go('#firmware')"><span class="tool-icon">⇪</span><span class="tx"><b>{{ t("editor.nav.firmware") }}</b><small>{{ t("editor.settings.screens.firmware_detail") }}</small></span></button>
         </div>
       </section>
-      <section v-if="u" class="card updates" id="updates">
+      <section v-if="u && inv.espScreens" class="card updates" id="updates">
         <h2>{{ t("editor.settings.updates.title") }}</h2>
         <p id="updates-hint">{{ updatesHint }}</p>
         <!-- Every build on the way, whoever asked: an update, a plugin build, an install (the builds store, stores/builds.ts). -->
@@ -159,7 +159,7 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
         </label>
       </section>
       <!-- Build firmware on a faster computer: an ESPHome build server (BuildServerCard, the add-on's build_server.py). -->
-      <BuildServerCard v-if="inv.inventory.build_server" />
+      <BuildServerCard v-if="inv.inventory.build_server && inv.espScreens" />
       <section v-if="lang" class="card" id="language">
         <h2>{{ t("editor.settings.language.title") }}</h2>
         <div class="field">
@@ -217,7 +217,7 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
           <button type="button" class="tool" @click="ui.go('#events')"><span class="tool-icon">!</span><span class="tx"><b>{{ t("editor.nav.events") }}</b><small>{{ t("editor.settings.alerts.detail") }}</small></span></button>
         </div>
       </section>
-      <section v-if="inv.pluginsEnabled" class="card" id="video">
+      <section v-if="inv.pluginsEnabled && inv.espScreens" class="card" id="video">
         <h2>{{ t("editor.settings.video.title") }}</h2>
         <p>{{ t("editor.settings.video.text") }}</p>
         <div class="actions">

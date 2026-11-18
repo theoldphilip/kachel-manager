@@ -16,6 +16,7 @@ from datetime import date, datetime, timedelta, timezone
 import math
 from urllib.parse import urlsplit
 import automations
+import kachel
 import calendar_feed
 import todo_feed
 import doorbell
@@ -261,7 +262,7 @@ class HomeAssistant:
         self.broadcasts = asyncio.Queue()
         # (event type, data) of tile events (app 0.2.51+), for Manager.tile_loop.
         self.tile_events = asyncio.Queue()
-        # (event type, data) of the doorbell's events (esp_screens_doorbell, esp_screens_dismiss_doorbell) and of a screen's
+        # (event type, data) of the doorbell's events (kachel_doorbell, kachel_dismiss_doorbell) and of a screen's
         # report of a ring (esphome.screen_doorbell, docs/DOORBELL.md), for Manager.doorbell_loop.
         self.doorbell_events = asyncio.Queue()
         self.call_events = asyncio.Queue()  # esphome.screen_call, for Manager.call_loop
@@ -1615,7 +1616,7 @@ class Manager:
     def follow_renamed_inboxes(self, items):
         """Keep a screen's layout and update history when its inbox entity gets a new entity id.
 
-        Firmware 0.2.34 renamed the inbox from "Tegelinstellingen" to "Tile settings". Home Assistant then
+        Firmware 0.2.34 renamed the inbox from "Tegelinstellingen" to "Kachel inbox". Home Assistant then
         removes the old entity and registers the renamed one under a new id, which would orphan the layout
         stored under the old id. The screen is recognised by its device: an inbox this run saw on the same
         device, or (after a restart) a stored inbox id that carries one of the device's entity id prefixes."""
@@ -1762,10 +1763,10 @@ class Manager:
         By its node name, and by the name they carry: a screen that is offline says no node, and that is exactly
         the screen somebody removes."""
         node = screen.get('node')
-        found = {'sensor.esp_screens_' + node.replace('-', '_')} if node else set()
+        found = {'sensor.kachel_' + node.replace('-', '_')} if node else set()
         title = f"{screen['name']} tiles"
         found |= {entity for entity, state in getattr(self.ha, 'states', {}).items()
-                  if entity.startswith('sensor.esp_screens_') and (state.get('attributes') or {}).get('friendly_name') == title}
+                  if entity.startswith('sensor.kachel_') and (state.get('attributes') or {}).get('friendly_name') == title}
         return sorted(found)
 
     def known_board(self, mac):
@@ -4304,7 +4305,7 @@ class Manager:
             if self.published.get(inbox) == snapshot:
                 continue
             try:
-                await self.ha.set_state('sensor.esp_screens_' + node.replace('-', '_'), len(snapshot['tiles']),
+                await self.ha.set_state('sensor.kachel_' + node.replace('-', '_'), len(snapshot['tiles']),
                                         {'friendly_name': f"{screen['name']} tiles", 'icon': 'mdi:view-dashboard-outline', **snapshot})
                 self.published[inbox] = snapshot
             except Exception as error:
@@ -4380,7 +4381,7 @@ class Manager:
         return bool(isinstance(found, dict) and found.get('two_way_audio'))
 
     async def doorbell_show(self, data):
-        """esp_screens_doorbell (docs/DOORBELL.md): the doorbell's camera on the screens the event names, every screen
+        """kachel_doorbell (docs/DOORBELL.md): the doorbell's camera on the screens the event names, every screen
         without a name. A screen that draws a doorbell opens the camera live with its sound and a chime; any other gets
         the camera's alert. What the reply of Events, Try it shows: sent (views), alerts, skipped, failed, unknown."""
         camera, title, timeout, unusable = doorbell.request(data)
@@ -4445,7 +4446,7 @@ class Manager:
         return closed
 
     async def doorbell_dismiss(self, data):
-        """esp_screens_dismiss_doorbell: every ring nobody answered yet closes on every screen."""
+        """kachel_dismiss_doorbell: every ring nobody answered yet closes on every screen."""
         for key in self.doorbells.open():
             views, alerts = self.doorbells.answered(key)
             closed = await self.doorbell_close(key, views, alerts)
@@ -4838,8 +4839,10 @@ def create_app(manager, development=False):
     # Named editor features. An experiment can sit behind SCREEN_EDITOR_ENV=development here and never changes
     # authentication or firmware capabilities; taller tiles left that stage in 0.3.1.
     # Plugins (docs/PLUGINS.md), on in every app since 0.4.87 (core.plugins_enabled).
-    editor_features = {'tall_tiles': True, 'plugins': core.plugins_enabled()}
-    app = web.Application(middlewares=[guard], client_max_size=128*1024)
+    editor_features = {'tall_tiles': True, 'plugins': core.plugins_enabled(),
+                       # Kachel Manager: the editor hides what only an ESP32 screen needs (kachel.py).
+                       'esp_screens': kachel.ESP_SCREENS}
+    app = web.Application(middlewares=[guard, kachel.refuse_esp()], client_max_size=128*1024)
     static = Path(__file__).parent / 'static'
 
     async def cache_assets(request, response):
@@ -5661,7 +5664,7 @@ def create_app(manager, development=False):
         await manager.ha.call(alert_service(screen['node']), service)
         return web.json_response({'sent': 1, 'failed': 0, 'skipped': 0, 'unusable': unusable})
     async def test_doorbell(request):
-        """Events, Doorbell, Try it: one ring to one screen or to every screen, as esp_screens_doorbell sends it."""
+        """Events, Doorbell, Try it: one ring to one screen or to every screen, as kachel_doorbell sends it."""
         body = await request.json()
         if not isinstance(body, dict):
             raise ValueError(t('addon.errors.alerts.invalid'))
@@ -6381,7 +6384,8 @@ async def main():
         manager = Manager(ha, Path(os.environ.get('SCREEN_DATA', '/data')) / 'screens.json')
         # Every screen's YAML on what this app builds from, before anything can build it (core.ref): after an update of
         # the app its screens build its new release, whoever starts the build.
-        moved = manager.firmware.follow_release()
+        # Kachel Manager: the ESPHome folder's screens are Tessera's, and stay as they are (kachel.py).
+        moved = manager.firmware.follow_release() if kachel.ESP_SCREENS else None
         if moved:
             LOG.info('Screens now build from %s: %s', core.ref(), ', '.join(moved))
         # handle_signals: SIGTERM (the Supervisor stopping the app, `docker stop`) and SIGINT end the app through the
@@ -6395,9 +6399,11 @@ async def main():
         # A port another program holds turns camera images off, and nothing else.
         await picture_links.open_port(cameras)
         try:
-            await asyncio.gather(ha.run(), manager.run(), manager.history_loop(), manager.updates.run(),
+            # Kachel Manager: no firmware updates, no pairing of new ESP32 screens, no tessera_video (kachel.py).
+            esp = [manager.updates.run(), manager.pairing_loop(), manager.video_loop()] if kachel.ESP_SCREENS else []
+            await asyncio.gather(ha.run(), manager.run(), manager.history_loop(), *esp,
                                  manager.alert_loop(), manager.doorbell_loop(), manager.call_loop(), manager.tile_loop(), manager.card_history_loop(), manager.camera_loop(), manager.card_options_loop(), manager.calendar_loop(), manager.todo_loop(),
-                                 manager.media_loop(), manager.pairing_loop(), manager.photo_loop(), manager.video_loop(),
+                                 manager.media_loop(), manager.photo_loop(),
                                  *([manager.plugins.loop(), manager.plugin_loop()] if core.plugins_enabled() else []))
         finally:
             await cameras.cleanup()

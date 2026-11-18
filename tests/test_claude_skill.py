@@ -66,7 +66,7 @@ class SkillText(unittest.TestCase):
         for event in TILE_EVENTS:
             self.assertIn(f'`{event}`', tiles)
         self.assertIn(TILE_RESULT_EVENT, tiles)
-        self.assertIn('sensor.esp_screens_<device name>', tiles)
+        self.assertIn('sensor.kachel_<device name>', tiles)
         for domain, choices in CONTROLS.items():
             self.assertRegex(tiles, rf'\| `{domain}` \|' + ''.join(rf'.*`{key}`' for key, _ in choices))
         for domain, names in DISPLAYS.items():
@@ -84,9 +84,9 @@ class SkillText(unittest.TestCase):
         self.assertEqual(len(blocks), 13)
         parsed = [yaml.safe_load(block) for block in blocks]
         # Tiles first (0.2.51): putting one on a screen, and ordering a page.
-        self.assertEqual(parsed[0]['actions'][0]['event'], 'esp_screens_add_tile')
+        self.assertEqual(parsed[0]['actions'][0]['event'], 'kachel_add_tile')
         self.assertEqual(set(parsed[0]['actions'][0]['event_data']), {'screen', 'entity'})
-        self.assertEqual(parsed[1]['actions'][0]['event'], 'esp_screens_order_tiles')
+        self.assertEqual(parsed[1]['actions'][0]['event'], 'kachel_order_tiles')
         self.assertEqual(set(parsed[1]['actions'][0]['event_data']), {'screen', 'page', 'entities'})
         self.assertEqual(parsed[2]['actions'][0]['event'], BROADCAST_SHOW)
         self.assertEqual(set(parsed[2]['actions'][0]['event_data']), {name for name, *_ in ALERT_FIELDS})

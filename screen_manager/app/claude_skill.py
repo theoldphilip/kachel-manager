@@ -81,10 +81,10 @@ def text():
                          for domain, choices in CONTROLS.items())
     displays = '\n'.join(f'| `{domain}` | ' + ', '.join(f'`{name}`' for name in names) + ' |' for domain, names in DISPLAYS.items())
     events = '\n'.join(f'| `{event}` | {what} |' for event, what in
-                       (('esp_screens_add_tile', 'Puts an entity on a screen as a new tile'),
-                        ('esp_screens_remove_tile', 'Takes a tile off a screen'),
-                        ('esp_screens_move_tile', 'Moves a tile to another page or spot'),
-                        ('esp_screens_order_tiles', 'Puts tiles in the order you give')))
+                       (('kachel_add_tile', 'Puts an entity on a screen as a new tile'),
+                        ('kachel_remove_tile', 'Takes a tile off a screen'),
+                        ('kachel_move_tile', 'Moves a tile to another page or spot'),
+                        ('kachel_order_tiles', 'Puts tiles in the order you give')))
     return f'''---
 name: {NAME}
 description: {DESCRIPTION}
@@ -110,7 +110,7 @@ Fire one of these events and ESP Screens changes that screen and sends it right 
 
 ```yaml
 actions:
-  - event: esp_screens_add_tile
+  - event: kachel_add_tile
     event_data:
       screen: living room
       entity: vacuum.s8
@@ -126,22 +126,22 @@ actions:
 | `page` | Page, counted from 1. Without a spot the tile takes the first free one on that page. |
 | `row`, `column` | An exact spot on that page: the row counted from 1, and the column as a number counted from 1 or as `left` or `right` (the first and the last column; `middle` on a screen with three). |
 | `slot` | An exact spot as the screen's sensor counts it, from 0 up to its pages times its cells minus one: instead of `page`, `row` and `column`. |
-| `from_page`, `from_slot` | Only for `esp_screens_move_tile`: which copy of an entity that is on several tiles to move (see below). |
+| `from_page`, `from_slot` | Only for `kachel_move_tile`: which copy of an entity that is on several tiles to move (see below). |
 | `size` | `single`, `wide`, `tall` (two rows), `square` (two by two) or `full` (the whole page). On firmware 0.19.0 or newer also any other rectangle the grid holds, as columns x rows, such as `1x3` or `3x2`. |
 | `controls` | What you can operate on the tile itself (see below). |
 | `display` | How the tile draws itself (see below). On a screen that draws pictures (every board but {_and(f'the {_board(b)}' for b in BOARD_KEYS if 'camera' not in SHAPES[b])}) a camera or image tile takes `live` (firmware {LIVE_VERSION} or newer): its live picture, over the whole tile from firmware 0.3.7 (in the icon's place before), with `refresh` 5, 10, 15 or 30 (seconds), `fit` `contain` for the whole picture and `overlay` `none` for no name on it; a media player tile takes `cover` (firmware {COVER_TILE_VERSION} or newer): the album cover of what plays in the icon's place. |
 | `icon`, `color` | An icon from the list further down, and one of the pastel colors. |
 | `tap` | What a tap does: `auto`, `detail` (open the card), `toggle`, `action` or `none`. `toggle` works for anything Home Assistant can toggle for that entity, such as a light, a cover (open, close, or stop while it moves) or a speaker that turns on and off. Holding the tile still opens its card. An automation (firmware 0.7.0 or newer) also takes `run`: `auto` switches it on or off and holding the tile runs its actions (as Home Assistant's Run actions does, conditions skipped), `run` does it the other way round. |
 | `action`, `data` | Perform action: an action Home Assistant offers for the tile's own entity, such as `cover.set_cover_position`, with `data` for its fields (`position: 50`). Giving `action` sets `tap` to `action`. The target is always the tile's entity. Only actions and fields Home Assistant lists for that entity are accepted; the answer says what is missing. |
-| `entities` | Only for `esp_screens_order_tiles`: the entities in the order you want them. |
+| `entities` | Only for `kachel_order_tiles`: the entities in the order you want them. |
 
 A tile with a control, a forecast or a sun path is drawn double-width on its own; you don't have to ask for that.
 
 A navigation tile goes to another page: add the entity `screen.page_3` (for page 3, `screen.page_1` and up, as far as the screen's `max_pages` goes) with a `name` such as "Heating"; it shows an arrow (or an `icon`), its name and the page number, and a tap opens that page. Handy as a menu on page 2 when page 1 is one full-page light switch. It is single or double width, never full-page.
 
-On firmware {ENTITY_REPEAT_VERSION} or newer an entity can be on a screen more than once, such as a light as a small tile on page 1 and with its slider on page 3, or a `screen.page_1` named "Back" on every other page. `esp_screens_add_tile` always puts a new tile on the screen, also when the entity is there already; to change a tile, remove it and add it again with what it should have. Only the bedside clock (`screen.nightstand`) is on a screen once. On older firmware an entity is on a screen once (a navigation tile once per page from firmware {PAGE_TILE_REPEAT_VERSION}), and adding it again changes the tile that is there, or moves it when you name another place.
+On firmware {ENTITY_REPEAT_VERSION} or newer an entity can be on a screen more than once, such as a light as a small tile on page 1 and with its slider on page 3, or a `screen.page_1` named "Back" on every other page. `kachel_add_tile` always puts a new tile on the screen, also when the entity is there already; to change a tile, remove it and add it again with what it should have. Only the bedside clock (`screen.nightstand`) is on a screen once. On older firmware an entity is on a screen once (a navigation tile once per page from firmware {PAGE_TILE_REPEAT_VERSION}), and adding it again changes the tile that is there, or moves it when you name another place.
 
-When an entity is on several tiles, say which copy you mean: `page` or `slot` for `esp_screens_remove_tile`, `from_page` or `from_slot` for `esp_screens_move_tile` (its `page` and `slot` say where to), and in `esp_screens_order_tiles` each time you name it takes the next copy. An event that doesn't say acts on the first copy, the one with the lowest `slot` in the sensor.
+When an entity is on several tiles, say which copy you mean: `page` or `slot` for `kachel_remove_tile`, `from_page` or `from_slot` for `kachel_move_tile` (its `page` and `slot` say where to), and in `kachel_order_tiles` each time you name it takes the next copy. An event that doesn't say acts on the first copy, the one with the lowest `slot` in the sensor.
 
 ### What a tile can do, per kind of entity
 
@@ -157,20 +157,20 @@ Everything else shows its name and state, and opens a card of its own on a long 
 
 ### Reading a screen first
 
-Every screen also publishes what it shows, as `sensor.esp_screens_<device name>`: the state is the number of tiles, and the attributes hold `title`, the grid of its pages (`columns`, `rows`, `max_pages` and `max_tiles`), `pages` and `tiles` with `entity`, `name`, `page`, `row`, `column`, `slot`, `size`, `controls` and `display` per tile (and `to_page` for a `screen.page_<n>` tile), every copy of an entity on its own. The `column` is `left` or `right` on a two-column screen and a number counted from 1 on any other. Read that before moving things around, so you know what is already there and where.
+Every screen also publishes what it shows, as `sensor.kachel_<device name>`: the state is the number of tiles, and the attributes hold `title`, the grid of its pages (`columns`, `rows`, `max_pages` and `max_tiles`), `pages` and `tiles` with `entity`, `name`, `page`, `row`, `column`, `slot`, `size`, `controls` and `display` per tile (and `to_page` for a `screen.page_<n>` tile), every copy of an entity on its own. The `column` is `left` or `right` on a two-column screen and a number counted from 1 on any other. Read that before moving things around, so you know what is already there and where.
 
 Ordering a page means naming the tiles that are on it, in the order you want:
 
 ```yaml
 actions:
-  - event: esp_screens_order_tiles
+  - event: kachel_order_tiles
     event_data:
       screen: living room
       page: 1
       entities: [light.kitchen, light.dining, vacuum.s8]
 ```
 
-A tile from another page has to be moved there first (`esp_screens_move_tile` with `page`). Leave `page` out to order the whole screen: the entities you name come first, the rest keeps its order behind them.
+A tile from another page has to be moved there first (`kachel_move_tile` with `page`). Leave `page` out to order the whole screen: the entities you name come first, the rest keeps its order behind them.
 
 ### What comes back
 
@@ -351,7 +351,7 @@ Typical use: the page with a full-page player when a media player starts playing
 
 ## Standby and brightness
 
-Every screen has these entities in Home Assistant, on its ESPHome device. `<screen>` stands for the start Home Assistant gave the screen's entity IDs, the same as in `text.<screen>_tile_settings`; look them up rather than guessing.
+Every screen has these entities in Home Assistant, on its ESPHome device. `<screen>` stands for the start Home Assistant gave the screen's entity IDs, the same as in `text.<screen>_kachel_inbox`; look them up rather than guessing.
 
 | Entity | What it does |
 |---|---|

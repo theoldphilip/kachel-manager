@@ -1305,15 +1305,15 @@
         },
         "camera": {
           "label": "Telecamera",
-          "help": "Un'entità telecamera o immagine. Tutti gli schermi tranne il CYD, con firmware 0.2.57+, mostrano la sua immagine di quel momento sulla scheda, nelle proporzioni della telecamera (sopra il testo, o accanto su uno schermo largo e basso); un tocco apre la telecamera a schermo intero. Il CYD mostra l'avviso senza immagine. Solo tramite l'evento esp_screens_show_alert."
+          "help": "Un'entità telecamera o immagine. Tutti gli schermi tranne il CYD, con firmware 0.2.57+, mostrano la sua immagine di quel momento sulla scheda, nelle proporzioni della telecamera (sopra il testo, o accanto su uno schermo largo e basso); un tocco apre la telecamera a schermo intero. Il CYD mostra l'avviso senza immagine. Solo tramite l'evento kachel_show_alert."
         },
         "action": {
           "label": "Azione",
-          "help": "Un'azione di Home Assistant, come script.open_gate o light.turn_off, eseguita una volta quando il pulsante viene premuto su uno qualsiasi degli schermi. `data` fornisce i suoi campi (entity_id, brightness, ...). Un timeout o un nuovo avviso la lascia non eseguita. Solo tramite l'evento esp_screens_show_alert."
+          "help": "Un'azione di Home Assistant, come script.open_gate o light.turn_off, eseguita una volta quando il pulsante viene premuto su uno qualsiasi degli schermi. `data` fornisce i suoi campi (entity_id, brightness, ...). Un timeout o un nuovo avviso la lascia non eseguita. Solo tramite l'evento kachel_show_alert."
         },
         "screen": {
           "label": "Schermo",
-          "help": "Quale schermo riceve l'avviso: il suo nome dispositivo (come kitchen-screen), il nome mostrato da Home Assistant, oppure una stanza, che raggiunge ogni schermo al suo interno. Un elenco, come [kitchen-screen, hallway], ne raggiunge più di uno. Omettilo per tutti gli schermi. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Tessera Screen Manager elenca allora gli schermi che conosce. Solo tramite gli eventi esp_screens_show_alert ed esp_screens_dismiss_alert."
+          "help": "Quale schermo riceve l'avviso: il suo nome dispositivo (come kitchen-screen), il nome mostrato da Home Assistant, oppure una stanza, che raggiunge ogni schermo al suo interno. Un elenco, come [kitchen-screen, hallway], ne raggiunge più di uno. Omettilo per tutti gli schermi. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Tessera Screen Manager elenca allora gli schermi che conosce. Solo tramite gli eventi kachel_show_alert ed kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Colore del pulsante",
@@ -1330,7 +1330,7 @@
         },
         "button2_action": {
           "label": "Azione del secondo pulsante",
-          "help": "Un'azione di Home Assistant eseguita una volta quando il secondo pulsante viene premuto su uno schermo, come `action` per il primo. `button2_data` ne dà i campi. Solo tramite l'evento esp_screens_show_alert."
+          "help": "Un'azione di Home Assistant eseguita una volta quando il secondo pulsante viene premuto su uno schermo, come `action` per il primo. `button2_data` ne dà i campi. Solo tramite l'evento kachel_show_alert."
         }
       },
       "endings": {

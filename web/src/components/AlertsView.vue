@@ -148,8 +148,8 @@ const sections = ["alerts-screens", "alerts-howto", "alerts-all", "alerts-one", 
       <section id="alerts-all" class="card">
         <h2>{{ t("editor.alerts.all.title") }}</h2>
         <i18n-t keypath="editor.alerts.all.text" tag="p" scope="global">
-          <template #show><code id="alerts-all-event">{{ alerts.broadcast?.show || "esp_screens_show_alert" }}</code></template>
-          <template #dismiss><code id="alerts-all-dismiss">{{ alerts.broadcast?.dismiss || "esp_screens_dismiss_alert" }}</code></template>
+          <template #show><code id="alerts-all-event">{{ alerts.broadcast?.show || "kachel_show_alert" }}</code></template>
+          <template #dismiss><code id="alerts-all-dismiss">{{ alerts.broadcast?.dismiss || "kachel_dismiss_alert" }}</code></template>
           <template #event><b>{{ t("editor.alerts.all.event") }}</b></template>
           <template #edit><b>{{ t("editor.alerts.edit_yaml") }}</b></template>
         </i18n-t>
@@ -364,7 +364,7 @@ const sections = ["alerts-screens", "alerts-howto", "alerts-all", "alerts-one", 
             <template #dismiss><code>dismiss_alert</code></template>
           </i18n-t>
           <i18n-t keypath="editor.alerts.tips.every" tag="li" scope="global">
-            <template #event><code>{{ alerts.broadcast?.show || "esp_screens_show_alert" }}</code></template>
+            <template #event><code>{{ alerts.broadcast?.show || "kachel_show_alert" }}</code></template>
             <template #screen><code>screen</code></template>
           </i18n-t>
           <i18n-t keypath="editor.alerts.tips.claude" tag="li" scope="global">

@@ -136,7 +136,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
 
     async def events(self, m, *events):
         for data in events:
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', data))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', data))
         worker = asyncio.create_task(m.tile_loop())
         for _ in range(300):
             await asyncio.sleep(0.01)
@@ -151,10 +151,10 @@ class Through(unittest.IsolatedAsyncioTestCase):
             m.save('text.d1_tiles', {'title': 'Hall', 'tiles': [tile('light.a', 0), tile('light.reading', 6)]})
             answers = await self.events(m, {'entity': BACK, 'page': 2, 'name': 'Back'}, {'entity': BACK, 'page': 3, 'name': 'Back'})
             self.assertEqual([(a['ok'], a['page'], a['slot']) for a in answers], [(True, 2, 7), (True, 3, 12)], answers)
-            self.assertEqual(answers[0]['event'], 'esp_screens_add_tile')
+            self.assertEqual(answers[0]['event'], 'kachel_add_tile')
             saved = m.layouts['text.d1_tiles']['tiles']
             self.assertEqual([(t['entity'], t['slot']) for t in saved], [('light.a', 0), ('light.reading', 6), (BACK, 7), (BACK, 12)])
-            _, attributes = m.ha.published['sensor.esp_screens_living_room']
+            _, attributes = m.ha.published['sensor.kachel_living_room']
             self.assertEqual([t['slot'] for t in attributes['tiles'] if t['entity'] == BACK], [7, 12])
             self.assertTrue(all(fired == TILE_RESULT_EVENT for fired, _ in m.ha.fired))
 

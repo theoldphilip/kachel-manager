@@ -21,6 +21,7 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))
 import screen_video  # noqa: E402
+from kachel_esp import esp_on   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:
@@ -328,6 +329,7 @@ class Sync(unittest.TestCase):
 
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class Endpoint(unittest.IsolatedAsyncioTestCase):
     """Settings, Video in Home Assistant, through the app's own routes. The editor's buttons, and that the restart waits
     for the person's yes, are web/tests/video-settings.spec.ts."""

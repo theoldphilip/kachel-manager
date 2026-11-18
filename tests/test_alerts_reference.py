@@ -133,14 +133,14 @@ class InventoryTests(unittest.IsolatedAsyncioTestCase):
     async def test_inventory_carries_the_reference_and_each_screen_its_action_names(self):
         class HA:
             online = True
-            registry = [{'entity_id': 'text.studio_1_tegelinstellingen', 'platform': 'esphome', 'original_name': 'Tegelinstellingen', 'device_id': 'd1'},
+            registry = [{'entity_id': 'text.studio_1_kachel_inbox', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                         {'entity_id': 'sensor.studio_1_apparaatnaam', 'platform': 'esphome', 'original_name': 'Apparaatnaam', 'device_id': 'd1'},
                         {'entity_id': 'sensor.studio_1_schermfirmware', 'platform': 'esphome', 'original_name': 'Schermfirmware', 'device_id': 'd1'},
-                        {'entity_id': 'text.oud_tegelinstellingen', 'platform': 'esphome', 'original_name': 'Tegelinstellingen', 'device_id': 'd2'}]
+                        {'entity_id': 'text.oud_kachel_inbox', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd2'}]
             devices = [{'id': 'd1', 'name': 'Studio 1'}, {'id': 'd2', 'name': 'Old screen'}]
             areas = []
-            states = {'text.studio_1_tegelinstellingen': {'state': 'Ready'}, 'sensor.studio_1_apparaatnaam': {'state': 'studio-1'},
-                      'sensor.studio_1_schermfirmware': {'state': '0.2.31'}, 'text.oud_tegelinstellingen': {'state': 'Ready'}}
+            states = {'text.studio_1_kachel_inbox': {'state': 'Ready'}, 'sensor.studio_1_apparaatnaam': {'state': 'studio-1'},
+                      'sensor.studio_1_schermfirmware': {'state': '0.2.31'}, 'text.oud_kachel_inbox': {'state': 'Ready'}}
             changed = asyncio.Event()
             async def send(self, inbox, message, action=None): pass
         with tempfile.TemporaryDirectory() as temp:
@@ -149,9 +149,9 @@ class InventoryTests(unittest.IsolatedAsyncioTestCase):
                 full = await (await client.get('/api/inventory')).json()
                 self.assertEqual(full['alerts'], alert_reference())
                 by_id = {s['id']: s for s in full['screens']}
-                self.assertEqual(by_id['text.studio_1_tegelinstellingen']['alert_action'], 'esphome.studio_1_show_alert')
-                self.assertEqual(by_id['text.studio_1_tegelinstellingen']['dismiss_action'], 'esphome.studio_1_dismiss_alert')
-                self.assertIsNone(by_id['text.oud_tegelinstellingen']['alert_action'])
+                self.assertEqual(by_id['text.studio_1_kachel_inbox']['alert_action'], 'esphome.studio_1_show_alert')
+                self.assertEqual(by_id['text.studio_1_kachel_inbox']['dismiss_action'], 'esphome.studio_1_dismiss_alert')
+                self.assertIsNone(by_id['text.oud_kachel_inbox']['alert_action'])
                 light = await (await client.get('/api/inventory?light=1')).json()
                 self.assertNotIn('alerts', light)
                 self.assertEqual(light['screens'][0]['alert_action'], 'esphome.studio_1_show_alert')

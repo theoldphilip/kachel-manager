@@ -10,6 +10,7 @@ import re
 import secrets
 
 from i18n import english, screen_t, t
+import kachel
 import calendar_feed
 import todo_feed
 import light_presets
@@ -548,7 +549,8 @@ def resolve_controls(tile):
 # Diagnostic entities every ESP Screens firmware exposes; the manager watches them for screens.
 # Firmware built before the English translation still registers the Dutch originals, so both
 # forms are recognised until every board has been reflashed with an English `name:`.
-NAME_TILE_SETTINGS = ('Tile settings', 'Tegelinstellingen')
+# Kachel Manager: only a Kachel screen's inbox, never the inbox of a Tessera screen (kachel.py).
+NAME_TILE_SETTINGS = (kachel.INBOX_NAME,)
 NAME_SCREEN_FIRMWARE = ('Screen firmware', 'Schermfirmware')
 NAME_GUITION_TYPE = ('Guition screen type', 'Guition schermtype')
 NAME_DEVICE_NAME = ('Device name', 'Apparaatnaam')
@@ -904,11 +906,11 @@ def entity_slug(name):
     """The end of an entity id Home Assistant derives from an entity name (ASCII names)."""
     return re.sub(r'[^a-z0-9]+', '_', str(name).lower()).strip('_')
 
-# An inbox entity id is text.<device>_tile_settings, or text.<device>_tegelinstellingen before firmware 0.2.34.
+# An inbox entity id is text.<device>_kachel_inbox, or text.<device>_tegelinstellingen before firmware 0.2.34.
 INBOX_SUFFIXES = tuple('_' + entity_slug(name) for name in NAME_TILE_SETTINGS)
 
 def inbox_prefix(entity):
-    """The device part of an inbox entity id ('office_1' for text.office_1_tile_settings), or None."""
+    """The device part of an inbox entity id ('office_1' for text.office_1_kachel_inbox), or None."""
     if isinstance(entity, str) and entity.startswith('text.'):
         for suffix in INBOX_SUFFIXES:
             if entity.endswith(suffix) and len(entity) > len('text.') + len(suffix):
@@ -1371,9 +1373,9 @@ def short(value, limit):
 # it fires one of these events and the app changes that screen's layout, with the same validation and the
 # same push. The app answers with TILE_RESULT_EVENT, and publishes every layout as a sensor
 # (layout_snapshot) so an assistant can see what is where before it changes anything.
-TILE_EVENTS = {'esp_screens_add_tile': 'add', 'esp_screens_remove_tile': 'remove',
-               'esp_screens_move_tile': 'move', 'esp_screens_order_tiles': 'order'}
-TILE_RESULT_EVENT = 'esp_screens_tile_result'
+TILE_EVENTS = {'kachel_add_tile': 'add', 'kachel_remove_tile': 'remove',
+               'kachel_move_tile': 'move', 'kachel_order_tiles': 'order'}
+TILE_RESULT_EVENT = 'kachel_tile_result'
 # What an event may set on a tile: the editor's own settings, with `color` as a friendlier name for the
 # pastel background.
 TILE_EVENT_OPTIONS = {'size': 'size', 'controls': 'controls', 'display': 'display', 'icon': 'icon',
@@ -2772,18 +2774,18 @@ ALERT_SUGGESTED_ICONS = ('doorbell', 'bell', 'bell-ring', 'alert-outline', 'alar
                          'account', 'account-group', 'washing-machine', 'robot-vacuum', 'timer-outline', 'check')
 # Not an argument of show_alert: the app sends the image itself to screens that can draw it (app 0.2.66, a Guition with
 # firmware 0.2.57+) and leaves it out for the others. (name, label, explanation, example) like ALERT_FIELDS.
-ALERT_CAMERA_FIELD = ('camera', 'Camera', 'A camera or image entity. Every screen but the CYD, with firmware 0.2.57+, shows its picture of that moment on the card, in the proportions of the camera itself (above the words, or beside them on a wide, low screen); a tap on it opens the camera full screen. The CYD shows the alert without it. Only through the esp_screens_show_alert event.', 'camera.front_door')
+ALERT_CAMERA_FIELD = ('camera', 'Camera', 'A camera or image entity. Every screen but the CYD, with firmware 0.2.57+, shows its picture of that moment on the card, in the proportions of the camera itself (above the words, or beside them on a wide, low screen); a tap on it opens the camera full screen. The CYD shows the alert without it. Only through the kachel_show_alert event.', 'camera.front_door')
 # An action behind the button (app 0.2.91): the event names a Home Assistant action, with data for its fields, that the
 # app performs when the button is pressed on any screen, once per alert. Not an argument of show_alert either: the
 # screen only reports the press (ALERT_EVENT, action "ok") and the app does the rest, so every firmware from 0.2.31 has it.
-ALERT_ACTION_FIELD = ('action', 'Action', 'A Home Assistant action, such as script.open_gate or light.turn_off, performed once when the button is pressed on any screen. `data` gives its fields (entity_id, brightness, ...). A timeout or a new alert leaves it unperformed. Only through the esp_screens_show_alert event.', 'script.open_gate')
+ALERT_ACTION_FIELD = ('action', 'Action', 'A Home Assistant action, such as script.open_gate or light.turn_off, performed once when the button is pressed on any screen. `data` gives its fields (entity_id, brightness, ...). A timeout or a new alert leaves it unperformed. Only through the kachel_show_alert event.', 'script.open_gate')
 ALERT_ACTION_MAX_BYTES = 4096
 # Who gets it (app 0.2.133): without a `screen` the event goes to every screen, as it always did; with one, only to the
 # screens it names. That is how one screen gets a camera picture or a button action, which its own show_alert action cannot
 # take: Home Assistant makes every field of a device's action required, so show_alert keeps its seven. A name is the
 # device name, the name Home Assistant shows, or a room (every screen in it), written loosely (case, spaces, dashes and
 # underscores don't matter); a list names several. A name that matches no screen sends nothing, never to everyone.
-ALERT_SCREEN_FIELD = ('screen', 'Screen', 'Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the ESP Screen Manager log names the screens it knows. Only through the esp_screens_show_alert and esp_screens_dismiss_alert events.', 'kitchen-screen')
+ALERT_SCREEN_FIELD = ('screen', 'Screen', 'Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the ESP Screen Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events.', 'kitchen-screen')
 # A second button and a colour per button (firmware 0.3.3+): the screen's own show_alert_choice action, which takes the seven
 # fields of show_alert and these three. Through the event they are optional: an alert that uses any of them goes to a screen
 # with that firmware as show_alert_choice, and to an older one as show_alert, with its one button. (field, ESPHome type,
@@ -2797,12 +2799,12 @@ ALERT_CHOICE_FIELDS = (
 )
 ALERT_CHOICE_ORDER = ('title', 'subtitle', 'icon', 'color', 'button_text', 'button_color', 'button2_text', 'button2_color', 'timeout', 'flash')
 # What the second button does, like `action` and `data` for the first (app 0.3.8): performed once when it is pressed.
-ALERT_ACTION2_FIELD = ('button2_action', 'Second button action', 'A Home Assistant action performed once when the second button is pressed on any screen, like `action` for the first. `button2_data` gives its fields. Only through the esp_screens_show_alert event.', 'script.snooze_reminder')
+ALERT_ACTION2_FIELD = ('button2_action', 'Second button action', 'A Home Assistant action performed once when the second button is pressed on any screen, like `action` for the first. `button2_data` gives its fields. Only through the kachel_show_alert event.', 'script.snooze_reminder')
 # The firmware's MAX_TIMEOUT_SECONDS.
 ALERT_MAX_TIMEOUT = 86400
 # One alert for every screen (app 0.2.45): an automation fires one of these Home Assistant events and the
 # app calls the matching action on each screen that can show it, screens added later included.
-BROADCAST_SHOW, BROADCAST_DISMISS = 'esp_screens_show_alert', 'esp_screens_dismiss_alert'
+BROADCAST_SHOW, BROADCAST_DISMISS = 'kachel_show_alert', 'kachel_dismiss_alert'
 BROADCAST_EVENTS = {BROADCAST_SHOW: 'show_alert', BROADCAST_DISMISS: 'dismiss_alert'}
 
 def alert_service(node, action='show_alert'):

@@ -160,7 +160,7 @@ def fake_ha():
         online = True
 
         def __init__(self):
-            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            self.registry = [{'entity_id': 'text.d1_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                              {'entity_id': 'sensor.d1_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'}]
             self.states = {'text.d1_tiles': {'state': 'Synced'}, 'sensor.d1_node': {'state': 'living-room'}, 'sensor.d1_fw': {'state': '0.2.43'}}
@@ -187,8 +187,8 @@ class Through(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'screens.json'
             m = Manager(with_screen_grid(fake_ha()), path)
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'vacuum.s8', 'screen': 'living room'}))
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'light.reading', 'controls': 'brightness'}))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'vacuum.s8', 'screen': 'living room'}))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'light.reading', 'controls': 'brightness'}))
             worker = asyncio.create_task(m.tile_loop())
             for _ in range(200):
                 await asyncio.sleep(0.01)
@@ -200,7 +200,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(saved['tiles'][1]['options'], {'controls': 'brightness', 'size': 'wide'})
             self.assertEqual([(event, answer['ok'], answer['entity']) for event, answer in m.ha.fired],
                              [(TILE_RESULT_EVENT, True, 'vacuum.s8'), (TILE_RESULT_EVENT, True, 'light.reading')])
-            state, attributes = m.ha.published['sensor.esp_screens_living_room']
+            state, attributes = m.ha.published['sensor.kachel_living_room']
             self.assertEqual(state, 2)
             self.assertEqual([t['entity'] for t in attributes['tiles']], ['vacuum.s8', 'light.reading'])
 
@@ -219,7 +219,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
                     m.save('text.d1_tiles', {'title': 'Living room', 'tiles': [tile('vacuum.s8', 0)]})
                 return None   # nothing to refuse
             m.ha.capabilities = capabilities
-            await m.tile_event('esp_screens_add_tile', {'entity': 'light.reading', 'controls': 'brightness'})
+            await m.tile_event('kachel_add_tile', {'entity': 'light.reading', 'controls': 'brightness'})
             saved = m.layouts['text.d1_tiles']
             # The lamp with its brightness slider is wide, so it takes the next row after the editor's vacuum.
             self.assertEqual([(t['entity'], t['slot']) for t in sorted(saved['tiles'], key=lambda t: t['slot'])],
@@ -230,7 +230,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'screens.json'
             m = Manager(with_screen_grid(fake_ha()), path)
-            m.ha.tile_events.put_nowait(('esp_screens_add_tile', {'entity': 'light.reading', 'screen': 'attic'}))
+            m.ha.tile_events.put_nowait(('kachel_add_tile', {'entity': 'light.reading', 'screen': 'attic'}))
             worker = asyncio.create_task(m.tile_loop())
             with self.assertLogs('screen_manager', 'INFO') as logs:
                 for _ in range(200):
@@ -245,7 +245,7 @@ class Through(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(any('refused' in line for line in logs.output), logs.output)
 
     async def test_every_event_name_is_handled(self):
-        self.assertEqual(set(TILE_EVENTS), {'esp_screens_add_tile', 'esp_screens_remove_tile', 'esp_screens_move_tile', 'esp_screens_order_tiles'})
+        self.assertEqual(set(TILE_EVENTS), {'kachel_add_tile', 'kachel_remove_tile', 'kachel_move_tile', 'kachel_order_tiles'})
         self.assertEqual((MAX_PAGES, SLOTS_PER_PAGE), (8, 6))
 
 

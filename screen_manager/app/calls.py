@@ -21,7 +21,7 @@ OUT, RING, LIVE, HELD, END = 'out', 'ring', 'live', 'held', 'end'
 # Why a call ended (the op's `w`).
 DECLINED, BUSY, MISSED, NO_ANSWER, GONE, QUIET, HUNG_UP = 'declined', 'busy', 'missed', 'no_answer', 'gone', 'quiet', 'hung_up'
 # Events into Home Assistant, once per call.
-STARTED, ANSWERED, MISSED_EVENT, ENDED = 'esp_screens_call_started', 'esp_screens_call_answered', 'esp_screens_call_missed', 'esp_screens_call_ended'
+STARTED, ANSWERED, MISSED_EVENT, ENDED = 'kachel_call_started', 'kachel_call_answered', 'kachel_call_missed', 'kachel_call_ended'
 # A screen in the list (`contacts`): what it can be called for now.
 FREE, IN_CALL, DND, OFFLINE = 'free', 'busy', 'quiet', 'offline'
 

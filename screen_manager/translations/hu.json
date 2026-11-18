@@ -1305,15 +1305,15 @@
         },
         "camera": {
           "label": "Kamera",
-          "help": "Kamera- vagy képentitás. A CYD kivételével minden 0.2.57+ firmware-ű kijelző megjeleníti a kártyán az adott pillanat képét, a kamera saját képarányában (a szöveg felett, széles, alacsony kijelzőn mellette); rákoppintva a kamera teljes képernyőn nyílik meg. A CYD kép nélkül mutatja a figyelmeztetést. Csak az esp_screens_show_alert eseményen keresztül."
+          "help": "Kamera- vagy képentitás. A CYD kivételével minden 0.2.57+ firmware-ű kijelző megjeleníti a kártyán az adott pillanat képét, a kamera saját képarányában (a szöveg felett, széles, alacsony kijelzőn mellette); rákoppintva a kamera teljes képernyőn nyílik meg. A CYD kép nélkül mutatja a figyelmeztetést. Csak az kachel_show_alert eseményen keresztül."
         },
         "action": {
           "label": "Művelet",
-          "help": "Egy Home Assistant-művelet, például script.open_gate vagy light.turn_off, amely egyszer fut le, amikor bármelyik kijelzőn megnyomják a gombot. A `data` adja meg a mezőit (entity_id, brightness, ...). Időkorlát vagy új figyelmeztetés esetén nem fut le. Csak az esp_screens_show_alert eseményen keresztül."
+          "help": "Egy Home Assistant-művelet, például script.open_gate vagy light.turn_off, amely egyszer fut le, amikor bármelyik kijelzőn megnyomják a gombot. A `data` adja meg a mezőit (entity_id, brightness, ...). Időkorlát vagy új figyelmeztetés esetén nem fut le. Csak az kachel_show_alert eseményen keresztül."
         },
         "screen": {
           "label": "Kijelző",
-          "help": "Melyik kijelző kapja a figyelmeztetést: az eszközneve (például kitchen-screen), a Home Assistantban látható neve, vagy egy helyiség, amely a benne lévő összes kijelzőt eléri. Egy lista, például [kitchen-screen, hallway], többet is elér. Ha kihagyod, minden kijelző megkapja. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; a Tessera Screen Manager naplója felsorolja az ismert kijelzőket. Csak az esp_screens_show_alert és esp_screens_dismiss_alert eseményeken keresztül."
+          "help": "Melyik kijelző kapja a figyelmeztetést: az eszközneve (például kitchen-screen), a Home Assistantban látható neve, vagy egy helyiség, amely a benne lévő összes kijelzőt eléri. Egy lista, például [kitchen-screen, hallway], többet is elér. Ha kihagyod, minden kijelző megkapja. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; a Tessera Screen Manager naplója felsorolja az ismert kijelzőket. Csak az kachel_show_alert és kachel_dismiss_alert eseményeken keresztül."
         },
         "button_color": {
           "label": "Gomb színe",
@@ -1330,7 +1330,7 @@
         },
         "button2_action": {
           "label": "Második gomb művelete",
-          "help": "Egy Home Assistant-művelet, amely egyszer fut le, amikor bármelyik kijelzőn megnyomják a második gombot, ugyanúgy, mint az első gombnál az `action`. A `button2_data` adja meg a mezőit. Csak az esp_screens_show_alert eseményen keresztül."
+          "help": "Egy Home Assistant-művelet, amely egyszer fut le, amikor bármelyik kijelzőn megnyomják a második gombot, ugyanúgy, mint az első gombnál az `action`. A `button2_data` adja meg a mezőit. Csak az kachel_show_alert eseményen keresztül."
         }
       },
       "endings": {

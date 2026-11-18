@@ -1,8 +1,10 @@
-name: Tessera Screen Manager
-version: "0.4.98"
-slug: esp_screen_manager
-description: "Tessera: touch screens for Home Assistant. Choose tiles for your ESP32 screens, 2.8 to 10.1 inch, without reflashing."
-url: https://tessera-maxgramser.on-forge.com
+# This app is a fork of Tessera 0.4.98 (MaxGramser/homeassistant_espscreen) for the Kachel screens: Alpine Linux
+# and echod on tablets. Real ESP32 screens stay with Tessera, which may run beside it (screen_manager/app/kachel.py).
+name: Kachel Manager
+version: "0.1.0"
+slug: kachel_manager
+description: "Pages of tiles for the Kachel screens (Alpine Linux and echod on tablets). Based on Tessera."
+url: https://github.com/theoldphilip/kachel-manager
 arch: [aarch64, amd64]
 startup: application
 boot: auto
@@ -13,25 +15,21 @@ hassio_api: true
 hassio_role: homeassistant
 ingress: true
 ingress_port: 8099
-# Camera images for Guition screens (docs/CAMERA.md): the screens load them from this port on the LAN.
-ports:
-  8098/tcp: 8098
-ports_description:
-  8098/tcp: Camera images and album covers for the screens
+# No port on the LAN: Tessera's 8098 carries camera images for ESP32 screens, and a Kachel screen fetches its pictures
+# from Home Assistant itself (own_pictures in its hello).
 # With Home Assistant's Watchdog switch on (the app's Info page; off until someone turns it on) the Supervisor starts
 # the app again when it stops unexpectedly, and with this address also when it stops answering: the one address the
 # app answers from anywhere (server.py guard, the same as Docker's health check).
 watchdog: http://[HOST]:[PORT:8099]/health
 panel_icon: mdi:view-grid
-panel_title: Tessera
+panel_title: Kachel
 panel_admin: true
 options: {}
 schema: {}
 
 map:
   - homeassistant_config:rw
-uart: true
-usb: true
+# No uart or usb: flashing an ESP32 screen is Tessera's.
 # Reproducible compiler/download caches (firmware.py build_env); retain screens.json and user configuration.
 backup_exclude:
   - '*/build/'

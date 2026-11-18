@@ -17,7 +17,7 @@ const plugin = (id: string, version: string, more: Partial<Plugin> = {}): Plugin
   permissions: { home_assistant: [], network: [] }, readme: { en: "" }, languages: ["en"], attributes: [], source: "index",
   permission_hash: "same", ...more,
 });
-const hall = { id: "text.hall_tile_settings", name: "Hall", node: "hall", online: true, board: "guition", firmware: "0.52.0",
+const hall = { id: "text.hall_kachel_inbox", name: "Hall", node: "hall", online: true, board: "guition", firmware: "0.52.0",
   pictures: true, layout: {}, update: { profile: "hall.yaml" } } as unknown as Screen;
 const installed = (id: string, version: string, more: Partial<Installed> = {}): Installed =>
   ({ id, version, source: "index", consent: "same", state: "active", ...more });
@@ -61,7 +61,7 @@ describe("update all on this screen", () => {
     expect(view.get("#screen-plugin-updates").text()).toContain("Public transport, Waste collection");
     await button.trigger("click");
     await vi.waitFor(() => expect(calls.length).toBe(1));
-    expect(calls[0].path).toContain("screens/text.hall_tile_settings/plugins");
+    expect(calls[0].path).toContain("screens/text.hall_kachel_inbox/plugins");
     expect(calls[0].body.add.map((a: any) => a.id)).toEqual(["bus", "waste"]);
     expect(calls[0].body.add[1].values).toEqual({ calendar: "calendar.bins" });
   });

@@ -36,7 +36,7 @@ export function doorFields(door: DoorChoice | undefined): Record<string, unknown
   return {};
 }
 
-const SHOW = "esp_screens_doorbell", DISMISS = "esp_screens_dismiss_doorbell", MISSED = "esp_screens_doorbell_missed";
+const SHOW = "kachel_doorbell", DISMISS = "kachel_dismiss_doorbell", MISSED = "kachel_doorbell_missed";
 
 /** How `entity` starts the automation: a suggestion says so (a doorbell's event entity), else its domain. */
 export const triggerKind = (reference: DoorbellReference | undefined, entity: string) =>
@@ -66,7 +66,7 @@ export function doorbellAutomation(reference: DoorbellReference | undefined, cho
 }
 export const automationYaml = (reference: DoorbellReference | undefined, choice: DoorbellChoice) => written(doorbellAutomation(reference, choice));
 
-/** A ring nobody answered, to a phone: the app fires esp_screens_doorbell_missed once per ring. */
+/** A ring nobody answered, to a phone: the app fires kachel_doorbell_missed once per ring. */
 export const missedYaml = (reference: DoorbellReference | undefined) => [
   `alias: ${yamlString(t("editor.doorbell.yaml.missed_alias"))}`,
   "triggers:",

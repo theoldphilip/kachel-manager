@@ -1,4 +1,4 @@
-"""A doorbell's ring on the screens (docs/DOORBELL.md): an automation fires esp_screens_doorbell with the doorbell's camera
+"""A doorbell's ring on the screens (docs/DOORBELL.md): an automation fires kachel_doorbell with the doorbell's camera
 and the screens it names; a screen that draws a doorbell opens the camera live, any other gets its alert; the first that
 answers closes it on the others, a ring nobody answered shows in the top bars, and the app fires one answered or missed
 event per ring. The Events page's wizard puts such an automation into Home Assistant (automations.py)."""
@@ -313,7 +313,7 @@ int main() {{
 
 class TheAutomations(unittest.TestCase):
     automation = {'alias': 'Doorbell Front door', 'triggers': [{'trigger': 'doorbell.rang', 'target': {'entity_id': 'event.front_door_doorbell'}}],
-                  'actions': [{'event': 'esp_screens_doorbell', 'event_data': {'camera': 'camera.front_door'}}]}
+                  'actions': [{'event': 'kachel_doorbell', 'event_data': {'camera': 'camera.front_door'}}]}
 
     def test_every_one_is_called_tessera(self):
         self.assertEqual(automations.checked('doorbell', self.automation)['alias'], 'Tessera: Doorbell Front door')
@@ -321,14 +321,14 @@ class TheAutomations(unittest.TestCase):
 
     def test_only_our_events_and_our_ids(self):
         for wrong in ({**self.automation, 'actions': [{'action': 'lock.unlock', 'target': {'entity_id': 'lock.front'}}]},
-                      {**self.automation, 'actions': [{'event': 'esp_screens_show_alert'}]},
+                      {**self.automation, 'actions': [{'event': 'kachel_show_alert'}]},
                       {**self.automation, 'triggers': []}, {**self.automation, 'alias': ''}):
             with self.assertRaises(ValueError):
                 automations.checked('doorbell', wrong)
         self.assertEqual(automations.kind_of(automations.new_id('alert')), 'alert')
         self.assertIsNone(automations.kind_of('morning_lights'))
         # A button's action rides inside our event, which the app performs when the button is pressed (the alert wizard).
-        buttons = {**self.automation, 'alias': 'Someone at the door', 'actions': [{'event': 'esp_screens_show_alert', 'event_data': {
+        buttons = {**self.automation, 'alias': 'Someone at the door', 'actions': [{'event': 'kachel_show_alert', 'event_data': {
             'title': 'Someone at the door', 'button_text': 'Open', 'button_color': 'green', 'action': 'lock.unlock',
             'data': {'entity_id': 'lock.front_door'}, 'button2_text': 'Not now'}}]}
         self.assertEqual(automations.checked('alert', buttons)['actions'], buttons['actions'])
@@ -409,7 +409,7 @@ class TheManager(unittest.TestCase):
             self.assertEqual((made.entity, made.box, made.screen, made.tile, made.sound),
                              ('camera.front_door', None, inbox, False, inbox == 'a'))
         self.assertEqual(manager.warmed, ['camera.front_door'], 'its camera starts before the first screen opens')
-        self.assertEqual(manager.broadcasts, [('esp_screens_show_alert', {'title': 'Front door', 'icon': 'doorbell', 'camera': 'camera.front_door',
+        self.assertEqual(manager.broadcasts, [('kachel_show_alert', {'title': 'Front door', 'icon': 'doorbell', 'camera': 'camera.front_door',
                                                                           'timeout': 30, 'screen': ['cyd', 'off']})])
         self.assertEqual((result['sent'], result['alerts']), (2, 2))
         self.assertIn('camera.front_door', manager.alert_cameras, 'the screens may open its camera')
@@ -419,8 +419,8 @@ class TheManager(unittest.TestCase):
         manager.broadcasts.clear()
         asyncio.run(manager.doorbell_report({'action': 'answered', 'key': message['k'], 'screen': 'hall'}))
         self.assertEqual(manager.sent_messages, [('b', {'v': 1, 'op': 'doorbell', 'k': message['k'], 'c': 1})])
-        self.assertEqual(manager.broadcasts, [('esp_screens_dismiss_alert', {'screen': ['cyd', 'off']})])
-        self.assertEqual(manager.fired, [('esp_screens_doorbell_answered', {'camera': 'camera.front_door', 'title': 'Front door', 'screen': 'hall'})])
+        self.assertEqual(manager.broadcasts, [('kachel_dismiss_alert', {'screen': ['cyd', 'off']})])
+        self.assertEqual(manager.fired, [('kachel_doorbell_answered', {'camera': 'camera.front_door', 'title': 'Front door', 'screen': 'hall'})])
         asyncio.run(manager.doorbell_report({'action': 'closed', 'key': message['k'], 'screen': 'kitchen'}))
         self.assertEqual(len(manager.fired), 1)
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The doorbell, a part of Events (EventsView, docs/DOORBELL.md): an automation fires esp_screens_doorbell with the
+// The doorbell, a part of Events (EventsView, docs/DOORBELL.md): an automation fires kachel_doorbell with the
 // doorbell's camera, started by whatever rings at that house, for the screens it names. The page has one way in, the
 // wizard that builds that automation with the person's own doorbell, camera and screens and puts it into Home Assistant
 // (DoorbellWizard), the doorbell automations of Tessera under it, and, folded away, the event's fields for writing one
@@ -80,8 +80,8 @@ const mock = {
     <details class="card event-more" id="doorbell-after">
       <summary>{{ t("editor.doorbell.after.title") }}</summary>
       <i18n-t keypath="editor.doorbell.after.text" tag="p" scope="global">
-        <template #answered><code>{{ reference?.answered || "esp_screens_doorbell_answered" }}</code></template>
-        <template #missed><code>{{ reference?.missed || "esp_screens_doorbell_missed" }}</code></template>
+        <template #answered><code>{{ reference?.answered || "kachel_doorbell_answered" }}</code></template>
+        <template #missed><code>{{ reference?.missed || "kachel_doorbell_missed" }}</code></template>
       </i18n-t>
       <div class="copy-line">
         <pre id="doorbell-missed-yaml">{{ missedYaml(reference) }}</pre>

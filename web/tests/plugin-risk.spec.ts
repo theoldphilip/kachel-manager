@@ -14,7 +14,7 @@ const plugin = (id: string): Plugin => ({
   version: "1.0.0", repo: "", license: "MIT", type: "functions", boards: "any", requires: {}, flash_kb: 1,
   permissions: { home_assistant: [], network: [] }, readme: { en: "" }, languages: ["en"], attributes: [], source: "index",
 });
-const hall = { id: "text.hall_tile_settings", name: "Hall", node: "hall", online: true, board: "guition", firmware: "0.52.0",
+const hall = { id: "text.hall_kachel_inbox", name: "Hall", node: "hall", online: true, board: "guition", firmware: "0.52.0",
   pictures: true, layout: {}, update: { profile: "hall.yaml" } } as unknown as Screen;
 const installed = (id: string): Installed => ({ id, version: "1.0.0", source: "index", state: "active" });
 

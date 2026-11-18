@@ -11,7 +11,7 @@ import re
 import secrets
 
 # The events an automation of this app may fire, by the wizard's kind.
-KINDS = {'doorbell': ('esp_screens_doorbell',), 'alert': ('esp_screens_show_alert',)}
+KINDS = {'doorbell': ('kachel_doorbell',), 'alert': ('kachel_show_alert',)}
 PREFIX = 'tessera_'
 # Every automation of this app is called "Tessera: <name>" in Home Assistant, so its list shows which ones came from here.
 TITLE = 'Tessera: '

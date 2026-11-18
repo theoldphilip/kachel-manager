@@ -358,9 +358,9 @@ class TheBridge(unittest.TestCase):
 
 class WhatAScreenSays(unittest.TestCase):
     def test_the_word_comes_from_its_own_sensor(self):
-        registry = [{'entity_id': 'text.a', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'a'},
+        registry = [{'entity_id': 'text.a', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'a'},
                     {'entity_id': 'sensor.a_flash', 'platform': 'esphome', 'original_name': 'Screen flash', 'device_id': 'a'},
-                    {'entity_id': 'text.b', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'b'}]
+                    {'entity_id': 'text.b', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'b'}]
         devices = [{'id': 'a', 'name': 'A'}, {'id': 'b', 'name': 'B'}]
         for state, word in (('wide', 'wide'), ('widen', 'widen'), ('widen_next', 'widen_next'), ('old', 'old'),
                             ('other', 'other'), ('unavailable', None), ('unknown', None), ('Wide!', None)):
@@ -466,7 +466,7 @@ class TheUpdater(unittest.IsolatedAsyncioTestCase):
         class HA:
             online = True
             time_zone = timezone.utc
-            registry = [{'entity_id': 'text.screen1', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd1'},
+            registry = [{'entity_id': 'text.screen1', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd1'},
                         {'entity_id': 'text.node1', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd1'},
                         {'entity_id': 'text.ip1', 'platform': 'esphome', 'original_name': 'IP address', 'device_id': 'd1'},
                         {'entity_id': 'text.fw1', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd1'},

@@ -14,7 +14,7 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: "/", name: "home", component: Nothing },
-    // A screen by its inbox entity id (text.kitchen_tile_settings): what the inventory calls it.
+    // A screen by its inbox entity id (text.kitchen_kachel_inbox): what the inventory calls it.
     { path: "/screens/:id", name: "screen", component: Nothing },
     { path: "/settings", name: "settings", component: Nothing },
     { path: "/new-screen", name: "new-screen", component: Nothing },

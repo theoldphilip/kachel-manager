@@ -1305,15 +1305,15 @@
         },
         "camera": {
           "label": "Cámara",
-          "help": "Una entidad de cámara o de imagen. Todas las pantallas excepto la CYD, con firmware 0.2.57+, muestran su imagen de ese momento en la tarjeta, con las proporciones de la propia cámara (sobre el texto, o a su lado en una pantalla ancha y baja); al tocarla se abre la cámara a pantalla completa. La CYD muestra la alerta sin ella. Solo mediante el evento esp_screens_show_alert."
+          "help": "Una entidad de cámara o de imagen. Todas las pantallas excepto la CYD, con firmware 0.2.57+, muestran su imagen de ese momento en la tarjeta, con las proporciones de la propia cámara (sobre el texto, o a su lado en una pantalla ancha y baja); al tocarla se abre la cámara a pantalla completa. La CYD muestra la alerta sin ella. Solo mediante el evento kachel_show_alert."
         },
         "action": {
           "label": "Acción",
-          "help": "Una acción de Home Assistant, como script.open_gate o light.turn_off, realizada una vez cuando se pulsa el botón en cualquier pantalla. `data` da sus campos (entity_id, brightness, ...). Un tiempo agotado o una nueva alerta la deja sin realizar. Solo mediante el evento esp_screens_show_alert."
+          "help": "Una acción de Home Assistant, como script.open_gate o light.turn_off, realizada una vez cuando se pulsa el botón en cualquier pantalla. `data` da sus campos (entity_id, brightness, ...). Un tiempo agotado o una nueva alerta la deja sin realizar. Solo mediante el evento kachel_show_alert."
         },
         "screen": {
           "label": "Pantalla",
-          "help": "Qué pantalla recibe la alerta: su nombre de dispositivo (como kitchen-screen), el nombre que muestra Home Assistant, o una habitación, que llega a cada pantalla que haya en ella. Una lista, como [kitchen-screen, hallway], llega a varias. Omítelo para todas las pantallas. Un nombre que no coincide con ninguna pantalla no envía nada; el registro de Tessera Screen Manager nombra entonces las pantallas que conoce. Solo mediante los eventos esp_screens_show_alert y esp_screens_dismiss_alert."
+          "help": "Qué pantalla recibe la alerta: su nombre de dispositivo (como kitchen-screen), el nombre que muestra Home Assistant, o una habitación, que llega a cada pantalla que haya en ella. Una lista, como [kitchen-screen, hallway], llega a varias. Omítelo para todas las pantallas. Un nombre que no coincide con ninguna pantalla no envía nada; el registro de Tessera Screen Manager nombra entonces las pantallas que conoce. Solo mediante los eventos kachel_show_alert y kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Color del botón",
@@ -1330,7 +1330,7 @@
         },
         "button2_action": {
           "label": "Acción del segundo botón",
-          "help": "Una acción de Home Assistant que se ejecuta una vez al pulsar el segundo botón en cualquier pantalla, como `action` para el primero. `button2_data` da sus campos. Solo mediante el evento esp_screens_show_alert."
+          "help": "Una acción de Home Assistant que se ejecuta una vez al pulsar el segundo botón en cualquier pantalla, como `action` para el primero. `button2_data` da sus campos. Solo mediante el evento kachel_show_alert."
         }
       },
       "endings": {

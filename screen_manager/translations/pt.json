@@ -1305,15 +1305,15 @@
         },
         "camera": {
           "label": "Câmara",
-          "help": "Uma entidade de câmara ou de imagem. Todos os ecrãs exceto o CYD, com firmware 0.2.57+, mostram a imagem desse momento no cartão, nas proporções da própria câmara (acima do texto, ou ao lado num ecrã largo e baixo); um toque nela abre a câmara em ecrã inteiro. O CYD mostra o alerta sem ela. Só através do evento esp_screens_show_alert."
+          "help": "Uma entidade de câmara ou de imagem. Todos os ecrãs exceto o CYD, com firmware 0.2.57+, mostram a imagem desse momento no cartão, nas proporções da própria câmara (acima do texto, ou ao lado num ecrã largo e baixo); um toque nela abre a câmara em ecrã inteiro. O CYD mostra o alerta sem ela. Só através do evento kachel_show_alert."
         },
         "action": {
           "label": "Ação",
-          "help": "Uma ação do Home Assistant, como script.open_gate ou light.turn_off, executada uma vez quando o botão é premido em qualquer ecrã. `data` dá os seus campos (entity_id, brightness, ...). Um tempo esgotado ou um novo alerta deixa-a por executar. Só através do evento esp_screens_show_alert."
+          "help": "Uma ação do Home Assistant, como script.open_gate ou light.turn_off, executada uma vez quando o botão é premido em qualquer ecrã. `data` dá os seus campos (entity_id, brightness, ...). Um tempo esgotado ou um novo alerta deixa-a por executar. Só através do evento kachel_show_alert."
         },
         "screen": {
           "label": "Ecrã",
-          "help": "Que ecrã recebe o alerta: o nome do dispositivo (como kitchen-screen), o nome que o Home Assistant mostra, ou uma divisão, que chega a cada ecrã nela. Uma lista, como [kitchen-screen, hallway], chega a vários. Omita-o para todos os ecrãs. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Tessera Screen Manager indica então os ecrãs que conhece. Apenas através dos eventos esp_screens_show_alert e esp_screens_dismiss_alert."
+          "help": "Que ecrã recebe o alerta: o nome do dispositivo (como kitchen-screen), o nome que o Home Assistant mostra, ou uma divisão, que chega a cada ecrã nela. Uma lista, como [kitchen-screen, hallway], chega a vários. Omita-o para todos os ecrãs. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Tessera Screen Manager indica então os ecrãs que conhece. Apenas através dos eventos kachel_show_alert e kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Cor do botão",
@@ -1330,7 +1330,7 @@
         },
         "button2_action": {
           "label": "Ação do segundo botão",
-          "help": "Uma ação do Home Assistant executada uma vez quando o segundo botão é premido em qualquer ecrã, como `action` para o primeiro. `button2_data` dá os seus campos. Apenas através do evento esp_screens_show_alert."
+          "help": "Uma ação do Home Assistant executada uma vez quando o segundo botão é premido em qualquer ecrã, como `action` para o primeiro. `button2_data` dá os seus campos. Apenas através do evento kachel_show_alert."
         }
       },
       "endings": {

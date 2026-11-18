@@ -2,8 +2,8 @@
  "min_firmware": "0.2.31",
  "event": "esphome.screen_alert",
  "broadcast": {
-  "show": "esp_screens_show_alert",
-  "dismiss": "esp_screens_dismiss_alert"
+  "show": "kachel_show_alert",
+  "dismiss": "kachel_dismiss_alert"
  },
  "endings": [
   {
@@ -83,19 +83,19 @@
  "camera": {
   "name": "camera",
   "label": "Camera",
-  "help": "A camera or image entity. Every screen but the CYD, with firmware 0.2.57+, shows its picture of that moment on the card, in the proportions of the camera itself (above the words, or beside them on a wide, low screen); a tap on it opens the camera full screen. The CYD shows the alert without it. Only through the esp_screens_show_alert event.",
+  "help": "A camera or image entity. Every screen but the CYD, with firmware 0.2.57+, shows its picture of that moment on the card, in the proportions of the camera itself (above the words, or beside them on a wide, low screen); a tap on it opens the camera full screen. The CYD shows the alert without it. Only through the kachel_show_alert event.",
   "example": "camera.front_door"
  },
  "screen": {
   "name": "screen",
   "label": "Screen",
-  "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Tessera Screen Manager log names the screens it knows. Only through the esp_screens_show_alert and esp_screens_dismiss_alert events.",
+  "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Tessera Screen Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events.",
   "example": "kitchen-screen"
  },
  "action": {
   "name": "action",
   "label": "Action",
-  "help": "A Home Assistant action, such as script.open_gate or light.turn_off, performed once when the button is pressed on any screen. `data` gives its fields (entity_id, brightness, ...). A timeout or a new alert leaves it unperformed. Only through the esp_screens_show_alert event.",
+  "help": "A Home Assistant action, such as script.open_gate or light.turn_off, performed once when the button is pressed on any screen. `data` gives its fields (entity_id, brightness, ...). A timeout or a new alert leaves it unperformed. Only through the kachel_show_alert event.",
   "example": "script.open_gate"
  },
  "choice": {
@@ -127,7 +127,7 @@
   "action2": {
    "name": "button2_action",
    "label": "Second button action",
-   "help": "A Home Assistant action performed once when the second button is pressed on any screen, like `action` for the first. `button2_data` gives its fields. Only through the esp_screens_show_alert event.",
+   "help": "A Home Assistant action performed once when the second button is pressed on any screen, like `action` for the first. `button2_data` gives its fields. Only through the kachel_show_alert event.",
    "example": "script.snooze_reminder"
   }
  },

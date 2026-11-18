@@ -164,7 +164,7 @@ const lastLog = () => {
     <div class="label label-row">
       <span>{{ t("editor.sidebar.screens") }}</span>
       <button id="refresh" type="button" class="icon-btn" :aria-label="t('editor.sidebar.refresh')" :title="t('editor.sidebar.refresh')" @click="inv.refresh()"><Icon name="refresh" /></button>
-      <button id="new-screen" type="button" class="icon-btn" :aria-current="ui.route === '#new-screen' ? 'true' : 'false'" :aria-label="t('editor.nav.new_screen')"
+      <button id="new-screen" v-if="inv.espScreens" type="button" class="icon-btn" :aria-current="ui.route === '#new-screen' ? 'true' : 'false'" :aria-label="t('editor.nav.new_screen')"
         :title="sidebar.folded ? undefined : t('editor.nav.new_screen')" v-tooltip="tip('new', t('editor.nav.new_screen'))" @click="ui.go('#new-screen')"><Icon name="plus" /></button>
     </div>
     <div id="screens">

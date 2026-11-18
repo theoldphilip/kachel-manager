@@ -1,5 +1,5 @@
-"""One alert for every screen (app 0.2.45): Home Assistant fires esp_screens_show_alert or
-esp_screens_dismiss_alert, and the app calls that action on each screen that can show it."""
+"""One alert for every screen (app 0.2.45): Home Assistant fires kachel_show_alert or
+kachel_dismiss_alert, and the app calls that action on each screen that can show it."""
 import asyncio
 import importlib.util
 from pathlib import Path
@@ -49,7 +49,7 @@ class AlertData(unittest.TestCase):
     def test_the_events_and_their_actions(self):
         # That ALERT_MAX_TIMEOUT is the firmware's MAX_TIMEOUT_SECONDS is tests/test_alerts_reference.py's, compiled.
         self.assertEqual(alert_data({'timeout': ALERT_MAX_TIMEOUT + 1})[0]['timeout'], ALERT_MAX_TIMEOUT)
-        self.assertEqual(BROADCAST_EVENTS, {'esp_screens_show_alert': 'show_alert', 'esp_screens_dismiss_alert': 'dismiss_alert'})
+        self.assertEqual(BROADCAST_EVENTS, {'kachel_show_alert': 'show_alert', 'kachel_dismiss_alert': 'dismiss_alert'})
         self.assertEqual(alert_reference()['broadcast'], {'show': BROADCAST_SHOW, 'dismiss': BROADCAST_DISMISS})
 
 
@@ -127,7 +127,7 @@ def fake_ha():
         def __init__(self):
             self.registry, self.devices, self.states = [], [], {}
             for device, node, firmware in (('d1', 'kitchen-screen', '0.2.38'), ('d2', 'hall', '0.2.31'), ('d3', 'attic', '0.2.30')):
-                self.registry += [{'entity_id': f'text.{device}_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': device},
+                self.registry += [{'entity_id': f'text.{device}_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': device},
                                   {'entity_id': f'sensor.{device}_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': device},
                                   {'entity_id': f'sensor.{device}_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': device}]
                 self.devices.append({'id': device, 'name': node.title()})
@@ -161,7 +161,7 @@ class Broadcast(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(result, {'sent': 2, 'skipped': 1, 'failed': 0})
             data = {'title': 'Mail!', 'subtitle': '', 'icon': 'mailbox', 'color': '', 'button_text': '', 'timeout': 0, 'flash': True}
             self.assertEqual(sorted(m.ha.calls), [('esphome.hall_show_alert', data), ('esphome.kitchen_screen_show_alert', data)])
-            self.assertIn('esp_screens_show_alert: 2 of 3 screens (not: Attic firmware 0.2.30)', logs.output[-1])
+            self.assertIn('kachel_show_alert: 2 of 3 screens (not: Attic firmware 0.2.30)', logs.output[-1])
             m.ha.calls.clear()
             await m.broadcast(BROADCAST_DISMISS, {'title': 'ignored'})
             self.assertEqual(sorted(m.ha.calls), [('esphome.hall_dismiss_alert', {}), ('esphome.kitchen_screen_dismiss_alert', {})])
@@ -174,7 +174,7 @@ class Broadcast(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(result, {'sent': 1, 'skipped': 0, 'failed': 0, 'unknown': []})
             self.assertEqual([action for action, _ in m.ha.calls], ['esphome.kitchen_screen_show_alert'])
             self.assertNotIn('screen', m.ha.calls[0][1], 'show_alert keeps its seven fields')
-            self.assertIn('esp_screens_show_alert: 1 of 1 screens for kitchen_screen', logs.output[-1])
+            self.assertIn('kachel_show_alert: 1 of 1 screens for kitchen_screen', logs.output[-1])
             self.assertEqual(list(m.alert_actions), ['kitchen-screen'], 'the button action waits on that screen only')
             # A screen that cannot show it now is named, as for every screen.
             m.ha.calls.clear()
@@ -213,7 +213,7 @@ class Broadcast(unittest.IsolatedAsyncioTestCase):
             ha = fake_ha()
             m = Manager(ha, Path(tmp) / 'screens.json')
             await m.broadcast(BROADCAST_SHOW, {'title': 'One'})
-            ha.registry = ha.registry + [{'entity_id': 'text.d4_tiles', 'platform': 'esphome', 'original_name': 'Tile settings', 'device_id': 'd4'},
+            ha.registry = ha.registry + [{'entity_id': 'text.d4_tiles', 'platform': 'esphome', 'original_name': 'Kachel inbox', 'device_id': 'd4'},
                                          {'entity_id': 'sensor.d4_node', 'platform': 'esphome', 'original_name': 'Device name', 'device_id': 'd4'},
                                          {'entity_id': 'sensor.d4_fw', 'platform': 'esphome', 'original_name': 'Screen firmware', 'device_id': 'd4'}]
             ha.devices = ha.devices + [{'id': 'd4', 'name': 'Study'}]

@@ -11,6 +11,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'screen_manager/app'))
 from core import SETTINGS_BESIDE_BLOCK, discover, installation_yaml, packets, state_message, validate_layout, validate_settings
+from kachel_esp import esp_on   # Kachel Manager
 
 class ProtocolTests(unittest.TestCase):
     def test_unicode_chunks_and_limits(self):
@@ -50,9 +51,9 @@ class ProtocolTests(unittest.TestCase):
         packets(msg)
 
     def test_discovery_only_enabled_esphome_inboxes(self):
-        registry=[{'entity_id':'text.screen','platform':'esphome','original_name':'Tile settings'},
-                  {'entity_id':'text.wrong','platform':'template','original_name':'Tile settings'},
-                  {'entity_id':'text.disabled','platform':'esphome','original_name':'Tile settings','disabled_by':'user'}]
+        registry=[{'entity_id':'text.screen','platform':'esphome','original_name':'Kachel inbox'},
+                  {'entity_id':'text.wrong','platform':'template','original_name':'Kachel inbox'},
+                  {'entity_id':'text.disabled','platform':'esphome','original_name':'Kachel inbox','disabled_by':'user'}]
         screens,_=discover(registry,{'text.screen':{'state':'Synced'}},[],[])
         self.assertEqual([s['id'] for s in screens],['text.screen'])
 
@@ -94,11 +95,12 @@ if HAS_AIOHTTP:
     from aiohttp.test_utils import TestClient, TestServer
 
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 class ManagerTests(unittest.IsolatedAsyncioTestCase):
     def setup_manager(self,path):
         class HA:
             online=True
-            registry=[{'entity_id':'text.screen','platform':'esphome','original_name':'Tile settings'}]
+            registry=[{'entity_id':'text.screen','platform':'esphome','original_name':'Kachel inbox'}]
             devices=[];areas=[]
             states={'text.screen':{'state':'Ready'},'light.a':{'state':'on','attributes':{'friendly_name':'Lamp'}}}
             changed=asyncio.Event()

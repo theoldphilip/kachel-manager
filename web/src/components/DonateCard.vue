@@ -6,12 +6,14 @@ import { ref } from "vue";
 import { t } from "../i18n";
 import { usePreference } from "../composables/usePreference";
 import { useUiStore } from "../stores/ui";
+// Kachel Manager: Philip's donation page, one link (src/kachel/links.ts), instead of Tessera's.
+import { DONATE } from "../kachel/links";
 
 const ui = useUiStore();
 
 const DAY = 86_400_000;
-const MONTHLY = "https://buymeacoffee.com/f5j9jnkmhpv/membership";
-const ONCE = "https://buymeacoffee.com/f5j9jnkmhpv";
+const MONTHLY = DONATE;
+const ONCE = "";
 
 // When to ask again, as this browser keeps it: a moment, or "donated" for never.
 const until = usePreference<number | "donated" | null>("kachel-manager.donate", null,
@@ -46,7 +48,7 @@ function donated() {
     <p>{{ t("editor.donate.body") }}</p>
     <div class="donate-actions">
       <a class="donate-buy" :href="MONTHLY" target="_blank" rel="noopener" @click="hide(30)">{{ t("editor.donate.monthly") }}</a>
-      <a class="donate-link" :href="ONCE" target="_blank" rel="noopener" @click="hide(30)">{{ t("editor.donate.once") }}</a>
+      <a v-if="ONCE" class="donate-link" :href="ONCE" target="_blank" rel="noopener" @click="hide(30)">{{ t("editor.donate.once") }}</a>
     </div>
     <div class="donate-actions donate-quiet">
       <button type="button" class="donate-link" @click="hide(7)">{{ t("editor.donate.later") }}</button>

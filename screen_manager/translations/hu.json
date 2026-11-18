@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "A Home Assistant nem engedte, hogy az alkalmazás automatizálást mentsen. Rendszergazdai hozzáférés kell.",
         "refused": "A Home Assistant elutasította az automatizálást: {reason}",
-        "not_ours": "Ezt az automatizálást nem a Tessera készítette, ezért az alkalmazás nem nyúl hozzá.",
+        "not_ours": "Ezt az automatizálást nem a Kachel Manager készítette, ezért az alkalmazás nem nyúl hozzá.",
         "invalid": "Ez az automatizálás nem menthető ({part})."
       },
       "icons": {
@@ -1313,7 +1313,7 @@
         },
         "screen": {
           "label": "Kijelző",
-          "help": "Melyik kijelző kapja a figyelmeztetést: az eszközneve (például kitchen-screen), a Home Assistantban látható neve, vagy egy helyiség, amely a benne lévő összes kijelzőt eléri. Egy lista, például [kitchen-screen, hallway], többet is elér. Ha kihagyod, minden kijelző megkapja. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; a Tessera Screen Manager naplója felsorolja az ismert kijelzőket. Csak az kachel_show_alert és kachel_dismiss_alert eseményeken keresztül."
+          "help": "Melyik kijelző kapja a figyelmeztetést: az eszközneve (például kitchen-screen), a Home Assistantban látható neve, vagy egy helyiség, amely a benne lévő összes kijelzőt eléri. Egy lista, például [kitchen-screen, hallway], többet is elér. Ha kihagyod, minden kijelző megkapja. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; a Kachel Manager naplója felsorolja az ismert kijelzőket. Csak az kachel_show_alert és kachel_dismiss_alert eseményeken keresztül."
         },
         "button_color": {
           "label": "Gomb színe",
@@ -2984,7 +2984,7 @@
         "result": "A képernyőn",
         "bytes": "{n} / {of} bájt",
         "empty": "Az eredmény üres: a képernyő itt nem mutat semmit.",
-        "access": "A sablon a Home Assistantben fut a Tessera alkalmazás jogaival, így bármely entitást olvashat.",
+        "access": "A sablon a Home Assistantben fut a Kachel Manager alkalmazás jogaival, így bármely entitást olvashat.",
         "markup": {
           "label": "Formázás",
           "heading": "Címsor",
@@ -3170,11 +3170,11 @@
       },
       "left_hint": "Cím és kezdőlap gomb: az oldal beállításaiban",
       "wifi_sample": "A kijelző saját jele",
-      "link_sample": "Csak ha a Home Assistant vagy a Tessera nem elérhető",
+      "link_sample": "Csak ha a Home Assistant vagy a Kachel Manager nem elérhető",
       "battery_sample": "A kijelző saját akkumulátora",
       "wifi_hint": "A kijelző a saját jelét olvassa, így ez az elem a sávban marad, amikor a Home Assistant nem elérhető. Négy csíktól egyig, hálózat nélkül áthúzva.",
       "wifi_show_hint": "A Csak ha gyenge üresen hagyja a sávot, amíg a jel egy csíkra nem esik vagy a hálózat el nem tűnik.",
-      "link_hint": "Csak akkor jelenik meg, amikor a Home Assistant vagy a Tessera nem elérhető, így egy pillantással látod, miért hiányoznak értékek.",
+      "link_hint": "Csak akkor jelenik meg, amikor a Home Assistant vagy a Kachel Manager nem elérhető, így egy pillantással látod, miért hiányoznak értékek.",
       "battery_hint": "A kijelző maga olvassa az akkumulátorát, így ez az elem a sávon marad, amikor a Home Assistant nem elérhető. Az ikon úgy követi a töltöttséget, ahogy a Home Assistant rajzolja, töltés közben villámmal.",
       "battery_show_hint": "A Csak ha alacsony üresen hagyja a sávot, amíg az akkumulátor 20 % vagy kevesebb nem lesz.",
       "status_firmware": "Ez az elem a(z) {version} firmware-től jelenik meg. A frissítésig a kijelző kihagyja.",
@@ -3804,7 +3804,7 @@
       "copy_yaml": "YAML másolása",
       "all": {
         "title": "Minden kijelző egyszerre",
-        "text": "Váltsd ki a(z) {show} eseményt ugyanezekkel a mezőkkel, és a Tessera minden online kijelzőnek továbbítja a figyelmeztetést, a később hozzáadottaknak is. A(z) {dismiss} mindenhol eltünteti. Automatizmusban add hozzá a(z) {event} műveletet, vagy illeszd be a példát a(z) {edit} alatt. A nem használt mezőket hagyd ki. Ehhez a Tesserának futnia kell.",
+        "text": "Váltsd ki a(z) {show} eseményt ugyanezekkel a mezőkkel, és a Kachel Manager minden online kijelzőnek továbbítja a figyelmeztetést, a később hozzáadottaknak is. A(z) {dismiss} mindenhol eltünteti. Automatizmusban add hozzá a(z) {event} műveletet, vagy illeszd be a példát a(z) {edit} alatt. A nem használt mezőket hagyd ki. Ehhez a Tesserának futnia kell.",
         "event": "Esemény manuális kiváltása"
       },
       "fields": {
@@ -3877,7 +3877,7 @@
       "one": {
         "title": "Egy kijelző, kamerával vagy gombművelettel",
         "text": "Add hozzá a(z) {screen} mezőt ugyanahhoz az eseményhez, és csak az a kijelző kapja meg a figyelmeztetést. Így tud egyetlen kijelző {camera} képet mutatni vagy a gombjáról {action} műveletet futtatni: a kijelző saját műveletének nincsenek ilyen mezői. A(z) {screen} után az alábbi lista egyik értéke jön.",
-        "more": "Néhány kijelzőre? Adj meg listát, például: {list}. Helyiség is működik, és a benne lévő összes kijelzőt eléri. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; ilyenkor a Tessera Screen Manager naplója felsorolja az ismert kijelzőket.",
+        "more": "Néhány kijelzőre? Adj meg listát, például: {list}. Helyiség is működik, és a benne lévő összes kijelzőt eléri. Olyan név, amely egyik kijelzőre sem illik, semmit sem küld; ilyenkor a Kachel Manager naplója felsorolja az ismert kijelzőket.",
         "value": "A screen után:",
         "name": "Név a Home Assistantban",
         "room": "Helyiség",
@@ -3896,7 +3896,7 @@
         "camera": "Kamera (nem kötelező)",
         "no_camera": "Nincs kamera",
         "screens_hint": "Nincs kiválasztva: minden képernyő, amely értesítést tud mutatni.",
-        "description": "A Tessera Eseményeiben készült: egy értesítés a képernyőkön.",
+        "description": "A Kachel Manager Eseményeiben készült: egy értesítés a képernyőkön.",
         "title": "Új értesítés-automatizálás",
         "with_picture": "A kamera képét mutatja",
         "without_picture": "Kép nélkül mutatja az értesítést",
@@ -4363,9 +4363,9 @@
       "simple_editor": "Egyszerű nézet"
     },
     "donate": {
-      "title": "Támogasd a Tesserát",
-      "body": "A Tessera ingyenes, és az is marad. Én vezetem a fejlesztést és a karbantartást, a közösség hozzájárulásaival. A támogatásod több időt ad a fejlesztésre, a módosítások átnézésére és tesztelésére. Egy havi hozzájárulást vagy egy egyszeri kávét is szívesen fogadok.",
-      "monthly": "Havi támogatás",
+      "title": "Support the Kachel Manager",
+      "body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
+      "monthly": "Donate with PayPal",
       "once": "vagy hívj meg egyszer egy kávéra",
       "later": "Talán később",
       "donated": "Már adományoztam",
@@ -4576,7 +4576,7 @@
         "finish": {
           "label": "Hogyan szeretnéd használni?",
           "automation": "Automatizálás létrehozása",
-          "automation_detail": "A Tessera hozzáadja a Home Assistanthez, az 1. lépésben választott indítással.",
+          "automation_detail": "A Kachel Manager hozzáadja a Home Assistanthez, az 1. lépésben választott indítással.",
           "needs_trigger": "Először válaszd ki az 1. lépésben, mi indítja.",
           "action": "Saját automatizálásban használom",
           "action_detail": "Csak a műveletet másold ki, és illeszd be egy meglévő automatizálásodba.",
@@ -4629,7 +4629,7 @@
       "yaml": {
         "missed_alias": "Nem fogadott csengetés a telefonomra",
         "missed_message": "Valaki csengetett",
-        "description": "A Tessera Eseményeiben készült: egy csengő a képernyőkön."
+        "description": "A Kachel Manager Eseményeiben készült: egy csengő a képernyőkön."
       },
       "wizard": {
         "title": "Új csengő-automatizálás",
@@ -4824,11 +4824,11 @@
       "button": "Automatikus elrendezés",
       "button_title": "Oldalak készítése a Home Assistant területeidből és eszközeidből",
       "title": "Elrendezés készítése neked",
-      "intro": "A Tessera megnézi a Home Assistant területeidet és eszközeidet, és oldalakat készít ehhez a kijelzőhöz: helyiségenként egy oldalt vagy szakaszt, a ház időjárását, riasztóját, személyeit és kameráit együtt, nagyobb csempéket ott, ahol a kijelzőn van hely. Visszavonhatod, és utána bármit módosíthatsz.",
+      "intro": "A Kachel Manager megnézi a Home Assistant területeidet és eszközeidet, és oldalakat készít ehhez a kijelzőhöz: helyiségenként egy oldalt vagy szakaszt, a ház időjárását, riasztóját, személyeit és kameráit együtt, nagyobb csempéket ott, ahol a kijelzőn van hely. Visszavonhatod, és utána bármit módosíthatsz.",
       "reading": "Az otthonod beolvasása…",
       "failed": "Az otthonodat nem sikerült beolvasni: {error}",
-      "nothing": "A Tessera még nem talált semmit, amit ezen a kijelzőn mutathatna. Adj területet az eszközeidnek a Home Assistantban, vagy adj hozzá csempéket a könyvtárból.",
-      "nothing_new": "Minden, amit a Tessera erre a kijelzőre tenne, már rajta van.",
+      "nothing": "A Kachel Manager még nem talált semmit, amit ezen a kijelzőn mutathatna. Adj területet az eszközeidnek a Home Assistantban, vagy adj hozzá csempéket a könyvtárból.",
+      "nothing_new": "Minden, amit a Kachel Manager erre a kijelzőre tenne, már rajta van.",
       "summary": "{pages} oldal · {tiles} csempe | {pages} oldal · {tiles} csempe",
       "summary_sections": "{n} szakasz | {n} szakasz",
       "from_rooms": "egy helyiségből | {n} helyiségből",
@@ -4841,7 +4841,7 @@
       "make": "Elrendezés készítése",
       "made": "Elkészült egy {pages} oldalas elrendezés. A visszavonás visszaállítja. | Elkészült egy {pages} oldalas elrendezés. A visszavonás visszaállítja.",
       "offer_title": "Készítsek neked egy első elrendezést?",
-      "offer_text": "A Tessera elrendezheti ezt a kijelzőt a Home Assistant területeid és eszközeid alapján. Utána mindent módosíthatsz.",
+      "offer_text": "A Kachel Manager elrendezheti ezt a kijelzőt a Home Assistant területeid és eszközeid alapján. Utána mindent módosíthatsz.",
       "offer_make": "Első elrendezés készítése",
       "offer_empty": "Üres kezdés"
     },
@@ -4907,7 +4907,7 @@
         "no_page": "Nincs {page}. oldal.",
         "not_drawn": "A kijelző {count} entitáshoz nem rajzol csempét. | A kijelző {count} entitáshoz nem rajzol csempét."
       },
-      "update_app": "Frissítsd a Tessera alkalmazást: ez a szerkesztő maga helyezi el a Layoutbot terveit.",
+      "update_app": "Frissítsd a Kachel Manager alkalmazást: ez a szerkesztő maga helyezi el a Layoutbot terveit.",
       "scope": {
         "here": "Ez a kijelző",
         "all": "Minden kijelző"

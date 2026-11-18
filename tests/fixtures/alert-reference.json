@@ -89,7 +89,7 @@
  "screen": {
   "name": "screen",
   "label": "Screen",
-  "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Tessera Screen Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events.",
+  "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Kachel Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events.",
   "example": "kitchen-screen"
  },
  "action": {

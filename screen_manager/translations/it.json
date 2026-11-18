@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "Home Assistant non ha permesso all'app di salvare automazioni. L'app ha bisogno dell'accesso di un amministratore.",
         "refused": "Home Assistant ha rifiutato l'automazione: {reason}",
-        "not_ours": "Quell'automazione non è stata creata da Tessera, quindi l'app non la tocca.",
+        "not_ours": "Quell'automazione non è stata creata da Kachel Manager, quindi l'app non la tocca.",
         "invalid": "Questa automazione non può essere salvata ({part})."
       },
       "icons": {
@@ -1313,7 +1313,7 @@
         },
         "screen": {
           "label": "Schermo",
-          "help": "Quale schermo riceve l'avviso: il suo nome dispositivo (come kitchen-screen), il nome mostrato da Home Assistant, oppure una stanza, che raggiunge ogni schermo al suo interno. Un elenco, come [kitchen-screen, hallway], ne raggiunge più di uno. Omettilo per tutti gli schermi. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Tessera Screen Manager elenca allora gli schermi che conosce. Solo tramite gli eventi kachel_show_alert ed kachel_dismiss_alert."
+          "help": "Quale schermo riceve l'avviso: il suo nome dispositivo (come kitchen-screen), il nome mostrato da Home Assistant, oppure una stanza, che raggiunge ogni schermo al suo interno. Un elenco, come [kitchen-screen, hallway], ne raggiunge più di uno. Omettilo per tutti gli schermi. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Kachel Manager elenca allora gli schermi che conosce. Solo tramite gli eventi kachel_show_alert ed kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Colore del pulsante",
@@ -1526,7 +1526,7 @@
       },
       "identify": {
         "title": "Questo è {name}",
-        "subtitle": "Identificazione, da Tessera"
+        "subtitle": "Identificazione, da Kachel Manager"
       },
       "script_running": "In esecuzione",
       "states": {
@@ -1929,7 +1929,7 @@
       "page_taken": "Questo schermo ha già un riquadro che porta a pagina {page}.",
       "copied": "Disposizione di {name} copiata. Salva e invia quando ti sembra giusta.",
       "imported": "Disposizione importata. Salva e invia quando ti sembra giusta.",
-      "not_json": "Questo non è JSON. Esporta prima una disposizione, oppure incollane una da un altro Tessera.",
+      "not_json": "Questo non è JSON. Esporta prima una disposizione, oppure incollane una da un altro Kachel Manager.",
       "count": "{n} pagina · {tiles} / {limit} riquadri | {n} pagine · {tiles} / {limit} riquadri",
       "no_tiles": "Aggiungi la tua prima luce, scena o dispositivo dalla libreria.",
       "page_removed": "La pagina {page} è sparita.",
@@ -2444,7 +2444,7 @@
       "choose": "Scegli…",
       "less": "Meno",
       "more": "Più",
-      "from_fetch": "Le scelte vengono dalla fonte di dati del plugin stesso, tramite Tessera.",
+      "from_fetch": "Le scelte vengono dalla fonte di dati del plugin stesso, tramite Kachel Manager.",
       "on_screen": "Sullo schermo",
       "sizes": "Da {min} a {max}; trascina un bordo del riquadro per cambiarne le dimensioni.",
       "sizes_or_page": "Da {min} a {max}, o l'intera pagina; trascina un bordo del riquadro per cambiarne le dimensioni.",
@@ -2984,7 +2984,7 @@
         "result": "Sullo schermo",
         "bytes": "{n} di {of} byte",
         "empty": "Il risultato è vuoto: lo schermo qui non mostra nulla.",
-        "access": "Il modello gira in Home Assistant con i permessi dell’app Tessera, quindi può leggere ogni entità.",
+        "access": "Il modello gira in Home Assistant con i permessi dell’app Kachel Manager, quindi può leggere ogni entità.",
         "markup": {
           "label": "Formattazione",
           "heading": "Titolo",
@@ -3170,11 +3170,11 @@
       },
       "left_hint": "Titolo e pulsante Home: nelle impostazioni della pagina",
       "wifi_sample": "Il segnale di questo schermo",
-      "link_sample": "Solo quando Home Assistant o Tessera manca",
+      "link_sample": "Solo quando Home Assistant o Kachel Manager manca",
       "battery_sample": "La batteria di questo schermo",
       "wifi_hint": "Lo schermo legge il proprio segnale, quindi questo elemento resta nella barra quando Home Assistant non c'è. Da quattro tacche a una, barrato senza rete.",
       "wifi_show_hint": "Solo se debole lascia la barra libera finché il segnale non scende a una tacca o la rete sparisce.",
-      "link_hint": "Compare solo mentre Home Assistant o Tessera manca, così vedi subito perché mancano dei valori.",
+      "link_hint": "Compare solo mentre Home Assistant o Kachel Manager manca, così vedi subito perché mancano dei valori.",
       "battery_hint": "Lo schermo legge la propria batteria, quindi questo elemento resta nella barra quando Home Assistant non c'è. L'icona segue il livello come la disegna Home Assistant, con un fulmine durante la ricarica.",
       "battery_show_hint": "Solo se scarica lascia la barra libera finché la batteria non è al 20 % o meno.",
       "status_firmware": "Questo elemento compare dal firmware {version}. Fino a quell'aggiornamento, lo schermo lo omette.",
@@ -3804,7 +3804,7 @@
       "copy_yaml": "Copia YAML",
       "all": {
         "title": "Tutti gli schermi insieme",
-        "text": "Attiva l'evento {show} con gli stessi campi ed Tessera inoltra l'avviso a ogni schermo online, compresi quelli che aggiungerai in seguito. {dismiss} lo rimuove ovunque. In un'automazione, aggiungi l'azione {event} o incolla l'esempio in {edit}. Tralascia i campi che non usi. Perché funzioni, Tessera deve essere in esecuzione.",
+        "text": "Attiva l'evento {show} con gli stessi campi ed Kachel Manager inoltra l'avviso a ogni schermo online, compresi quelli che aggiungerai in seguito. {dismiss} lo rimuove ovunque. In un'automazione, aggiungi l'azione {event} o incolla l'esempio in {edit}. Tralascia i campi che non usi. Perché funzioni, Kachel Manager deve essere in esecuzione.",
         "event": "Attiva manualmente evento"
       },
       "fields": {
@@ -3877,7 +3877,7 @@
       "one": {
         "title": "Uno schermo, con una telecamera o un'azione del pulsante",
         "text": "Aggiungi {screen} allo stesso evento e solo quello schermo riceve l'avviso. È così che un singolo schermo mostra un'immagine della {camera} o esegue un'{action} dal suo pulsante: l'azione propria dello schermo non ha campi per questo. Dopo {screen} va uno dei valori dell'elenco qui sotto.",
-        "more": "Qualche schermo? Indica un elenco, come {list}. Funziona anche una stanza, che raggiunge ogni schermo al suo interno. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Tessera Screen Manager elenca allora gli schermi che conosce.",
+        "more": "Qualche schermo? Indica un elenco, come {list}. Funziona anche una stanza, che raggiunge ogni schermo al suo interno. Un nome che non corrisponde a nessuno schermo non invia nulla; il log di Kachel Manager elenca allora gli schermi che conosce.",
         "value": "Dopo screen:",
         "name": "Nome in Home Assistant",
         "room": "Stanza",
@@ -3896,7 +3896,7 @@
         "camera": "Telecamera (facoltativa)",
         "no_camera": "Nessuna telecamera",
         "screens_hint": "Nessuno scelto: tutti gli schermi che possono mostrare un avviso.",
-        "description": "Creata negli Eventi di Tessera: un avviso sugli schermi.",
+        "description": "Creata negli Eventi di Kachel Manager: un avviso sugli schermi.",
         "title": "Nuova automazione di avviso",
         "with_picture": "Mostra l'immagine della telecamera",
         "without_picture": "Mostra l'avviso senza immagine",
@@ -4363,9 +4363,9 @@
       "simple_editor": "Vista semplice"
     },
     "donate": {
-      "title": "Sostieni Tessera",
-      "body": "Tessera è gratuito e lo resterà. Guido lo sviluppo e la manutenzione, con i contributi della comunità. Il tuo sostegno mi dà più tempo per sviluppare, rivedere e testare i miglioramenti. Un contributo mensile o un caffè una tantum sono benvenuti.",
-      "monthly": "Sostieni ogni mese",
+      "title": "Support the Kachel Manager",
+      "body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
+      "monthly": "Donate with PayPal",
       "once": "oppure offrimi un caffè una volta",
       "later": "Forse più tardi",
       "donated": "Ho già donato",
@@ -4576,7 +4576,7 @@
         "finish": {
           "label": "Come vuoi usarla?",
           "automation": "Crea l'automazione",
-          "automation_detail": "Tessera la aggiunge a Home Assistant, con l'avvio scelto al passo 1.",
+          "automation_detail": "Kachel Manager la aggiunge a Home Assistant, con l'avvio scelto al passo 1.",
           "needs_trigger": "Scegli prima al passo 1 cosa la avvia.",
           "action": "Usala in un'automazione tua",
           "action_detail": "Copia solo l'azione e incollala in un'automazione che hai già.",
@@ -4590,7 +4590,7 @@
         "saved": "Aggiunta. Funziona subito, senza riavvio.",
         "open": "Apri in Home Assistant",
         "hint": "Si chiama \"{title}\" nelle automazioni di Home Assistant, dove puoi modificarla ancora.",
-        "listed": "Da Tessera in Home Assistant",
+        "listed": "Da Kachel Manager in Home Assistant",
         "remove": "Rimuovi",
         "remove_confirm": "Rimuovere \"{name}\" da Home Assistant?",
         "on": "Attiva",
@@ -4629,7 +4629,7 @@
       "yaml": {
         "missed_alias": "Campanello perso sul mio telefono",
         "missed_message": "Qualcuno ha suonato",
-        "description": "Creata negli Eventi di Tessera: un campanello sugli schermi."
+        "description": "Creata negli Eventi di Kachel Manager: un campanello sugli schermi."
       },
       "wizard": {
         "title": "Nuova automazione del campanello",
@@ -4824,11 +4824,11 @@
       "button": "Layout automatico",
       "button_title": "Crea pagine dalle tue aree e dai tuoi dispositivi di Home Assistant",
       "title": "Creare un layout per te",
-      "intro": "Tessera guarda le tue aree e i tuoi dispositivi in Home Assistant e crea pagine per questo schermo: una pagina o sezione per stanza, il meteo, l'allarme, le persone e le telecamere della casa insieme, riquadri più grandi dove lo schermo ha spazio. Puoi annullare e cambiare tutto dopo.",
+      "intro": "Kachel Manager guarda le tue aree e i tuoi dispositivi in Home Assistant e crea pagine per questo schermo: una pagina o sezione per stanza, il meteo, l'allarme, le persone e le telecamere della casa insieme, riquadri più grandi dove lo schermo ha spazio. Puoi annullare e cambiare tutto dopo.",
       "reading": "Lettura della tua casa…",
       "failed": "Non è stato possibile leggere la tua casa: {error}",
-      "nothing": "Tessera non ha ancora trovato nulla da mostrare su questo schermo. Assegna un'area ai tuoi dispositivi in Home Assistant o aggiungi riquadri dalla libreria.",
-      "nothing_new": "Tutto ciò che Tessera metterebbe su questo schermo c'è già.",
+      "nothing": "Kachel Manager non ha ancora trovato nulla da mostrare su questo schermo. Assegna un'area ai tuoi dispositivi in Home Assistant o aggiungi riquadri dalla libreria.",
+      "nothing_new": "Tutto ciò che Kachel Manager metterebbe su questo schermo c'è già.",
       "summary": "{pages} pagina · {tiles} riquadri | {pages} pagine · {tiles} riquadri",
       "summary_sections": "{n} sezione | {n} sezioni",
       "from_rooms": "da una stanza | da {n} stanze",
@@ -4841,7 +4841,7 @@
       "make": "Crea il layout",
       "made": "Un layout di {pages} pagina è pronto. Annulla lo toglie. | Un layout di {pages} pagine è pronto. Annulla lo toglie.",
       "offer_title": "Vuoi che crei un primo layout per te?",
-      "offer_text": "Tessera può organizzare questo schermo con le tue aree e i tuoi dispositivi di Home Assistant. Dopo puoi cambiare tutto.",
+      "offer_text": "Kachel Manager può organizzare questo schermo con le tue aree e i tuoi dispositivi di Home Assistant. Dopo puoi cambiare tutto.",
       "offer_make": "Crea un primo layout",
       "offer_empty": "Inizia vuoto"
     },
@@ -4907,7 +4907,7 @@
         "no_page": "Non esiste la pagina {page}.",
         "not_drawn": "Lo schermo non disegna alcun riquadro per {count} entità. | Lo schermo non disegna alcun riquadro per {count} entità."
       },
-      "update_app": "Aggiorna l'app Tessera: questo editor colloca da sé i piani di Layoutbot.",
+      "update_app": "Aggiorna l'app Kachel Manager: questo editor colloca da sé i piani di Layoutbot.",
       "scope": {
         "here": "Questo schermo",
         "all": "Tutti gli schermi"

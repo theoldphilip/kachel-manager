@@ -67,7 +67,7 @@ onKeyStroke((e) => (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !q
       <ConnectionBar />
       <header v-if="ui.phone && ui.route !== ''" class="phone-nav">
         <button type="button" class="icon-btn phone-menu-key" id="phone-menu" :aria-label="t('editor.phone.menu')" @click="ui.sideOpen = true"><Icon name="menu" /></button>
-        <b>Tessera</b>
+        <b>Kachel</b>
       </header>
       <component :is="view" />
     </main>

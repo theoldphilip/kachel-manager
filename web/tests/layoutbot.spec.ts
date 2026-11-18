@@ -86,7 +86,7 @@ describe("Layoutbot", () => {
     api.on("POST screens/:id/layoutbot", () => ({ reply: "Done", layout: withNewPage(before), changed: true, notes: [] }));
     await bot.ask("Covers");
     expect(doc.document).toEqual(before);
-    expect(bot.messages.at(-1)).toMatchObject({ error: true, text: "Update the Tessera app: this editor places Layoutbot's plans itself." });
+    expect(bot.messages.at(-1)).toMatchObject({ error: true, text: "Update the Kachel Manager: this editor places Layoutbot's plans itself." });
   });
 
   it("asks to send after a real change and nothing else, and yes saves and sends this screen", async () => {

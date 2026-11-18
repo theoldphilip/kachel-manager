@@ -11,6 +11,7 @@ import type { Screen } from "../types";
 import Icon from "./ui/Icon.vue";
 // Kachel Manager: the Kachel mark and name instead of Tessera's.
 import KachelMark from "../kachel/KachelMark.vue";
+import { MANUAL } from "../kachel/links";
 import BuildIndicator from "./BuildIndicator.vue";
 import BrokenList from "./BrokenList.vue";
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from "reka-ui";
@@ -323,7 +324,7 @@ const lastLog = () => {
            the command palette and a screen's menu rather than here, where it read as the way in (app 0.3.27). -->
       <button v-if="plugins.pluginsEnabled" id="open-plugins" type="button" class="nav-item" data-tip="plugins" v-tooltip="tip('plugins', t('editor.nav.plugins'))" :aria-current="ui.route === '#plugins' ? 'true' : 'false'" @click="ui.go('#plugins')"><Icon name="puzzle-outline"/><span class="txt">{{ t("editor.nav.plugins") }}</span><span v-if="pluginBuilds()" class="spin small" role="img" :aria-label="t('editor.build.plugins')"></span></button>
       <!-- The manual on the website (app 0.4.91): what every button does and what to do when something doesn't work. -->
-      <a id="open-manual" class="nav-item" href="https://tessera-maxgramser.on-forge.com/docs" target="_blank" rel="noopener" data-tip="manual" v-tooltip="tip('manual', t('editor.nav.manual'))"><Icon name="book-open-page-variant"/><span class="txt">{{ t("editor.nav.manual") }}</span></a>
+      <a id="open-manual" class="nav-item" :href="MANUAL" target="_blank" rel="noopener" data-tip="manual" v-tooltip="tip('manual', t('editor.nav.manual'))"><Icon name="book-open-page-variant"/><span class="txt">{{ t("editor.nav.manual") }}</span></a>
       <button id="open-events" type="button" class="nav-item" data-tip="events" v-tooltip="tip('events', t('editor.nav.events'))" :aria-current="ui.route === '#events' ? 'true' : 'false'" @click="ui.go('#events')"><span class="mdi">{{ glyph("F073C") }}</span><span class="txt">{{ t("editor.nav.events") }}</span></button>
       <button id="open-settings" type="button" class="nav-item" data-tip="settings" v-tooltip="tip('settings', t('editor.nav.settings'))" :aria-current="ui.route === '#settings' ? 'true' : 'false'" @click="ui.go('#settings')"><span class="mdi">{{ glyph("F0493") }}</span><span class="txt">{{ t("editor.nav.settings") }}</span></button>
     </div>

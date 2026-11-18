@@ -14,6 +14,9 @@ Was ein Gerät nicht hat, zeigt er nicht.
 ESP32-Bildschirme (CYD, Guition, Waveshare …) gehören nicht hierher, sie bleiben beim Tessera-Add-on. Beide können
 nebeneinander in derselben Home-Assistant-Instanz laufen.
 
+Der Kachel Manager ist kostenlos. Wenn er dir nützt, freue ich mich über eine
+[Spende per PayPal](https://www.paypal.com/donate/?hosted_button_id=SLNW2MCC268SG).
+
 Der Kachel Manager ist ein Fork von [Tessera](https://github.com/MaxGramser/homeassistant_espscreen) von Max Gramser
 (AGPL-3.0). Quelle: [theoldphilip/kachel-manager](https://github.com/theoldphilip/kachel-manager).
 

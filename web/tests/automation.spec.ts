@@ -29,9 +29,9 @@ describe("what starts an automation", () => {
     for (const entity of ["sensor.temperature", "light.hall", "camera.front_door"]) expect(triggerKind(entity)).toBeNull();
   });
 
-  it("calls every automation Tessera: <name>, once", () => {
-    expect(title("Front door")).toBe("Tessera: Front door");
-    expect(title("tessera: Front door")).toBe("Tessera: Front door");
+  it("calls every automation Kachel: <name>, once", () => {
+    expect(title("Front door")).toBe("Kachel: Front door");
+    expect(title("kachel: Front door")).toBe("Kachel: Front door");
   });
 });
 
@@ -43,7 +43,7 @@ describe("the doorbell's automation", () => {
     expect(doorbellKind(reference, "binary_sensor.porch_visitor")).toBe("on");
     const automation = doorbellAutomation(reference, { trigger: "binary_sensor.porch_visitor", camera: "camera.porch", name: "Porch",
       screens: ["hallway", "kitchen"], timeout: 90 });
-    expect(automation.alias.startsWith("Tessera: ")).toBe(true);
+    expect(automation.alias.startsWith("Kachel: ")).toBe(true);
     expect(automation.triggers).toEqual([{ trigger: "state", entity_id: "binary_sensor.porch_visitor", from: "off", to: "on" }]);
     expect(automation.actions).toEqual([{ event: "kachel_doorbell", event_data: { camera: "camera.porch", screen: ["hallway", "kitchen"], timeout: 90 } }]);
     expect(automationYaml(automation)).toContain("    from: \"off\"\n    to: \"on\"");

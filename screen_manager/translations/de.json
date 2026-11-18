@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "Home Assistant hat der App das Speichern von Automatisierungen nicht erlaubt. Die App braucht den Zugriff eines Administrators.",
         "refused": "Home Assistant hat die Automatisierung abgelehnt: {reason}",
-        "not_ours": "Diese Automatisierung wurde nicht von Tessera erstellt, die App lässt sie in Ruhe.",
+        "not_ours": "Diese Automatisierung wurde nicht vom Kachel Manager erstellt, die App lässt sie in Ruhe.",
         "invalid": "Diese Automatisierung kann nicht gespeichert werden ({part})."
       },
       "icons": {
@@ -1347,7 +1347,7 @@
         },
         "screen": {
           "label": "Bildschirm",
-          "help": "Welcher Bildschirm die Meldung bekommt: sein Gerätename (etwa kitchen-screen), der Name, den Home Assistant anzeigt, oder ein Raum, der jeden Bildschirm darin erreicht. Eine Liste wie [kitchen-screen, hallway] erreicht mehrere. Weglassen für alle Bildschirme. Ein Name, der zu keinem Bildschirm passt, sendet nichts; das Log von Tessera Screen Manager nennt dann die Bildschirme, die es kennt. Nur über die Events kachel_show_alert und kachel_dismiss_alert."
+          "help": "Welcher Bildschirm die Meldung bekommt: sein Gerätename (etwa kitchen-screen), der Name, den Home Assistant anzeigt, oder ein Raum, der jeden Bildschirm darin erreicht. Eine Liste wie [kitchen-screen, hallway] erreicht mehrere. Weglassen für alle Bildschirme. Ein Name, der zu keinem Bildschirm passt, sendet nichts; das Log des Kachel Managers nennt dann die Bildschirme, die er kennt. Nur über die Events kachel_show_alert und kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Tastenfarbe",
@@ -1560,7 +1560,7 @@
       },
       "identify": {
         "title": "Das ist {name}",
-        "subtitle": "Identifizieren in Tessera"
+        "subtitle": "Identifizieren im Kachel Manager"
       },
       "script_running": "Läuft",
       "states": {
@@ -1963,7 +1963,7 @@
       "page_taken": "Dieser Bildschirm hat schon eine Kachel, die zu Seite {page} führt.",
       "copied": "Layout von {name} kopiert. Drücke „Speichern & senden“, wenn alles passt.",
       "imported": "Layout importiert. Drücke „Speichern & senden“, wenn alles passt.",
-      "not_json": "Das ist kein JSON. Exportiere zuerst ein Layout oder füge eines aus einer anderen Tessera-Installation ein.",
+      "not_json": "Das ist kein JSON. Exportiere zuerst ein Layout oder füge eines aus einem anderen Kachel Manager oder aus Tessera ein.",
       "count": "{n} Seite · {tiles} / {limit} Kacheln | {n} Seiten · {tiles} / {limit} Kacheln",
       "no_tiles": "Füge aus der Bibliothek deine erste Leuchte, Szene oder dein erstes Gerät hinzu.",
       "page_removed": "Seite {page} ist weg.",
@@ -2478,7 +2478,7 @@
       "choose": "Wählen…",
       "less": "Weniger",
       "more": "Mehr",
-      "from_fetch": "Die Auswahl kommt aus der eigenen Datenquelle des Plugins, über Tessera.",
+      "from_fetch": "Die Auswahl kommt aus der eigenen Datenquelle des Plugins, über den Kachel Manager.",
       "on_screen": "Auf dem Bildschirm",
       "sizes": "Von {min} bis {max}; zieh an einem Rand der Kachel, um ihre Größe zu ändern.",
       "sizes_or_page": "Von {min} bis {max}, oder die ganze Seite; zieh an einem Rand der Kachel, um ihre Größe zu ändern.",
@@ -3018,7 +3018,7 @@
         "result": "Auf dem Bildschirm",
         "bytes": "{n} von {of} Bytes",
         "empty": "Das Ergebnis ist leer: Der Bildschirm zeigt hier nichts.",
-        "access": "Das Template läuft in Home Assistant mit den Rechten der Tessera-App und kann daher jede Entität lesen.",
+        "access": "Das Template läuft in Home Assistant mit den Rechten des Kachel Managers und kann daher jede Entität lesen.",
         "markup": {
           "label": "Formatierung",
           "heading": "Überschrift",
@@ -3204,11 +3204,11 @@
       },
       "left_hint": "Titel und Startseiten-Schaltfläche: in den Seiteneinstellungen",
       "wifi_sample": "Das Signal dieses Bildschirms",
-      "link_sample": "Nur wenn Home Assistant oder Tessera fehlt",
+      "link_sample": "Nur wenn Home Assistant oder der Kachel Manager fehlt",
       "battery_sample": "Der Akku dieses Bildschirms",
       "wifi_hint": "Der Bildschirm liest sein eigenes Signal, daher bleibt dieses Element in der Leiste, wenn Home Assistant weg ist. Vier Balken bis einer, durchgestrichen ohne Netzwerk.",
       "wifi_show_hint": "Nur wenn schwach hält die Leiste frei, bis das Signal auf einen Balken fällt oder das Netzwerk weg ist.",
-      "link_hint": "Erscheint nur, solange Home Assistant oder Tessera fehlt, damit du auf einen Blick siehst, warum Werte fehlen.",
+      "link_hint": "Erscheint nur, solange Home Assistant oder der Kachel Manager fehlt, damit du auf einen Blick siehst, warum Werte fehlen.",
       "battery_hint": "Der Bildschirm liest seinen eigenen Akku, daher bleibt dieses Element in der Leiste, wenn Home Assistant weg ist. Das Symbol folgt dem Ladestand so, wie Home Assistant ihn zeichnet, mit einem Blitz während des Ladens.",
       "battery_show_hint": "Nur wenn niedrig hält die Leiste frei, bis der Akku bei 20 % oder weniger ist.",
       "status_firmware": "Dieses Element erscheint ab Firmware {version}. Bis zu diesem Update lässt der Bildschirm es weg.",
@@ -3854,7 +3854,7 @@
       "copy_yaml": "YAML kopieren",
       "all": {
         "title": "Alle Bildschirme auf einmal",
-        "text": "Löse das Ereignis {show} mit denselben Feldern aus, und Tessera gibt die Meldung an jeden Bildschirm weiter, der online ist, auch an später hinzugefügte. {dismiss} entfernt sie überall. Nimm in einer Automation die Aktion {event} oder füge das Beispiel unter {edit} ein. Lass die Felder weg, die du nicht brauchst. Dafür muss Tessera laufen.",
+        "text": "Löse das Ereignis {show} mit denselben Feldern aus, und der Kachel Manager gibt die Meldung an jeden Bildschirm weiter, der online ist, auch an später hinzugefügte. {dismiss} entfernt sie überall. Nimm in einer Automation die Aktion {event} oder füge das Beispiel unter {edit} ein. Lass die Felder weg, die du nicht brauchst. Dafür muss der Kachel Manager laufen.",
         "event": "Manuelles Ereignis auslösen"
       },
       "fields": {
@@ -3927,7 +3927,7 @@
       "one": {
         "title": "Ein Bildschirm, mit Kamera oder Tastenaktion",
         "text": "Füge {screen} zum selben Event hinzu, und nur dieser Bildschirm bekommt die Meldung. So zeigt ein einzelner Bildschirm ein Bild von {camera} oder führt über seine Taste eine {action} aus: Die eigene Aktion des Bildschirms hat dafür keine Felder. Nach {screen} kommt einer der Werte aus der Liste unten.",
-        "more": "Mehrere Bildschirme? Gib eine Liste an, etwa {list}. Ein Raum geht auch und erreicht jeden Bildschirm darin. Ein Name, der zu keinem Bildschirm passt, sendet nichts; das Log von Tessera Screen Manager nennt dann die Bildschirme, die es kennt.",
+        "more": "Mehrere Bildschirme? Gib eine Liste an, etwa {list}. Ein Raum geht auch und erreicht jeden Bildschirm darin. Ein Name, der zu keinem Bildschirm passt, sendet nichts; das Log des Kachel Managers nennt dann die Bildschirme, die er kennt.",
         "value": "Nach screen:",
         "name": "Name in Home Assistant",
         "room": "Raum",
@@ -3946,7 +3946,7 @@
         "camera": "Kamera (optional)",
         "no_camera": "Keine Kamera",
         "screens_hint": "Nichts gewählt: jeder Bildschirm, der eine Meldung zeigen kann.",
-        "description": "Erstellt in den Events von Tessera: ein Alert auf den Bildschirmen.",
+        "description": "Erstellt in den Events des Kachel Managers: ein Alert auf den Bildschirmen.",
         "title": "Neue Meldungs-Automation",
         "with_picture": "Zeigt das Bild der Kamera",
         "without_picture": "Zeigt die Meldung ohne Bild",
@@ -4413,9 +4413,9 @@
       "simple_editor": "Einfache Ansicht"
     },
     "donate": {
-      "title": "Tessera unterstützen",
-      "body": "Tessera ist kostenlos und bleibt kostenlos. Ich leite die Entwicklung und Wartung, mit Beiträgen aus der Community. Deine Unterstützung gibt mir mehr Zeit, Verbesserungen zu entwickeln, zu prüfen und zu testen. Ein monatlicher Beitrag oder ein einmaliger Kaffee ist willkommen.",
-      "monthly": "Monatlich unterstützen",
+      "title": "Kachel Manager unterstützen",
+      "body": "Der Kachel Manager ist kostenlos und bleibt es. Wenn er dir nützt, freue ich mich über eine Spende.",
+      "monthly": "Mit PayPal spenden",
       "once": "oder einmal einen Kaffee spendieren",
       "later": "Vielleicht später",
       "donated": "Ich habe schon gespendet",
@@ -4626,7 +4626,7 @@
         "finish": {
           "label": "Wie willst du sie nutzen?",
           "automation": "Automation erstellen",
-          "automation_detail": "Tessera legt sie in Home Assistant an, mit dem Start aus Schritt 1.",
+          "automation_detail": "Der Kachel Manager legt sie in Home Assistant an, mit dem Start aus Schritt 1.",
           "needs_trigger": "Wähle zuerst in Schritt 1, was sie startet.",
           "action": "In einer eigenen Automation nutzen",
           "action_detail": "Kopiere nur die Aktion und füge sie in eine Automation ein, die du schon hast.",
@@ -4640,7 +4640,7 @@
         "saved": "Hinzugefügt. Es funktioniert sofort, ohne Neustart.",
         "open": "In Home Assistant öffnen",
         "hint": "Sie heißt „{title}“ in den Automatisierungen von Home Assistant, wo du sie weiter ändern kannst.",
-        "listed": "Von Tessera in Home Assistant",
+        "listed": "Vom Kachel Manager in Home Assistant",
         "remove": "Entfernen",
         "remove_confirm": "„{name}“ aus Home Assistant entfernen?",
         "on": "An",
@@ -4679,7 +4679,7 @@
       "yaml": {
         "missed_alias": "Verpasste Türklingel aufs Handy",
         "missed_message": "Es hat geklingelt",
-        "description": "Erstellt in den Events von Tessera: eine Türklingel auf den Bildschirmen."
+        "description": "Erstellt in den Events des Kachel Managers: eine Türklingel auf den Bildschirmen."
       },
       "wizard": {
         "title": "Neue Türklingel-Automation",
@@ -4874,11 +4874,11 @@
       "button": "Automatisches Layout",
       "button_title": "Seiten aus deinen Home-Assistant-Bereichen und -Geräten erstellen",
       "title": "Ein Layout für dich erstellen",
-      "intro": "Tessera sieht sich deine Bereiche und Geräte in Home Assistant an und erstellt Seiten für diesen Bildschirm: eine Seite oder einen Abschnitt pro Raum, Wetter, Alarm, Personen und Kameras des Hauses zusammen, größere Kacheln, wo dieser Bildschirm Platz dafür hat. Du kannst es rückgängig machen und danach alles ändern.",
+      "intro": "Der Kachel Manager sieht sich deine Bereiche und Geräte in Home Assistant an und erstellt Seiten für diesen Bildschirm: eine Seite oder einen Abschnitt pro Raum, Wetter, Alarm, Personen und Kameras des Hauses zusammen, größere Kacheln, wo dieser Bildschirm Platz dafür hat. Du kannst es rückgängig machen und danach alles ändern.",
       "reading": "Dein Zuhause wird gelesen…",
       "failed": "Dein Zuhause konnte nicht gelesen werden: {error}",
-      "nothing": "Tessera hat noch nichts für diesen Bildschirm gefunden. Gib deinen Geräten in Home Assistant einen Bereich oder füge Kacheln aus der Bibliothek hinzu.",
-      "nothing_new": "Alles, was Tessera auf diesen Bildschirm setzen würde, ist schon darauf.",
+      "nothing": "Der Kachel Manager hat noch nichts für diesen Bildschirm gefunden. Gib deinen Geräten in Home Assistant einen Bereich oder füge Kacheln aus der Bibliothek hinzu.",
+      "nothing_new": "Alles, was der Kachel Manager auf diesen Bildschirm setzen würde, ist schon darauf.",
       "summary": "{pages} Seite · {tiles} Kacheln | {pages} Seiten · {tiles} Kacheln",
       "summary_sections": "{n} Abschnitt | {n} Abschnitte",
       "from_rooms": "aus einem Raum | aus {n} Räumen",
@@ -4891,7 +4891,7 @@
       "make": "Layout erstellen",
       "made": "Ein Layout mit {pages} Seite ist fertig. Rückgängig nimmt es zurück. | Ein Layout mit {pages} Seiten ist fertig. Rückgängig nimmt es zurück.",
       "offer_title": "Soll ich ein erstes Layout für dich erstellen?",
-      "offer_text": "Tessera kann diesen Bildschirm aus deinen Home-Assistant-Bereichen und -Geräten einrichten. Danach kannst du alles ändern.",
+      "offer_text": "Der Kachel Manager kann diesen Bildschirm aus deinen Home-Assistant-Bereichen und -Geräten einrichten. Danach kannst du alles ändern.",
       "offer_make": "Erstes Layout erstellen",
       "offer_empty": "Leer beginnen"
     },
@@ -4957,7 +4957,7 @@
         "no_page": "Es gibt keine Seite {page}.",
         "not_drawn": "Der Bildschirm zeichnet keine Kachel für {count} Entität. | Der Bildschirm zeichnet keine Kachel für {count} Entitäten."
       },
-      "update_app": "Aktualisiere die Tessera-App: Dieser Editor platziert die Pläne von Layoutbot selbst.",
+      "update_app": "Aktualisiere den Kachel Manager: Dieser Editor platziert die Pläne von Layoutbot selbst.",
       "scope": {
         "here": "Dieser Bildschirm",
         "all": "Alle Bildschirme"

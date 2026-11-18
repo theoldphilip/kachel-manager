@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "Home Assistant did not let the app save automations. The app needs an administrator's access.",
         "refused": "Home Assistant refused the automation: {reason}",
-        "not_ours": "That automation was not made by Tessera, so the app leaves it alone.",
+        "not_ours": "That automation was not made by the Kachel Manager, so the app leaves it alone.",
         "invalid": "This automation cannot be saved ({part})."
       },
       "icons": {
@@ -1347,7 +1347,7 @@
         },
         "screen": {
           "label": "Screen",
-          "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Tessera Screen Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events."
+          "help": "Which screen gets the alert: its device name (such as kitchen-screen), the name Home Assistant shows, or a room, which reaches every screen in it. A list, such as [kitchen-screen, hallway], reaches several. Leave it out for every screen. A name that matches no screen sends nothing; the Kachel Manager log names the screens it knows. Only through the kachel_show_alert and kachel_dismiss_alert events."
         },
         "button_color": {
           "label": "Button color",
@@ -1560,7 +1560,7 @@
       },
       "identify": {
         "title": "This is {name}",
-        "subtitle": "Identify, from Tessera"
+        "subtitle": "Identify, from the Kachel Manager"
       },
       "script_running": "Running",
       "states": {
@@ -1963,7 +1963,7 @@
       "page_taken": "This screen already has a tile that goes to page {page}.",
       "copied": "Layout of {name} copied. Save & send when it looks right.",
       "imported": "Layout imported. Save & send when it looks right.",
-      "not_json": "That isn't JSON. Export a layout first, or paste one from another Tessera.",
+      "not_json": "That isn't JSON. Export a layout first, or paste one from another Kachel Manager or from Tessera.",
       "count": "{n} page · {tiles} / {limit} tiles | {n} pages · {tiles} / {limit} tiles",
       "no_tiles": "Add your first light, scene, or device from the library.",
       "page_removed": "Page {page} is gone.",
@@ -2567,7 +2567,7 @@
         "result": "On the screen",
         "bytes": "{n} of {of} bytes",
         "empty": "The result is empty: the screen shows nothing here.",
-        "access": "The template runs in Home Assistant with the Tessera app's access, so it can read every entity.",
+        "access": "The template runs in Home Assistant with the Kachel Manager's access, so it can read every entity.",
         "markup": {
           "label": "Markup",
           "heading": "Heading",
@@ -2753,11 +2753,11 @@
       },
       "left_hint": "Title and home button: in the page settings",
       "wifi_sample": "This screen's own signal",
-      "link_sample": "Only when Home Assistant or Tessera is away",
+      "link_sample": "Only when Home Assistant or the Kachel Manager is away",
       "battery_sample": "This screen's own battery",
       "wifi_hint": "The screen reads its own signal, so this item stays in the bar when Home Assistant is away. Four bars down to one, struck through without a network.",
       "wifi_show_hint": "Only when weak keeps the bar clear until the signal drops to one bar or the network is gone.",
-      "link_hint": "Appears only while Home Assistant or Tessera is away, so you can tell at a glance why values are missing.",
+      "link_hint": "Appears only while Home Assistant or the Kachel Manager is away, so you can tell at a glance why values are missing.",
       "battery_hint": "The screen reads its own battery, so this item stays in the bar when Home Assistant is away. The icon follows the level the way Home Assistant draws it, with a lightning bolt while it charges.",
       "battery_show_hint": "Only when low keeps the bar clear until the battery is at 20 % or less.",
       "status_firmware": "This item shows from firmware {version}. Until that update, the screen leaves it out.",
@@ -3403,7 +3403,7 @@
       "copy_yaml": "Copy YAML",
       "all": {
         "title": "All screens at once",
-        "text": "Fire the event {show} with the same fields, and Tessera passes the alert on to every screen that is online, including screens you add later. {dismiss} clears it everywhere. In an automation, add the {event} action or paste the example under {edit}. Leave out the fields you don't use. Tessera has to be running for this.",
+        "text": "Fire the event {show} with the same fields, and the Kachel Manager passes the alert on to every screen that is online, including screens you add later. {dismiss} clears it everywhere. In an automation, add the {event} action or paste the example under {edit}. Leave out the fields you don't use. The Kachel Manager has to be running for this.",
         "event": "Fire manual event"
       },
       "fields": {
@@ -3476,7 +3476,7 @@
       "one": {
         "title": "One screen, with a camera or a button action",
         "text": "Add {screen} to the same event and only that screen gets the alert. That is how a single screen shows a {camera} picture or runs an {action} from its button: the screen's own action has no fields for those. After {screen} comes one of the values in the list below.",
-        "more": "A few screens? Give a list, such as {list}. A room works too and reaches every screen in it. A name that matches no screen sends nothing; the Tessera Screen Manager log then names the screens it knows.",
+        "more": "A few screens? Give a list, such as {list}. A room works too and reaches every screen in it. A name that matches no screen sends nothing; the Kachel Manager log then names the screens it knows.",
         "value": "After screen:",
         "name": "Name in Home Assistant",
         "room": "Room",
@@ -3495,7 +3495,7 @@
         "camera": "Camera (optional)",
         "no_camera": "No camera",
         "screens_hint": "None chosen: every screen that can show an alert.",
-        "description": "Made in Tessera's Events: an alert on the screens.",
+        "description": "Made in the Kachel Manager's Events: an alert on the screens.",
         "title": "New alert automation",
         "with_picture": "Shows the camera's picture",
         "without_picture": "Shows the alert without a picture",
@@ -3962,9 +3962,9 @@
       "simple_editor": "Simple view"
     },
     "donate": {
-      "title": "Support Tessera",
-      "body": "Tessera is free and stays free. I lead development and maintenance, with contributions from the community. Your support gives me more time to build, review and test improvements. A monthly contribution or a one-time coffee is welcome.",
-      "monthly": "Support monthly",
+      "title": "Support the Kachel Manager",
+      "body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
+      "monthly": "Donate with PayPal",
       "once": "or buy me a coffee once",
       "later": "Maybe later",
       "donated": "I already donated",
@@ -4398,7 +4398,7 @@
       "choose": "Choose…",
       "less": "Less",
       "more": "More",
-      "from_fetch": "The choices come from the plugin's own data source, through Tessera.",
+      "from_fetch": "The choices come from the plugin's own data source, through the Kachel Manager.",
       "on_screen": "On the screen",
       "sizes": "From {min} to {max}; drag an edge of the tile to change its size.",
       "sizes_or_page": "From {min} to {max}, or the whole page; drag an edge of the tile to change its size.",
@@ -4626,7 +4626,7 @@
         "finish": {
           "label": "How do you want to use it?",
           "automation": "Create the automation",
-          "automation_detail": "Tessera adds it to Home Assistant, starting from what you picked in step 1.",
+          "automation_detail": "The Kachel Manager adds it to Home Assistant, starting from what you picked in step 1.",
           "needs_trigger": "Pick what starts it in step 1 first.",
           "action": "Use it in an automation of your own",
           "action_detail": "Copy only the action and paste it into an automation you already have.",
@@ -4640,7 +4640,7 @@
         "saved": "Added. It works right away, no restart needed.",
         "open": "Open in Home Assistant",
         "hint": "It is called \"{title}\" in Home Assistant's automations, where you can change it further.",
-        "listed": "From Tessera in Home Assistant",
+        "listed": "From the Kachel Manager in Home Assistant",
         "remove": "Remove",
         "remove_confirm": "Remove \"{name}\" from Home Assistant?",
         "on": "On",
@@ -4679,7 +4679,7 @@
       "yaml": {
         "missed_alias": "Missed doorbell to my phone",
         "missed_message": "Someone rang the doorbell",
-        "description": "Made in Tessera's Events: a doorbell's ring on the screens."
+        "description": "Made in the Kachel Manager's Events: a doorbell's ring on the screens."
       },
       "wizard": {
         "title": "New doorbell automation",
@@ -4874,11 +4874,11 @@
       "button": "Auto layout",
       "button_title": "Make pages from your Home Assistant rooms and devices",
       "title": "Make a layout for you",
-      "intro": "Tessera looks at your Home Assistant areas and devices and makes pages for this screen: a page or section per room, the house's weather, alarm, people and cameras together, larger tiles where this screen has room for them. You can undo it and change anything afterwards.",
+      "intro": "The Kachel Manager looks at your Home Assistant areas and devices and makes pages for this screen: a page or section per room, the house's weather, alarm, people and cameras together, larger tiles where this screen has room for them. You can undo it and change anything afterwards.",
       "reading": "Reading your home…",
       "failed": "Your home could not be read: {error}",
-      "nothing": "Tessera found nothing for this screen to show yet. Give your devices an area in Home Assistant, or add tiles from the library.",
-      "nothing_new": "Everything Tessera would put on this screen is on it already.",
+      "nothing": "The Kachel Manager found nothing for this screen to show yet. Give your devices an area in Home Assistant, or add tiles from the library.",
+      "nothing_new": "Everything the Kachel Manager would put on this screen is on it already.",
       "summary": "{pages} page · {tiles} tiles | {pages} pages · {tiles} tiles",
       "summary_sections": "{n} section in it | {n} sections in it",
       "from_rooms": "from one room | from {n} rooms",
@@ -4891,7 +4891,7 @@
       "make": "Make the layout",
       "made": "A layout of {pages} page is ready. Undo takes it back. | A layout of {pages} pages is ready. Undo takes it back.",
       "offer_title": "Shall I make a first layout for you?",
-      "offer_text": "Tessera can lay out this screen from your Home Assistant rooms and devices. You can change everything afterwards.",
+      "offer_text": "The Kachel Manager can lay out this screen from your Home Assistant rooms and devices. You can change everything afterwards.",
       "offer_make": "Make a first layout",
       "offer_empty": "Start empty"
     },
@@ -4957,7 +4957,7 @@
         "no_page": "There is no page {page}.",
         "not_drawn": "The screen draws no tile of {count} entity. | The screen draws no tile of {count} entities."
       },
-      "update_app": "Update the Tessera app: this editor places Layoutbot's plans itself.",
+      "update_app": "Update the Kachel Manager: this editor places Layoutbot's plans itself.",
       "scope": {
         "here": "This screen",
         "all": "All screens"

@@ -3,7 +3,7 @@
 The wizard of Events builds an automation (a trigger the person picked, and one of our own events as its action: a
 doorbell's ring or an alert) and the app saves it the way Home Assistant's own automation editor does: POST
 /api/config/automation/config/<id>, which writes automations.yaml and reloads the automations, so no restart is needed.
-The app only writes automations whose every action fires one of our events, and only under ids of its own (`tessera_`),
+The app only writes automations whose every action fires one of our events, and only under ids of its own (`kachel_`),
 so it never touches an automation the person made. Home Assistant lets only an administrator write them; the add-on's
 token is one.
 """
@@ -12,10 +12,10 @@ import secrets
 
 # The events an automation of this app may fire, by the wizard's kind.
 KINDS = {'doorbell': ('kachel_doorbell',), 'alert': ('kachel_show_alert',)}
-PREFIX = 'tessera_'
-# Every automation of this app is called "Tessera: <name>" in Home Assistant, so its list shows which ones came from here.
-TITLE = 'Tessera: '
-ID = re.compile(r'^tessera_(doorbell|alert)_[a-z0-9]{8}$')
+PREFIX = 'kachel_'
+# Every automation of this app is called "Kachel: <name>" in Home Assistant, so its list shows which ones came from here.
+TITLE = 'Kachel: '
+ID = re.compile(r'^kachel_(doorbell|alert)_[a-z0-9]{8}$')
 MAX_TRIGGERS = 8
 
 
@@ -55,8 +55,8 @@ def checked(kind, config):
 
 
 def listed(states, kind=None):
-    """The automations of Tessera in Home Assistant's states (an automation entity carries its id and name): the ones this
-    app saved (an id of ours) and any whose name starts with "Tessera:". Entity, id, kind (None for one this app did not
+    """The automations of Kachel in Home Assistant's states (an automation entity carries its id and name): the ones this
+    app saved (an id of ours) and any whose name starts with "Kachel:". Entity, id, kind (None for one this app did not
     save, which it never changes), name, whether it is on and when it last ran, by name. With `kind`, only that kind's."""
     out = []
     for entity, state in states.items():

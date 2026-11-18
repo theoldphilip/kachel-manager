@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "O Home Assistant não deixou a app guardar automações. A app precisa de acesso de administrador.",
         "refused": "O Home Assistant recusou a automação: {reason}",
-        "not_ours": "Essa automação não foi criada pelo Tessera, por isso a app não lhe toca.",
+        "not_ours": "Essa automação não foi criada pelo Kachel Manager, por isso a app não lhe toca.",
         "invalid": "Esta automação não pode ser guardada ({part})."
       },
       "icons": {
@@ -1313,7 +1313,7 @@
         },
         "screen": {
           "label": "Ecrã",
-          "help": "Que ecrã recebe o alerta: o nome do dispositivo (como kitchen-screen), o nome que o Home Assistant mostra, ou uma divisão, que chega a cada ecrã nela. Uma lista, como [kitchen-screen, hallway], chega a vários. Omita-o para todos os ecrãs. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Tessera Screen Manager indica então os ecrãs que conhece. Apenas através dos eventos kachel_show_alert e kachel_dismiss_alert."
+          "help": "Que ecrã recebe o alerta: o nome do dispositivo (como kitchen-screen), o nome que o Home Assistant mostra, ou uma divisão, que chega a cada ecrã nela. Uma lista, como [kitchen-screen, hallway], chega a vários. Omita-o para todos os ecrãs. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Kachel Manager indica então os ecrãs que conhece. Apenas através dos eventos kachel_show_alert e kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Cor do botão",
@@ -1526,7 +1526,7 @@
       },
       "identify": {
         "title": "Este é {name}",
-        "subtitle": "Identificar, a partir do Tessera"
+        "subtitle": "Identificar, a partir do Kachel Manager"
       },
       "script_running": "Em curso",
       "states": {
@@ -1929,7 +1929,7 @@
       "page_taken": "Este ecrã já tem um mosaico que leva à página {page}.",
       "copied": "Layout de {name} copiado. Prima Guardar e enviar quando estiver bem.",
       "imported": "Layout importado. Prima Guardar e enviar quando estiver bem.",
-      "not_json": "Isso não é JSON. Exporte primeiro um layout ou cole um de outro Tessera.",
+      "not_json": "Isso não é JSON. Exporte primeiro um layout ou cole um de outro Kachel Manager.",
       "count": "{n} página · {tiles} / {limit} mosaicos | {n} páginas · {tiles} / {limit} mosaicos",
       "no_tiles": "Adicione a primeira luz, cena ou dispositivo a partir da biblioteca.",
       "page_removed": "A página {page} desapareceu.",
@@ -2444,7 +2444,7 @@
       "choose": "Escolher…",
       "less": "Menos",
       "more": "Mais",
-      "from_fetch": "As opções vêm da fonte de dados do próprio plugin, através do Tessera.",
+      "from_fetch": "As opções vêm da fonte de dados do próprio plugin, através do Kachel Manager.",
       "on_screen": "No ecrã",
       "sizes": "De {min} a {max}; arraste uma margem do mosaico para mudar o tamanho.",
       "sizes_or_page": "De {min} a {max}, ou a página inteira; arraste uma margem do mosaico para mudar o tamanho.",
@@ -2984,7 +2984,7 @@
         "result": "No ecrã",
         "bytes": "{n} de {of} bytes",
         "empty": "O resultado está vazio: o ecrã não mostra nada aqui.",
-        "access": "O modelo corre no Home Assistant com as permissões da app Tessera, por isso pode ler qualquer entidade.",
+        "access": "O modelo corre no Home Assistant com as permissões da app Kachel Manager, por isso pode ler qualquer entidade.",
         "markup": {
           "label": "Formatação",
           "heading": "Título",
@@ -3170,11 +3170,11 @@
       },
       "left_hint": "Título e botão de início: nas definições da página",
       "wifi_sample": "O sinal deste ecrã",
-      "link_sample": "Apenas quando falta o Home Assistant ou o Tessera",
+      "link_sample": "Apenas quando falta o Home Assistant ou o Kachel Manager",
       "battery_sample": "A bateria deste ecrã",
       "wifi_hint": "O ecrã lê o seu próprio sinal, por isso este item fica na barra quando o Home Assistant não está. De quatro barras a uma, riscado sem rede.",
       "wifi_show_hint": "Apenas quando fraco deixa a barra livre até o sinal descer a uma barra ou a rede desaparecer.",
-      "link_hint": "Só aparece enquanto falta o Home Assistant ou o Tessera, para perceber de relance porque faltam valores.",
+      "link_hint": "Só aparece enquanto falta o Home Assistant ou o Kachel Manager, para perceber de relance porque faltam valores.",
       "battery_hint": "O ecrã lê a sua própria bateria, por isso este item fica na barra quando o Home Assistant não está disponível. O ícone segue o nível como o Home Assistant o desenha, com um raio enquanto carrega.",
       "battery_show_hint": "Só quando fraca deixa a barra livre até a bateria estar a 20 % ou menos.",
       "status_firmware": "Este item aparece a partir do firmware {version}. Até essa atualização, o ecrã omite-o.",
@@ -3804,7 +3804,7 @@
       "copy_yaml": "Copiar YAML",
       "all": {
         "title": "Todos os ecrãs de uma vez",
-        "text": "Dispare o evento {show} com os mesmos campos e o Tessera passa o alerta a todos os ecrãs online, incluindo os que adicionar mais tarde. {dismiss} remove-o em todo o lado. Numa automatização, adicione a ação {event} ou cole o exemplo em {edit}. Omita os campos que não usar. Para isto, o Tessera tem de estar em execução.",
+        "text": "Dispare o evento {show} com os mesmos campos e o Kachel Manager passa o alerta a todos os ecrãs online, incluindo os que adicionar mais tarde. {dismiss} remove-o em todo o lado. Numa automatização, adicione a ação {event} ou cole o exemplo em {edit}. Omita os campos que não usar. Para isto, o Kachel Manager tem de estar em execução.",
         "event": "Dispara evento manual"
       },
       "fields": {
@@ -3877,7 +3877,7 @@
       "one": {
         "title": "Um ecrã, com câmara ou ação do botão",
         "text": "Adicione {screen} ao mesmo evento e só esse ecrã recebe o alerta. É assim que um único ecrã mostra uma imagem de {camera} ou executa uma {action} a partir do botão: a ação própria do ecrã não tem campos para isso. Depois de {screen} vem um dos valores da lista abaixo.",
-        "more": "Alguns ecrãs? Indique uma lista, como {list}. Uma divisão também funciona e chega a cada ecrã nela. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Tessera Screen Manager indica então os ecrãs que conhece.",
+        "more": "Alguns ecrãs? Indique uma lista, como {list}. Uma divisão também funciona e chega a cada ecrã nela. Um nome que não corresponde a nenhum ecrã não envia nada; o registo do Kachel Manager indica então os ecrãs que conhece.",
         "value": "Depois de screen:",
         "name": "Nome no Home Assistant",
         "room": "Divisão",
@@ -3896,7 +3896,7 @@
         "camera": "Câmara (opcional)",
         "no_camera": "Sem câmara",
         "screens_hint": "Nenhum escolhido: todos os ecrãs que podem mostrar um alerta.",
-        "description": "Criada nos Eventos do Tessera: um alerta nos ecrãs.",
+        "description": "Criada nos Eventos do Kachel Manager: um alerta nos ecrãs.",
         "title": "Nova automação de alerta",
         "with_picture": "Mostra a imagem da câmara",
         "without_picture": "Mostra o alerta sem imagem",
@@ -4363,9 +4363,9 @@
       "simple_editor": "Vista simples"
     },
     "donate": {
-      "title": "Apoia o Tessera",
-      "body": "O Tessera é gratuito e vai continuar a ser. Lidero o desenvolvimento e a manutenção, com contributos da comunidade. O teu apoio dá-me mais tempo para desenvolver, rever e testar melhorias. Um contributo mensal ou um café ocasional são bem-vindos.",
-      "monthly": "Apoiar todos os meses",
+      "title": "Support the Kachel Manager",
+      "body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
+      "monthly": "Donate with PayPal",
       "once": "ou paga-me um café uma vez",
       "later": "Talvez mais tarde",
       "donated": "Já fiz um donativo",
@@ -4576,7 +4576,7 @@
         "finish": {
           "label": "Como quer usá-la?",
           "automation": "Criar a automação",
-          "automation_detail": "O Tessera adiciona-a ao Home Assistant, com o início escolhido no passo 1.",
+          "automation_detail": "O Kachel Manager adiciona-a ao Home Assistant, com o início escolhido no passo 1.",
           "needs_trigger": "Escolha primeiro no passo 1 o que a inicia.",
           "action": "Usar numa automação sua",
           "action_detail": "Copie só a ação e cole-a numa automação que já tem.",
@@ -4590,7 +4590,7 @@
         "saved": "Adicionada. Funciona de imediato, sem reiniciar.",
         "open": "Abrir no Home Assistant",
         "hint": "Chama-se \"{title}\" nas automações do Home Assistant, onde a pode alterar.",
-        "listed": "Do Tessera no Home Assistant",
+        "listed": "Do Kachel Manager no Home Assistant",
         "remove": "Remover",
         "remove_confirm": "Remover \"{name}\" do Home Assistant?",
         "on": "Ligada",
@@ -4629,7 +4629,7 @@
       "yaml": {
         "missed_alias": "Campainha perdida para o meu telemóvel",
         "missed_message": "Alguém tocou à campainha",
-        "description": "Criada nos Eventos do Tessera: uma campainha nos ecrãs."
+        "description": "Criada nos Eventos do Kachel Manager: uma campainha nos ecrãs."
       },
       "wizard": {
         "title": "Nova automação de campainha",
@@ -4824,11 +4824,11 @@
       "button": "Esquema automático",
       "button_title": "Criar páginas a partir das suas áreas e dispositivos do Home Assistant",
       "title": "Criar um esquema para si",
-      "intro": "O Tessera olha para as suas áreas e dispositivos no Home Assistant e cria páginas para este ecrã: uma página ou secção por divisão, a meteorologia, o alarme, as pessoas e as câmaras da casa juntos, mosaicos maiores onde este ecrã tem espaço. Pode desfazer e alterar tudo depois.",
+      "intro": "O Kachel Manager olha para as suas áreas e dispositivos no Home Assistant e cria páginas para este ecrã: uma página ou secção por divisão, a meteorologia, o alarme, as pessoas e as câmaras da casa juntos, mosaicos maiores onde este ecrã tem espaço. Pode desfazer e alterar tudo depois.",
       "reading": "A ler a sua casa…",
       "failed": "Não foi possível ler a sua casa: {error}",
-      "nothing": "O Tessera ainda não encontrou nada para mostrar neste ecrã. Dê uma área aos seus dispositivos no Home Assistant ou adicione mosaicos a partir da biblioteca.",
-      "nothing_new": "Tudo o que o Tessera poria neste ecrã já lá está.",
+      "nothing": "O Kachel Manager ainda não encontrou nada para mostrar neste ecrã. Dê uma área aos seus dispositivos no Home Assistant ou adicione mosaicos a partir da biblioteca.",
+      "nothing_new": "Tudo o que o Kachel Manager poria neste ecrã já lá está.",
       "summary": "{pages} página · {tiles} mosaicos | {pages} páginas · {tiles} mosaicos",
       "summary_sections": "{n} secção | {n} secções",
       "from_rooms": "de uma divisão | de {n} divisões",
@@ -4841,7 +4841,7 @@
       "make": "Criar o esquema",
       "made": "Um esquema de {pages} página está pronto. Desfazer retira-o. | Um esquema de {pages} páginas está pronto. Desfazer retira-o.",
       "offer_title": "Quer que crie um primeiro esquema para si?",
-      "offer_text": "O Tessera pode organizar este ecrã com as suas áreas e dispositivos do Home Assistant. Depois pode alterar tudo.",
+      "offer_text": "O Kachel Manager pode organizar este ecrã com as suas áreas e dispositivos do Home Assistant. Depois pode alterar tudo.",
       "offer_make": "Criar um primeiro esquema",
       "offer_empty": "Começar vazio"
     },
@@ -4907,7 +4907,7 @@
         "no_page": "Não existe a página {page}.",
         "not_drawn": "O ecrã não desenha nenhum mosaico de {count} entidade. | O ecrã não desenha nenhum mosaico de {count} entidades."
       },
-      "update_app": "Atualize a app Tessera: este editor coloca ele próprio os planos do Layoutbot.",
+      "update_app": "Atualize a app Kachel Manager: este editor coloca ele próprio os planos do Layoutbot.",
       "scope": {
         "here": "Este ecrã",
         "all": "Todos os ecrãs"

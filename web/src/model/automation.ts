@@ -1,6 +1,6 @@
 // An automation the wizards of Events build (the doorbell's and the alerts'): what starts it (an entity the person picked),
 // and one of our events as its action. One object: the YAML the page shows is that object written out, and "Add to Home
-// Assistant" saves the same object (screen_manager/app/automations.py). Every one is called "Tessera: <name>", so Home
+// Assistant" saves the same object (screen_manager/app/automations.py). Every one is called "Kachel: <name>", so Home
 // Assistant's list shows which automations came from here. Pure.
 import { yamlString } from "./alert-yaml";
 
@@ -8,7 +8,7 @@ export type Automation = { alias: string; description?: string; triggers: Record
 /** How an entity starts an automation: a doorbell Home Assistant knows as one (its trigger doorbell.rang), any other event
  * entity, something that turns on (a sensor, a switch: Reolink's Visitor), or a button. */
 export type TriggerKind = "doorbell" | "event" | "on" | "press";
-export const TITLE = "Tessera: ";
+export const TITLE = "Kachel: ";
 const DOMAINS: Record<string, TriggerKind> = { event: "event", binary_sensor: "on", switch: "on", input_boolean: "on", button: "press", input_button: "press" };
 
 /** How `entity` starts an automation: `known` says so for some (a doorbell's event entity), else its domain does; null for
@@ -25,8 +25,8 @@ export function trigger(entity: string, kind: TriggerKind): Record<string, unkno
   return { trigger: "state", entity_id: entity, not_from: ["unavailable", "unknown"] };
 }
 
-/** "Tessera: <name>", whatever the name had in front. */
-export const title = (name: string) => TITLE + name.replace(/^tessera:\s*/i, "").trim();
+/** "Kachel: <name>", whatever the name had in front. */
+export const title = (name: string) => TITLE + name.replace(/^kachel:\s*/i, "").trim();
 
 // ---- YAML, as Home Assistant's own editor writes it ----
 // Words YAML would read as something else (a switch, nothing) are quoted, as is anything with a character of its own.

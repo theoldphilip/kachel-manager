@@ -1030,7 +1030,7 @@
       "automations": {
         "not_allowed": "Home Assistant liet de app geen automatiseringen opslaan. De app heeft toegang van een beheerder nodig.",
         "refused": "Home Assistant weigerde de automatisering: {reason}",
-        "not_ours": "Die automatisering is niet door Tessera gemaakt, dus de app laat hem met rust.",
+        "not_ours": "Die automatisering is niet door Kachel Manager gemaakt, dus de app laat hem met rust.",
         "invalid": "Deze automatisering kan niet worden opgeslagen ({part})."
       },
       "icons": {
@@ -1313,7 +1313,7 @@
         },
         "screen": {
           "label": "Scherm",
-          "help": "Welk scherm de melding krijgt: de apparaatnaam (zoals kitchen-screen), de naam die Home Assistant toont, of een ruimte, die elk scherm daarin bereikt. Een lijst, zoals [kitchen-screen, hallway], bereikt er meerdere. Laat het weg voor alle schermen. Een naam die bij geen scherm past stuurt niets; het log van Tessera Screen Manager noemt dan de schermen die het kent. Alleen via de events kachel_show_alert en kachel_dismiss_alert."
+          "help": "Welk scherm de melding krijgt: de apparaatnaam (zoals kitchen-screen), de naam die Home Assistant toont, of een ruimte, die elk scherm daarin bereikt. Een lijst, zoals [kitchen-screen, hallway], bereikt er meerdere. Laat het weg voor alle schermen. Een naam die bij geen scherm past stuurt niets; het log van Kachel Manager noemt dan de schermen die het kent. Alleen via de events kachel_show_alert en kachel_dismiss_alert."
         },
         "button_color": {
           "label": "Knopkleur",
@@ -1526,7 +1526,7 @@
       },
       "identify": {
         "title": "Dit is {name}",
-        "subtitle": "Identificeren, vanuit Tessera"
+        "subtitle": "Identificeren, vanuit Kachel Manager"
       },
       "script_running": "Bezig",
       "states": {
@@ -1929,7 +1929,7 @@
       "page_taken": "Dit scherm heeft al een tegel die naar pagina {page} gaat.",
       "copied": "Indeling van {name} gekopieerd. Druk op Opslaan & versturen als alles klopt.",
       "imported": "Indeling geïmporteerd. Druk op Opslaan & versturen als alles klopt.",
-      "not_json": "Dat is geen JSON. Exporteer eerst een indeling, of plak er een uit een andere Tessera.",
+      "not_json": "Dat is geen JSON. Exporteer eerst een indeling, of plak er een uit een andere Kachel Manager.",
       "count": "{n} pagina · {tiles} / {limit} tegels | {n} pagina's · {tiles} / {limit} tegels",
       "no_tiles": "Voeg je eerste lamp, scène of apparaat toe uit de bibliotheek.",
       "page_removed": "Pagina {page} is weg.",
@@ -2533,7 +2533,7 @@
         "result": "Op het scherm",
         "bytes": "{n} van {of} bytes",
         "empty": "Het resultaat is leeg: het scherm toont hier niets.",
-        "access": "De template draait in Home Assistant met de rechten van de Tessera-app, en kan dus elke entiteit lezen.",
+        "access": "De template draait in Home Assistant met de rechten van de Kachel Manager-app, en kan dus elke entiteit lezen.",
         "markup": {
           "label": "Opmaak",
           "heading": "Kop",
@@ -2719,11 +2719,11 @@
       },
       "left_hint": "Titel en thuisknop: in de pagina-instellingen",
       "wifi_sample": "Het signaal van dit scherm zelf",
-      "link_sample": "Alleen als Home Assistant of Tessera weg is",
+      "link_sample": "Alleen als Home Assistant of Kachel Manager weg is",
       "battery_sample": "De accu van dit scherm zelf",
       "wifi_hint": "Het scherm leest zijn eigen signaal, dus dit item blijft in de balk staan als Home Assistant weg is. Vier streepjes tot één, doorgestreept zonder netwerk.",
       "wifi_show_hint": "Alleen als zwak houdt de balk leeg tot het signaal op één streepje staat of het netwerk weg is.",
-      "link_hint": "Verschijnt alleen als Home Assistant of Tessera weg is, zodat je in één oogopslag ziet waarom waarden ontbreken.",
+      "link_hint": "Verschijnt alleen als Home Assistant of Kachel Manager weg is, zodat je in één oogopslag ziet waarom waarden ontbreken.",
       "battery_hint": "Het scherm leest zijn eigen accu, dus dit item blijft in de balk als Home Assistant weg is. Het icoon volgt het niveau zoals Home Assistant het tekent, met een bliksemschicht tijdens het laden.",
       "battery_show_hint": "Alleen als laag houdt de balk leeg tot de accu op 20 % of minder staat.",
       "status_firmware": "Dit item verschijnt vanaf firmware {version}. Tot die update laat het scherm het weg.",
@@ -3353,7 +3353,7 @@
       "copy_yaml": "YAML kopiëren",
       "all": {
         "title": "Alle schermen tegelijk",
-        "text": "Vuur de gebeurtenis {show} af met dezelfde velden, en Tessera geeft de alert door aan elk scherm dat online is, ook aan schermen die je later toevoegt. {dismiss} haalt hem overal weg. Voeg in een automatisering de actie {event} toe, of plak het voorbeeld onder {edit}. Laat de velden die je niet gebruikt weg. Tessera moet hiervoor draaien.",
+        "text": "Vuur de gebeurtenis {show} af met dezelfde velden, en Kachel Manager geeft de alert door aan elk scherm dat online is, ook aan schermen die je later toevoegt. {dismiss} haalt hem overal weg. Voeg in een automatisering de actie {event} toe, of plak het voorbeeld onder {edit}. Laat de velden die je niet gebruikt weg. Kachel Manager moet hiervoor draaien.",
         "event": "Handmatige gebeurtenis activeren"
       },
       "fields": {
@@ -3426,7 +3426,7 @@
       "one": {
         "title": "Eén scherm, met een camera of een knopactie",
         "text": "Zet {screen} in hetzelfde event en alleen dat scherm krijgt de melding. Zo toont één scherm een beeld van {camera} of voert de knop een {action} uit: de eigen actie van het scherm heeft daar geen velden voor. Achter {screen} komt een van de waarden uit de lijst hieronder.",
-        "more": "Een paar schermen? Geef een lijst, zoals {list}. Een ruimte werkt ook en bereikt elk scherm daarin. Een naam die bij geen scherm past stuurt niets; het log van Tessera Screen Manager noemt dan de schermen die het kent.",
+        "more": "Een paar schermen? Geef een lijst, zoals {list}. Een ruimte werkt ook en bereikt elk scherm daarin. Een naam die bij geen scherm past stuurt niets; het log van Kachel Manager noemt dan de schermen die het kent.",
         "value": "Achter screen:",
         "name": "Naam in Home Assistant",
         "room": "Ruimte",
@@ -3445,7 +3445,7 @@
         "camera": "Camera (optioneel)",
         "no_camera": "Geen camera",
         "screens_hint": "Niets gekozen: elk scherm dat een alert kan tonen.",
-        "description": "Gemaakt in Events van Tessera: een alert op de schermen.",
+        "description": "Gemaakt in Events van Kachel Manager: een alert op de schermen.",
         "title": "Nieuwe alert-automatisering",
         "with_picture": "Laat het beeld van de camera zien",
         "without_picture": "Laat de alert zonder beeld zien",
@@ -3912,9 +3912,9 @@
       "simple_editor": "Eenvoudige weergave"
     },
     "donate": {
-      "title": "Steun Tessera",
-      "body": "Tessera is gratis en blijft gratis. Ik leid de ontwikkeling en het onderhoud, met bijdragen uit de community. Jouw steun geeft me meer tijd om verbeteringen te bouwen, te beoordelen en te testen. Een maandelijkse bijdrage of een eenmalige koffie is welkom.",
-      "monthly": "Steun maandelijks",
+      "title": "Support the Kachel Manager",
+      "body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
+      "monthly": "Donate with PayPal",
       "once": "of trakteer één keer op koffie",
       "later": "Misschien later",
       "donated": "Ik heb al gedoneerd",
@@ -4348,7 +4348,7 @@
       "choose": "Kies…",
       "less": "Minder",
       "more": "Meer",
-      "from_fetch": "De keuzes komen uit de eigen gegevensbron van de plugin, via Tessera.",
+      "from_fetch": "De keuzes komen uit de eigen gegevensbron van de plugin, via Kachel Manager.",
       "on_screen": "Op het scherm",
       "sizes": "Van {min} tot {max}; sleep aan een rand van de tegel om de maat te wijzigen.",
       "sizes_or_page": "Van {min} tot {max}, of de hele pagina; sleep aan een rand van de tegel om de maat te wijzigen.",
@@ -4576,7 +4576,7 @@
         "finish": {
           "label": "Hoe wil je hem gebruiken?",
           "automation": "Maak de automatisering",
-          "automation_detail": "Tessera zet hem in Home Assistant, met wat je bij stap 1 koos als start.",
+          "automation_detail": "Kachel Manager zet hem in Home Assistant, met wat je bij stap 1 koos als start.",
           "needs_trigger": "Kies eerst bij stap 1 wat hem start.",
           "action": "Gebruik in een eigen automatisering",
           "action_detail": "Kopieer alleen de actie en plak hem in een automatisering die je al hebt.",
@@ -4590,7 +4590,7 @@
         "saved": "Toegevoegd. Het werkt meteen, zonder herstart.",
         "open": "Openen in Home Assistant",
         "hint": "Hij heet \"{title}\" bij de automatiseringen van Home Assistant, waar je hem verder kunt aanpassen.",
-        "listed": "Van Tessera in Home Assistant",
+        "listed": "Van Kachel Manager in Home Assistant",
         "remove": "Verwijderen",
         "remove_confirm": "\"{name}\" verwijderen uit Home Assistant?",
         "on": "Aan",
@@ -4629,7 +4629,7 @@
       "yaml": {
         "missed_alias": "Gemiste deurbel naar mijn telefoon",
         "missed_message": "Er werd aangebeld",
-        "description": "Gemaakt in Events van Tessera: een deurbel op de schermen."
+        "description": "Gemaakt in Events van Kachel Manager: een deurbel op de schermen."
       },
       "wizard": {
         "title": "Nieuwe deurbelautomatisering",
@@ -4824,11 +4824,11 @@
       "button": "Automatische indeling",
       "button_title": "Maak pagina's van je Home Assistant-ruimtes en -apparaten",
       "title": "Een indeling voor je maken",
-      "intro": "Tessera kijkt naar je ruimtes en apparaten in Home Assistant en maakt pagina's voor dit scherm: een pagina of sectie per ruimte, het weer, het alarm, de personen en de camera's van het huis bij elkaar, grotere tegels waar dit scherm er ruimte voor heeft. Je kunt het ongedaan maken en daarna alles aanpassen.",
+      "intro": "Kachel Manager kijkt naar je ruimtes en apparaten in Home Assistant en maakt pagina's voor dit scherm: een pagina of sectie per ruimte, het weer, het alarm, de personen en de camera's van het huis bij elkaar, grotere tegels waar dit scherm er ruimte voor heeft. Je kunt het ongedaan maken en daarna alles aanpassen.",
       "reading": "Je huis wordt gelezen…",
       "failed": "Je huis kon niet worden gelezen: {error}",
-      "nothing": "Tessera vond nog niets om op dit scherm te tonen. Geef je apparaten een ruimte in Home Assistant, of voeg tegels toe uit de bibliotheek.",
-      "nothing_new": "Alles wat Tessera op dit scherm zou zetten, staat er al.",
+      "nothing": "Kachel Manager vond nog niets om op dit scherm te tonen. Geef je apparaten een ruimte in Home Assistant, of voeg tegels toe uit de bibliotheek.",
+      "nothing_new": "Alles wat Kachel Manager op dit scherm zou zetten, staat er al.",
       "summary": "{pages} pagina · {tiles} tegels | {pages} pagina's · {tiles} tegels",
       "summary_sections": "{n} sectie | {n} secties",
       "from_rooms": "uit één ruimte | uit {n} ruimtes",
@@ -4841,7 +4841,7 @@
       "make": "Indeling maken",
       "made": "Een indeling van {pages} pagina staat klaar. Ongedaan maken draait het terug. | Een indeling van {pages} pagina's staat klaar. Ongedaan maken draait het terug.",
       "offer_title": "Zal ik een eerste indeling voor je maken?",
-      "offer_text": "Tessera kan dit scherm indelen met je ruimtes en apparaten uit Home Assistant. Daarna kun je alles aanpassen.",
+      "offer_text": "Kachel Manager kan dit scherm indelen met je ruimtes en apparaten uit Home Assistant. Daarna kun je alles aanpassen.",
       "offer_make": "Eerste indeling maken",
       "offer_empty": "Leeg beginnen"
     },
@@ -4907,7 +4907,7 @@
         "no_page": "Er is geen pagina {page}.",
         "not_drawn": "Het scherm tekent geen tegel van {count} entiteit. | Het scherm tekent geen tegel van {count} entiteiten."
       },
-      "update_app": "Werk de Tessera-app bij: deze editor plaatst de plannen van Layoutbot zelf.",
+      "update_app": "Werk de Kachel Manager-app bij: deze editor plaatst de plannen van Layoutbot zelf.",
       "scope": {
         "here": "Dit scherm",
         "all": "Alle schermen"

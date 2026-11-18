@@ -54,3 +54,8 @@ Firmware-Updates, Build-Server und Video. Der Kachel Manager öffnet keinen Port
 Fork von [Tessera](https://github.com/MaxGramser/homeassistant_espscreen) von Max Gramser, Lizenz AGPL-3.0. Quelle
 und Änderungen: [theoldphilip/kachel-manager](https://github.com/theoldphilip/kachel-manager), Änderungen im
 CHANGELOG unter „Kachel Manager“.
+
+## Unterstützen
+
+Der Kachel Manager ist kostenlos. Wenn er dir nützt, freue ich mich über eine
+[Spende per PayPal](https://www.paypal.com/donate/?hosted_button_id=SLNW2MCC268SG).

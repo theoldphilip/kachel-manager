@@ -316,8 +316,8 @@ class TheAutomations(unittest.TestCase):
                   'actions': [{'event': 'kachel_doorbell', 'event_data': {'camera': 'camera.front_door'}}]}
 
     def test_every_one_is_called_tessera(self):
-        self.assertEqual(automations.checked('doorbell', self.automation)['alias'], 'Tessera: Doorbell Front door')
-        self.assertEqual(automations.checked('doorbell', {**self.automation, 'alias': 'tessera:  Doorbell'})['alias'], 'Tessera: Doorbell')
+        self.assertEqual(automations.checked('doorbell', self.automation)['alias'], 'Kachel: Doorbell Front door')
+        self.assertEqual(automations.checked('doorbell', {**self.automation, 'alias': 'kachel:  Doorbell'})['alias'], 'Kachel: Doorbell')
 
     def test_only_our_events_and_our_ids(self):
         for wrong in ({**self.automation, 'actions': [{'action': 'lock.unlock', 'target': {'entity_id': 'lock.front'}}]},
@@ -334,13 +334,13 @@ class TheAutomations(unittest.TestCase):
         self.assertEqual(automations.checked('alert', buttons)['actions'], buttons['actions'])
 
     def test_the_list_by_id_and_by_name(self):
-        states = {'automation.tessera_doorbell': {'state': 'on', 'attributes': {'id': 'tessera_doorbell_0a1b2c3d', 'friendly_name': 'Tessera: Doorbell'}},
-                  'automation.by_hand': {'state': 'off', 'attributes': {'id': '1700000000', 'friendly_name': 'Tessera: made by hand'}},
+        states = {'automation.kachel_doorbell': {'state': 'on', 'attributes': {'id': 'kachel_doorbell_0a1b2c3d', 'friendly_name': 'Kachel: Doorbell'}},
+                  'automation.by_hand': {'state': 'off', 'attributes': {'id': '1700000000', 'friendly_name': 'Kachel: made by hand'}},
                   'automation.other': {'state': 'on', 'attributes': {'id': '1700000001', 'friendly_name': 'Morning lights'}}}
         listed = automations.listed(states)
         self.assertEqual([(item['entity'], item['kind']) for item in listed],
-                         [('automation.tessera_doorbell', 'doorbell'), ('automation.by_hand', None)])
-        self.assertEqual([item['entity'] for item in automations.listed(states, 'doorbell')], ['automation.tessera_doorbell'])
+                         [('automation.kachel_doorbell', 'doorbell'), ('automation.by_hand', None)])
+        self.assertEqual([item['entity'] for item in automations.listed(states, 'doorbell')], ['automation.kachel_doorbell'])
 
 
 class Screen:

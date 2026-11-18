@@ -12,12 +12,19 @@ are left alone. Tessera's GitHub workflows (TESSERA_WORKFLOWS) build every ESP32
 its WASM preview, which pushes commits of its own: a merge from Tessera brings them back, and this script takes them out
 again (the fork is checked by .github/workflows/kachel-check.yml alone).
 
+Where Tessera's words mean this app ("Tessera adds it to Home Assistant"), the app says Kachel Manager: tools/
+kachel_texts.json holds those texts in English and German, and puts "Kachel Manager" for "Tessera" in the other
+languages (for a text of our own, all_languages, the English one). Its "keep" list is where Tessera stays: the ESP32 parts (off here), and what goes to Tessera's own website
+(reports, feedback, the plugin catalogue). A new text with "Tessera" in neither is reported by --check, to decide.
+The automations this app makes are "Kachel: <name>" with ids kachel_..., so neither app takes the other's.
+
     tools/kachel_names.py            writes our names and removes Tessera's workflows
     tools/kachel_names.py --check    only lists what still has Tessera's names or workflows; exit status 1 when anything does
 
 tests/test_kachel.py runs --check.
 """
 import argparse
+import json
 from pathlib import Path
 import re
 import sys
@@ -53,6 +60,24 @@ WEB_RULES = (
     (re.compile(r'(?<=["\'`])esp-screens(?=[.\-:])(?!\.zip)'), 'kachel-manager'),
 )
 
+# Our automations: "Kachel: <name>", ids kachel_doorbell_... (Tessera's are "Tessera: " and tessera_...).
+AUTOMATION_FILES = {'screen_manager/app/automations.py', 'web/src/model/automation.ts', 'tests/test_doorbell.py',
+                    'web/tests/automation.spec.ts'}
+AUTOMATION_RULES = (
+    (re.compile(r'\bTessera\b'), 'Kachel'),
+    (re.compile(r'\btessera(?=[:_])'), 'kachel'),
+)
+# Single places that show the app's name.
+FILE_RULES = {
+    'web/src/App.vue': ((re.compile(r'<b>Tessera</b>'), '<b>Kachel</b>'),),
+    # Tests that quote a text of tools/kachel_texts.json.
+    'tests/test_addon_translations.py': ((re.compile(r'Identify, from Tessera'), 'Identify, from the Kachel Manager'),),
+    'web/tests/layoutbot.spec.ts': ((re.compile(r'Update the Tessera app:'), 'Update the Kachel Manager:'),),
+}
+TEXTS = ROOT / 'tools' / 'kachel_texts.json'
+TRANSLATIONS = ROOT / 'screen_manager' / 'translations'
+
+
 def files():
     for folder, patterns in PLACES:
         base = ROOT / folder
@@ -64,9 +89,66 @@ def files():
                 yield path, relative
 
 def renamed(text, relative=''):
-    for pattern, replacement in RULES + (WEB_RULES if relative.startswith('web/') else ()):
+    rules = RULES + (WEB_RULES if relative.startswith('web/') else ())
+    rules += AUTOMATION_RULES if relative in AUTOMATION_FILES else ()
+    rules += FILE_RULES.get(relative, ())
+    for pattern, replacement in rules:
         text = pattern.sub(replacement, text)
     return text
+
+
+def strings(tree, path=''):
+    """Every text of a translation file with its dotted key."""
+    if isinstance(tree, dict):
+        for key, value in tree.items():
+            yield from strings(value, f'{path}.{key}' if path else key)
+    elif isinstance(tree, str):
+        yield path, tree
+
+
+def ours(text, language, key, table):
+    """What the key says in the Kachel Manager: the table's text in English and German, "Kachel Manager" for "Tessera"
+    elsewhere."""
+    if key in table.get(language, {}):
+        return table[language][key]
+    if language.startswith('en') and key in table['en']:
+        return table['en'][key]
+    if key in table.get('all_languages', ()):
+        return table['en'][key]  # a text of our own, which the other languages have no words for yet
+    return re.sub(r'Tessera(?: Screen Manager)?', 'Kachel Manager', text)
+
+
+def texts(check):
+    """Writes the table's texts into the translation files (only those strings, the file otherwise as it is). Returns
+    the files that were not up to date, and the keys with "Tessera" that are neither ours nor kept."""
+    table = json.loads(TEXTS.read_text(encoding='utf-8'))
+    keep = tuple(table['keep'])
+    stale, unknown = [], []
+    for path in sorted(TRANSLATIONS.glob('*.json')):
+        language = path.stem
+        text = path.read_text(encoding='utf-8')
+        new = text
+        for key, value in strings(json.loads(text)):
+            if key.startswith(keep):
+                continue
+            if key not in table['en']:
+                if 'Tessera' in value:
+                    unknown.append(f'{path.name} {key}')
+                continue
+            want = ours(value, language, key, table)
+            if want == value:
+                continue
+            last = key.rsplit('.', 1)[-1]
+            old = f'{json.dumps(last)}: {json.dumps(value, ensure_ascii=False)}'
+            if new.count(old) != 1:
+                unknown.append(f'{path.name} {key} (not found once)')
+                continue
+            new = new.replace(old, f'{json.dumps(last)}: {json.dumps(want, ensure_ascii=False)}')
+        if new != text:
+            stale.append(path.relative_to(ROOT).as_posix())
+            if not check:
+                path.write_text(new, encoding='utf-8')
+    return stale, unknown
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
@@ -81,6 +163,10 @@ def main(argv=None):
         stale.append(relative)
         if not args.check:
             path.write_text(new, encoding='utf-8')
+    words, unknown = texts(args.check)
+    stale += words
+    for name in unknown:
+        print(f"says Tessera, neither ours nor kept (tools/kachel_texts.json): {name}")
     verb = "still has Tessera's names" if args.check else 'renamed'
     for relative in stale:
         print(f'{verb}: {relative}')
@@ -93,7 +179,7 @@ def main(argv=None):
         else:
             path.unlink()
             print(f'removed: {relative} (git rm it, or commit the removal)')
-    return 1 if args.check and (stale or back) else 0
+    return 1 if (args.check and (stale or back)) or unknown else 0
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -9,7 +9,8 @@ import { glyph } from "../model/topbar";
 import { summaryText } from "../model/broken-tiles";
 import type { Screen } from "../types";
 import Icon from "./ui/Icon.vue";
-import TesseraMark from "./TesseraMark.vue";
+// Kachel Manager: the Kachel mark and name instead of Tessera's.
+import KachelMark from "../kachel/KachelMark.vue";
 import BuildIndicator from "./BuildIndicator.vue";
 import BrokenList from "./BrokenList.vue";
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from "reka-ui";
@@ -145,8 +146,8 @@ const lastLog = () => {
     <div class="side-top">
       <button type="button" class="brand" :aria-label="t('editor.sidebar.home')" :title="sidebar.folded ? undefined : t('editor.sidebar.home')"
         v-tooltip="tip('brand', t('editor.sidebar.home'))" :aria-current="!scr.selected && ui.route === '' ? 'page' : undefined" @click="session.goHome">
-        <TesseraMark class="mark" />
-        <span class="txt">Tessera</span>
+        <KachelMark class="mark" />
+        <span class="txt">Kachel</span>
         <!-- The dev app (added from the #dev URL) says so beside the name, so nobody mistakes it for the stable one. -->
         <span v-if="builds.devChannel" class="chip channel-chip" id="dev-chip" :title="t('editor.sidebar.dev_chip')">dev</span>
       </button>

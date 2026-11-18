@@ -20,4 +20,4 @@ Der Kachel Manager ist ein Fork von [Tessera](https://github.com/MaxGramser/home
 ## Für Entwickler
 
 `CLAUDE.md` beschreibt, was dieser Fork anders macht als Tessera und wie Neues vom Original übernommen wird.
-`AGENTS.md` und `README_EXTENDED.md` sind die Anleitungen von Tessera. Icon und Logo zeichnet `tools/kachel_logo.py`.
+`AGENTS.md` und `README_EXTENDED.md` sind die Anleitungen von Tessera. Icon und Logo schneidet `tools/kachel_logo.py` aus dem Startbild der Tablets (echod).

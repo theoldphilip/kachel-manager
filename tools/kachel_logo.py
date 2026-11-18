@@ -1,59 +1,62 @@
 #!/usr/bin/env python3
-"""Kachel Manager: draws the add-on's icon and logo for the Home Assistant store (screen_manager/icon.png, 128 x 128,
-and screen_manager/logo.png, 500 x 200). They replace Tessera's mosaic, which is Tessera's own mark.
+"""Kachel Manager: the add-on's icon and logo for the Home Assistant store (screen_manager/icon.png, 128 x 128, and
+screen_manager/logo.png, 500 x 200). They replace Tessera's mosaic, which is Tessera's own mark.
 
-The mark is one page of a Kachel screen: a dark glazed tile with a wide tile on top and two below, the right one in
-terracotta. The logo puts the name beside it, in Roboto from the add-on's own fonts.
+Both are cut from the picture the Kachel tablets show while they start (echod, echod/internal/feature/display/assets/
+kachel.png, 1920 x 1200): the four tiles with the teal one, and "Kachel" beside them. So the store shows the same mark
+as the tablet. The icon is the four tiles alone; on the logo "Manager" takes the place of "für Tessera", in the same
+teal. echod belongs to wohnzimmer-app: read it from a throwaway clone (CLAUDE.md, "Grenzen").
 
-    tools/kachel_logo.py    (needs Pillow)
+    tools/kachel_logo.py <echod clone>    (needs Pillow and the Noto Sans font)
 """
 from pathlib import Path
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
-FONT = ROOT / 'screen_manager' / 'app' / 'fonts' / 'Roboto-500.ttf'
-GLAZE, CREAM, TERRACOTTA, INK = '#16404A', '#F3EEE4', '#D9693A', '#2B7A87'
-SCALE = 4  # drawn four times larger, then shrunk: smooth edges
+SPLASH = 'echod/internal/feature/display/assets/kachel.png'
+FONT = '/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf'
+TEAL = (43, 179, 163)
+
+# Where things are on the splash, in its own pixels.
+TILES = (483, 455, 733, 706)        # the four tiles
+SUBTITLE = (830, 630, 1175, 715)    # "für Tessera"
+SUBTITLE_AT = (837, 693)            # its left end and baseline
 
 
-def mark(draw, x, y, size):
-    s = size
-    draw.rounded_rectangle((x, y, x + s, y + s), radius=s * 0.22, fill=GLAZE)
-    pad, gap, r = s * 0.17, s * 0.07, s * 0.08
-    inner = s - 2 * pad
-    top = inner * 0.42
-    x0, y0 = x + pad, y + pad
-    draw.rounded_rectangle((x0, y0, x0 + inner, y0 + top), radius=r, fill=CREAM)
-    half = (inner - gap) / 2
-    y1 = y0 + top + gap
-    draw.rounded_rectangle((x0, y1, x0 + half, y0 + inner), radius=r, fill=CREAM)
-    draw.rounded_rectangle((x0 + half + gap, y1, x0 + inner, y0 + inner), radius=r, fill=TERRACOTTA)
+def rounded(image, radius):
+    mask = Image.new('L', image.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, image.width - 1, image.height - 1), radius=radius, fill=255)
+    image = image.convert('RGBA')
+    image.putalpha(mask)
+    return image
 
 
-def icon():
-    size = 128 * SCALE
-    image = Image.new('RGBA', (size, size), (0, 0, 0, 0))
-    mark(ImageDraw.Draw(image), size * 0.03, size * 0.03, size * 0.94)
-    return image.resize((128, 128), Image.LANCZOS)
+def main(clone):
+    splash = Image.open(Path(clone) / SPLASH).convert('RGB')
+    background = splash.getpixel((10, 10))
 
+    x0, y0, x1, y1 = TILES
+    pad = 55
+    icon = splash.crop((x0 - pad, y0 - pad, x1 + pad, y0 - pad + (x1 - x0) + 2 * pad))
+    icon = icon.resize((512, 512), Image.LANCZOS)
+    rounded(icon, 112).resize((128, 128), Image.LANCZOS).save(ROOT / 'screen_manager' / 'icon.png', optimize=True)
 
-def logo():
-    w, h = 500 * SCALE, 200 * SCALE
-    image = Image.new('RGBA', (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(image)
-    side = h * 0.72
-    left = h * 0.14
-    mark(draw, left, (h - side) / 2, side)
-    text_x = left + side + h * 0.12
-    big = ImageFont.truetype(str(FONT), int(h * 0.27))
-    small = ImageFont.truetype(str(FONT), int(h * 0.15))
-    draw.text((text_x, h * 0.50), 'Kachel', font=big, fill=INK, anchor='ls')
-    draw.text((text_x, h * 0.73), 'Manager', font=small, fill=TERRACOTTA, anchor='ls')
-    return image.resize((500, 200), Image.LANCZOS)
+    words = splash.copy()
+    draw = ImageDraw.Draw(words)
+    draw.rectangle(SUBTITLE, fill=background)
+    draw.text(SUBTITLE_AT, 'Manager', font=ImageFont.truetype(FONT, 70), fill=TEAL, anchor='ls')
+    left, right = x0 - 60, 1508
+    height = round((right - left) / 2.5)
+    middle = (y0 + y1) // 2
+    logo = words.crop((left, middle - height // 2, right, middle - height // 2 + height))
+    logo = logo.resize((1000, 400), Image.LANCZOS)
+    rounded(logo, 48).resize((500, 200), Image.LANCZOS).save(ROOT / 'screen_manager' / 'logo.png', optimize=True)
+    print('written: screen_manager/icon.png, screen_manager/logo.png')
 
 
 if __name__ == '__main__':
-    icon().save(ROOT / 'screen_manager' / 'icon.png', optimize=True)
-    logo().save(ROOT / 'screen_manager' / 'logo.png', optimize=True)
-    print('written: screen_manager/icon.png, screen_manager/logo.png')
+    if len(sys.argv) != 2:
+        sys.exit(__doc__.split('\n\n')[-1].strip())
+    main(sys.argv[1])

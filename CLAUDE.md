@@ -72,6 +72,12 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   Entität in echod (`original_name`, z. B. „Night hours“ zu ObjectID `screen_night_hours`) und ihre Domain. Neue
   Entitäten erscheinen, sobald ihr Name in `SECTIONS` steht; was ein Gerät nicht hat, fehlt (Fire: kein Auto-Update).
   Tesseras eigene Bildschirm-Einstellungen blendet der Editor aus (`SettingsTab.vue`, nur mit `esp_screens`).
+- **Kachel, nicht Tessera** (Philip, 18.11.): Wo die App von sich spricht, sagt sie „Kachel Manager“. Die Texte stehen
+  in `tools/kachel_texts.json` (Englisch, Deutsch; `keep` = wo Tessera gemeint ist: ESP32-Teile, Tesseras Website).
+  `tools/kachel_names.py` schreibt sie in die Übersetzungen; ein neuer Text mit „Tessera“ in keiner Liste lässt
+  `--check` scheitern, dann entscheiden. Automationen heißen „Kachel: …“ (IDs `kachel_…`). Seitenleiste: Kachel-Zeichen
+  (`web/src/kachel/KachelMark.vue`), Handbuch und Spende (PayPal) in `web/src/kachel/links.ts`, Tesseras
+  Finanzierungs-Karte aus. Store-Icon/-Logo schneidet `tools/kachel_logo.py` aus echods Startbild.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

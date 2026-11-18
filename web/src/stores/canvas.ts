@@ -32,7 +32,7 @@ export const useCanvasStore = defineStore("canvas", () => {
   const ui = useUiStore();
   // The zoom of the pages in this browser (1 = the size above), and the room the editor has for one page, measured by
   // the page row (LayoutView) while it is there.
-  const zoom = usePreference<number>("esp-screens.editor-zoom", 1);
+  const zoom = usePreference<number>("kachel-manager.editor-zoom", 1);
   const room = ref<{ width: number; height: number } | null>(null);
   function zoomBy(step: number) {
     const at = ZOOMS.findIndex((value) => value >= zoom.value - 0.001);

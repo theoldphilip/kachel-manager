@@ -44,7 +44,7 @@ const query = ref("");
 const input = ref<HTMLInputElement | null>(null);
 const list = ref<HTMLElement | null>(null);
 // What was chosen last, by the row's id, kept in this browser.
-const recent = usePreference<string[]>("esp-screens.palette-recent", [], {
+const recent = usePreference<string[]>("kachel-manager.palette-recent", [], {
   serializer: { read: (raw) => { try { const ids = JSON.parse(raw); return Array.isArray(ids) ? ids.filter((id) => typeof id === "string") : []; } catch { return []; } },
     write: (ids) => JSON.stringify(ids) },
 });

@@ -65,20 +65,20 @@ describe("the view the address names", () => {
     const { router, restoreKeptRoute } = await import("../../src/router");
     await router.replace("/");
     await router.push("/screens/text.hall_tiles");
-    expect(sessionStorage.getItem("esp-screens.route")).toBe("/screens/text.hall_tiles");
+    expect(sessionStorage.getItem("kachel-manager.route")).toBe("/screens/text.hall_tiles");
     // Home Assistant makes the frame anew at the bare address, which the router has read as the overview by the time the
     // page restores: the kept one comes back.
     await router.replace("/");
-    sessionStorage.setItem("esp-screens.route", "/screens/text.hall_tiles");
+    sessionStorage.setItem("kachel-manager.route", "/screens/text.hall_tiles");
     await restoreKeptRoute();
     expect(router.currentRoute.value.fullPath).toBe("/screens/text.hall_tiles");
     // A tab whose last address was the overview stays there.
     await router.replace("/");
-    expect(sessionStorage.getItem("esp-screens.route")).toBe("/");
+    expect(sessionStorage.getItem("kachel-manager.route")).toBe("/");
     await restoreKeptRoute();
     expect(router.currentRoute.value.fullPath).toBe("/");
     // An address that is there wins over the kept one.
-    sessionStorage.setItem("esp-screens.route", "/plugins");
+    sessionStorage.setItem("kachel-manager.route", "/plugins");
     history.replaceState(null, "", "#/alerts");
     await router.replace("/alerts");
     await restoreKeptRoute();
@@ -101,7 +101,7 @@ describe("the phone", () => {
     ui.addSheet = true; ui.pagesSheet = true; ui.menuOpen = true;
     ui.setFullEditor(true);
     expect([ui.phone, ui.addSheet, ui.pagesSheet, ui.menuOpen]).toEqual([false, false, false, false]);
-    expect(localStorage.getItem("esp-screens.full-editor")).toBe("1");
+    expect(localStorage.getItem("kachel-manager.full-editor")).toBe("1");
     ui.setFullEditor(false);
     expect(ui.phone).toBe(true);
     stop();

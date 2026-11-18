@@ -1,6 +1,6 @@
 // A screen's unsaved draft as this browser keeps it (stores/drafts.ts), so work survives a reload, a closed tab or a
 // browser that crashed: the layout, its grid and the way it hangs, the revision of the saved layout it started from, when
-// it was last changed and which tab wrote it. Kept in localStorage under esp-screens.draft.<screen>, which the editor
+// it was last changed and which tab wrote it. Kept in localStorage under kachel-manager.draft.<screen>, which the editor
 // shares with Home Assistant inside its iframe, so a draft is written without spaces, one screen's at a time, and goes
 // after two weeks or when more than a few screens keep one. Pure: what is read is checked here, the reading and writing
 // is the store's.
@@ -21,7 +21,7 @@ export type KeptDraft = {
   upright: boolean | null;
 };
 
-export const KEPT_PREFIX = "esp-screens.draft.";
+export const KEPT_PREFIX = "kachel-manager.draft.";
 /** A draft older than this is forgotten. */
 export const KEPT_MS = 14 * 86400000;
 /** The most screens whose drafts are kept; the oldest goes first. */

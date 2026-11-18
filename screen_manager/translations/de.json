@@ -1036,6 +1036,9 @@
       "icons": {
         "request": "Das ist keine Liste von Symbolen.",
         "too_many": "Ein Bildschirm fasst höchstens {most} eigene Symbole."
+      },
+      "kachel_device": {
+        "request": "Diese Änderung ist auf diesem Tablet nicht möglich."
       }
     },
     "status": {
@@ -1268,6 +1271,21 @@
           "label": "Echounterdrückung",
           "hint": "Verringert den eigenen Lautsprecher im Mikrofonsignal. Aus umgeht die Echounterdrückung; Mikrofon und Vollduplex bleiben aktiv. Erfordert den AEC-Audiopfad."
         }
+      },
+      "kachel_device": {
+        "firmware": "Kachel-Version",
+        "update_channel": "Update-Kanal",
+        "check_for_updates": "Nach Updates suchen",
+        "update_status": "Update-Status",
+        "update_automatically": "Updates automatisch installieren",
+        "battery_level": "Ladestand",
+        "charger_connected": "Netzteil angeschlossen",
+        "battery_charging": "Lädt",
+        "battery_care": "Akkuschutz",
+        "screen": "Bildschirm",
+        "screen_power": "Bildschirm an",
+        "screen_off_when_nobody_is_near": "Bildschirm aus, wenn niemand in der Nähe ist",
+        "settings_lock": "Einstellungssperre"
       }
     },
     "alerts": {
@@ -3370,6 +3388,21 @@
       "extras": {
         "title": "Extras",
         "note": "Einstellungen, die nur dieser Bildschirm hat, von seinem Board. Dieselben Schalter stehen auf der Einstellungsseite des Bildschirms und in Home Assistant."
+      },
+      "kachel_device": {
+        "title": "Gerät",
+        "note": "Updates, Akku und Bildschirm des Tablets. Dieselben Einstellungen stehen in Home Assistant beim Gerät des Tablets.",
+        "updates": "Updates",
+        "battery": "Akku",
+        "screen": "Bildschirm",
+        "install": "Installieren",
+        "installing": "Wird installiert",
+        "up_to_date": "Aktuell",
+        "offered": "Version {version} steht bereit.",
+        "confirm_install": "Kachel {version} auf {name} installieren? Das Tablet startet neu und behält die neue Version nur, wenn sie fünf Minuten läuft.",
+        "yes": "Ja",
+        "no": "Nein",
+        "brightness": "Helligkeit"
       }
     },
     "update": {

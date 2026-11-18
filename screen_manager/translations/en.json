@@ -1036,6 +1036,9 @@
       "icons": {
         "request": "That is not a list of icons.",
         "too_many": "A screen takes at most {most} icons of its own."
+      },
+      "kachel_device": {
+        "request": "This change is not possible on this tablet."
       }
     },
     "status": {
@@ -1268,6 +1271,21 @@
           "label": "Echo cancellation",
           "hint": "Reduce the screen speaker in microphone input. Off bypasses cancellation; it does not disable the microphone or full-duplex audio. Requires the AEC transport."
         }
+      },
+      "kachel_device": {
+        "firmware": "Kachel version",
+        "update_channel": "Update channel",
+        "check_for_updates": "Check for updates",
+        "update_status": "Update status",
+        "update_automatically": "Install updates automatically",
+        "battery_level": "Battery level",
+        "charger_connected": "Charger connected",
+        "battery_charging": "Charging",
+        "battery_care": "Battery care",
+        "screen": "Screen",
+        "screen_power": "Screen power",
+        "screen_off_when_nobody_is_near": "Screen off when nobody is near",
+        "settings_lock": "Settings lock"
       }
     },
     "alerts": {
@@ -2919,6 +2937,21 @@
       "extras": {
         "title": "Extras",
         "note": "Settings only this screen has, from its board. The same switches are on the screen's own settings page and in Home Assistant."
+      },
+      "kachel_device": {
+        "title": "Device",
+        "note": "The tablet's own updates, battery and screen. The same settings are in Home Assistant, on the tablet's device.",
+        "updates": "Updates",
+        "battery": "Battery",
+        "screen": "Screen",
+        "install": "Install",
+        "installing": "Installing",
+        "up_to_date": "Up to date",
+        "offered": "Version {version} is ready.",
+        "confirm_install": "Install Kachel {version} on {name}? The tablet restarts and keeps the new version only when it runs for five minutes.",
+        "yes": "Yes",
+        "no": "No",
+        "brightness": "Brightness"
       }
     },
     "update": {

@@ -14,7 +14,7 @@ const MONTHLY = "https://buymeacoffee.com/f5j9jnkmhpv/membership";
 const ONCE = "https://buymeacoffee.com/f5j9jnkmhpv";
 
 // When to ask again, as this browser keeps it: a moment, or "donated" for never.
-const until = usePreference<number | "donated" | null>("esp-screens.donate", null,
+const until = usePreference<number | "donated" | null>("kachel-manager.donate", null,
   { serializer: { read: (raw) => (raw === "donated" ? raw : raw ? Number(raw) : null), write: String } });
 function due() {
   if (until.value === "donated") return false;

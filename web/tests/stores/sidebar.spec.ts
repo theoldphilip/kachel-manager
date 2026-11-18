@@ -16,7 +16,7 @@ describe("the sidebar's edge", () => {
     sidebar.drag(300);
     expect([sidebar.folded, sidebar.shownWidth]).toEqual([false, 300]);
     await nextTick();
-    expect(localStorage.getItem("esp-screens.sidebar-width")).toBe("300");
+    expect(localStorage.getItem("kachel-manager.sidebar-width")).toBe("300");
   });
   it("folds and unfolds with its button, keeping the width it had", async () => {
     const sidebar = useSidebarStore();
@@ -24,19 +24,19 @@ describe("the sidebar's edge", () => {
     sidebar.toggle();
     expect(sidebar.shownWidth).toBe(SIDE_FOLDED);
     await nextTick();
-    expect(localStorage.getItem("esp-screens.sidebar-folded")).toBe("1");
+    expect(localStorage.getItem("kachel-manager.sidebar-folded")).toBe("1");
     sidebar.toggle();
     expect(sidebar.shownWidth).toBe(320);
     sidebar.reset();
     expect([sidebar.folded, sidebar.shownWidth]).toEqual([false, SIDE_DEFAULT]);
   });
   it("starts with what this browser kept, a width out of bounds brought back within them", () => {
-    localStorage.setItem("esp-screens.sidebar-width", "9999");
-    localStorage.setItem("esp-screens.sidebar-folded", "1");
+    localStorage.setItem("kachel-manager.sidebar-width", "9999");
+    localStorage.setItem("kachel-manager.sidebar-folded", "1");
     freshPinia();
     const sidebar = useSidebarStore();
     expect([sidebar.width, sidebar.folded, sidebar.shownWidth]).toEqual([SIDE_MAX, true, SIDE_FOLDED]);
-    localStorage.setItem("esp-screens.sidebar-folded", "0");
+    localStorage.setItem("kachel-manager.sidebar-folded", "0");
     freshPinia();
     expect(useSidebarStore().shownWidth).toBe(SIDE_MAX);
   });

@@ -166,7 +166,7 @@ export const useDraftsStore = defineStore("drafts", () => {
       // The other tabs, where the browser has a channel between them.
       const Channel = (globalThis as { BroadcastChannel?: typeof BroadcastChannel }).BroadcastChannel;
       if (!Channel) return;
-      const channel = new Channel("esp-screens.editor");
+      const channel = new Channel("kachel-manager.editor");
       post = (message) => { try { channel.postMessage(message); } catch { /* a closed channel says nothing */ } };
       channel.onmessage = (event: MessageEvent<Message>) => receive(event.data);
       const greet = () => { others.value = new Map(); post({ type: "hello", tab }); post({ type: "state", tab, ...state() }); };

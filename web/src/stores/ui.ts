@@ -110,7 +110,7 @@ export const useUiStore = defineStore("ui", () => {
   // editor (remembered in this browser), keep the editor as it was. The width is the browser's, so a desktop never sees
   // any of it. It is read when the store starts; start() follows it from then on (composables/useWidths.ts).
   const narrowPhone = ref(atMost("phone"));
-  const fullEditor = usePreference("esp-screens.full-editor", false, { serializer: flagSerializer });
+  const fullEditor = usePreference("kachel-manager.full-editor", false, { serializer: flagSerializer });
   const phone = computed(() => narrowPhone.value && !fullEditor.value);
   // The sidebar of a phone, a sheet from the left (App.vue): open until a screen or a page is chosen in it.
   const sideOpen = ref(false);
@@ -168,7 +168,7 @@ export const useUiStore = defineStore("ui", () => {
   function openIcons(id: string) { return router.push(iconsRoute(id)); }
 
   // ---- The library drawer along the bottom (app 0.4.32): open or folded, remembered in this browser, and its filters ----
-  const libraryOpen = usePreference("esp-screens.library-open", true, { serializer: { read: (raw) => raw !== "0", write: (open) => (open ? "1" : "0") } });
+  const libraryOpen = usePreference("kachel-manager.library-open", true, { serializer: { read: (raw) => raw !== "0", write: (open) => (open ? "1" : "0") } });
   const filter = ref("");
   const search = ref("");
   const room = ref("");
@@ -178,7 +178,7 @@ export const useUiStore = defineStore("ui", () => {
   // Which tile, the size it had and has, and the control set its growing put on it (null: it kept its own). Asking is
   // remembered in this browser: "Don't show this again" leaves the richer default and only the tip goes.
   const growTip = ref<{ tileId: string; before: string; size: string; applied: string | null } | null>(null);
-  const growTips = usePreference("esp-screens.grow-tips", true, { serializer: flagSerializer });
+  const growTips = usePreference("kachel-manager.grow-tips", true, { serializer: flagSerializer });
 
   // ---- The editor's clock and the top bar's fonts ----
   // The time the mockup's clocks and "last changed" lines read: the store's start ticks it (composables/useClock.ts).

@@ -14,8 +14,8 @@ export const clampWidth = (px: number) => Math.round(Math.min(SIDE_MAX, Math.max
 
 export const useSidebarStore = defineStore("sidebar", () => {
   // The width and the fold as this browser keeps them (composables/usePreference.ts), each written as it changes.
-  const width = usePreference("esp-screens.sidebar-width", SIDE_DEFAULT, { serializer: { read: (raw) => clampWidth(Number(raw) || SIDE_DEFAULT), write: String } });
-  const folded = usePreference("esp-screens.sidebar-folded", false, { serializer: flagSerializer });
+  const width = usePreference("kachel-manager.sidebar-width", SIDE_DEFAULT, { serializer: { read: (raw) => clampWidth(Number(raw) || SIDE_DEFAULT), write: String } });
+  const folded = usePreference("kachel-manager.sidebar-folded", false, { serializer: flagSerializer });
   // While its edge is held: the page lays nothing out again meanwhile.
   const resizing = ref(false);
 

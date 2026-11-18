@@ -101,7 +101,7 @@ describe("what can be done to a screen", () => {
     const api = fakeApi();
     expect(await scr.renameScreen(scr.currentScreen!, "  Study ")).toBe(true);
     expect(scr.currentScreen!.name).toBe("Study");
-    expect(JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!)[0].name).toBe("Study");
+    expect(JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!)[0].name).toBe("Study");
     expect(await scr.renameScreen(scr.currentScreen!, "   ")).toBe(true);
     expect(scr.currentScreen!.name).toBe("Study");
     expect(api.calls).toEqual([]);

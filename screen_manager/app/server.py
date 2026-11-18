@@ -17,6 +17,7 @@ import math
 from urllib.parse import urlsplit
 import automations
 import kachel
+import kachel_device
 import calendar_feed
 import todo_feed
 import doorbell
@@ -6297,6 +6298,8 @@ def create_app(manager, development=False):
     app.router.add_get('/api/screens/{inbox}/extras', extras)
     app.router.add_get('/api/screens/{inbox}/extras/events', extras_events)
     app.router.add_post('/api/screens/{inbox}/extras', extra)
+    # Kachel Manager: the tablet's own device under Screen settings, Device (kachel_device.py).
+    kachel_device.routes(app, manager, REQUEST_LANGUAGE.get)
     app.router.add_get('/', index)
     app.router.add_get('/api/inventory', inventory)
     app.router.add_get('/api/capabilities', capabilities)

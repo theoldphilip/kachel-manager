@@ -18,7 +18,7 @@ import type { BuildServerView, Inventory, PageDocument, Screen } from "../types"
 import { lookups } from "./lookup";
 import { useUiStore } from "./ui";
 
-const VIRTUAL_SCREENS_KEY = "esp-screens.virtual-screens";
+const VIRTUAL_SCREENS_KEY = "kachel-manager.virtual-screens";
 // The browser opens a broken stream again by itself, but one it gave up on (CLOSED: ingress answered 502 while the add-on
 // restarted) stays closed: a new stream is opened instead, a little later each time, and the polls stand in meanwhile; a
 // stream that opens starts the count again.

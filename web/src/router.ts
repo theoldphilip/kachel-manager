@@ -46,7 +46,7 @@ router.afterEach((to, from) => { if (to.path !== from.path) window.scrollTo(0, 0
 // it; a tab whose last address was the overview stays there. (The router has already read the iframe's address when
 // restoreKeptRoute runs: a bare one is `/` by then.) Outside a frame, and in a frame of another origin, only the tab's
 // storage is used.
-const KEPT = "esp-screens.route";
+const KEPT = "kachel-manager.route";
 const outer = (() => {
   try { return window.top && window.top !== window && window.top.location.origin === location.origin ? window.top : null; } catch { return null; }
 })();

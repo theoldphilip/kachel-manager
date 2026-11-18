@@ -149,12 +149,12 @@ describe("what this browser remembers of the editor", () => {
     expect(doc.editorMode).toBe("simple");
     useSessionStore().select("living");
     expect(doc.editorMode).toBe("advanced");
-    expect([localStorage.getItem("esp-screens-mode:living"), localStorage.getItem("esp-screens-mode:kitchen")]).toEqual(["advanced", null]);
+    expect([localStorage.getItem("kachel-manager-mode:living"), localStorage.getItem("kachel-manager-mode:kitchen")]).toEqual(["advanced", null]);
     useUiStore().libraryOpen = false;
     useUiStore().setFullEditor(true);
-    expect([localStorage.getItem("esp-screens.library-open"), localStorage.getItem("esp-screens.full-editor")]).toEqual(["0", "1"]);
+    expect([localStorage.getItem("kachel-manager.library-open"), localStorage.getItem("kachel-manager.full-editor")]).toEqual(["0", "1"]);
     useUiStore().libraryOpen = true;
-    expect(localStorage.getItem("esp-screens.library-open")).toBe("1");
+    expect(localStorage.getItem("kachel-manager.library-open")).toBe("1");
   });
 });
 
@@ -164,7 +164,7 @@ describe("live values", () => {
     addTile("light.b");
     await doc.save();
     expect(doc.dirty).toBe(false);
-    const saved = JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!)[0];
+    const saved = JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!)[0];
     expect(saved.shape).toMatchObject({ width: 800, columns: 3, rows: 4 });
     expect(saved.layout.tiles[0].entity).toBe("light.b");
     expect(virtual.firmware_known).toBe(renderer.firmware);
@@ -173,7 +173,7 @@ describe("live values", () => {
     await useInventoryStore().refresh(false);
     expect(useInventoryStore().inventory.screens[0].shape).toEqual(saved.shape);
     expect(await useSessionStore().removeScreen(useInventoryStore().inventory.screens[0])).toBe(true);
-    expect(JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!)).toEqual([]);
+    expect(JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!)).toEqual([]);
     expect(useScreenStore().selected).toBeNull();
     expect(fetch).toHaveBeenCalledTimes(1);
   });
@@ -193,7 +193,7 @@ describe("live values", () => {
     doc.chooseGrid(4, 3);
     expect(doc.documentGrid).toEqual({ columns: 3, rows: 3 });
     await doc.save();
-    const saved = JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!)[0];
+    const saved = JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!)[0];
     expect(saved.page_document.sourceGrid).toEqual({ columns: 3, rows: 3 });
     // A preview without its board's catalogue (the custom glass) keeps the grid it was made with.
     expect(useSessionStore().createVirtualScreen("Custom", customPreview).grids).toBeNull();
@@ -228,7 +228,7 @@ describe("live values", () => {
     const legacy = { id: "virtual.old", name: "Old preview", virtual: true, shape: customPreview.shape,
       layout: { title: "Old preview", pages: 2, tiles: [{ entity: "light.b", name: "Lamp", slot: 6 }] } };
     const migrated = documentFixture(structuredClone(legacy.layout));
-    localStorage.setItem("esp-screens.virtual-screens", JSON.stringify([legacy]));
+    localStorage.setItem("kachel-manager.virtual-screens", JSON.stringify([legacy]));
     vi.stubGlobal("fetch", vi.fn(async (url: string, init?: RequestInit) => {
       if (url.endsWith("firmware-preview/import")) {
         expect(JSON.parse(String(init?.body))).toEqual({ document: legacy.layout, sourceGrid: { columns: 2, rows: 3 } });
@@ -237,7 +237,7 @@ describe("live values", () => {
       return new Response(JSON.stringify({ screens: [] }), { status: 200 });
     }));
     await useInventoryStore().refresh(false);
-    const stored = JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!)[0];
+    const stored = JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!)[0];
     expect(stored.layout).toEqual(legacy.layout);
     if (success) {
       expect(stored.page_document.layout).toEqual(migrated.layout);
@@ -250,11 +250,11 @@ describe("live values", () => {
   });
   it("leaves out a stored preview screen it cannot read, says so, and loads the rest (app 0.4.32)", async () => {
     const good = useSessionStore().createVirtualScreen("Good preview", customPreview);
-    const stored = JSON.parse(localStorage.getItem("esp-screens.virtual-screens")!);
+    const stored = JSON.parse(localStorage.getItem("kachel-manager.virtual-screens")!);
     const broken = { ...structuredClone(stored[0]), id: "virtual.broken", name: "Broken preview" };
     broken.page_document.layout.pages[0].tiles = [{ id: "a".repeat(16), content: { kind: "entity", entityId: "light.b" },
       placement: { row: 0, column: 0, columns: 9, rows: 9 }, appearance: { label: "" }, interaction: {} }];
-    localStorage.setItem("esp-screens.virtual-screens", JSON.stringify([...stored, broken, { nonsense: true }]));
+    localStorage.setItem("kachel-manager.virtual-screens", JSON.stringify([...stored, broken, { nonsense: true }]));
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ screens: [] }), { status: 200 })));
     await useInventoryStore().refresh(false);
     await new Promise((done) => setTimeout(done, 0));

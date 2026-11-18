@@ -275,7 +275,7 @@ export const useDocumentStore = defineStore("document", () => {
   function redo() { historyStep("redo"); }
 
   // The simple or the advanced editor, remembered in this browser per screen: the preference of the open screen.
-  const keptMode = usePreference<EditorMode>(() => `esp-screens-mode:${scr.selected ?? ""}`, "simple",
+  const keptMode = usePreference<EditorMode>(() => `kachel-manager-mode:${scr.selected ?? ""}`, "simple",
     { serializer: { read: (raw) => (raw === "advanced" ? "advanced" : "simple"), write: (mode) => mode } });
   function setEditorMode(mode: EditorMode) {
     editorMode.value = mode;

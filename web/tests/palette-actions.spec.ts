@@ -62,7 +62,7 @@ describe("⌘K can do everything", () => {
     await flushPromises();
     expect(page.find('[data-setting="brightness"]').classes()).toContain("spotlit");
     expect(useSettingsStore().spotlight).toBeNull();
-    expect(JSON.parse(localStorage.getItem("esp-screens.palette-recent")!)).toEqual(["setting:kitchen:brightness"]);
+    expect(JSON.parse(localStorage.getItem("kachel-manager.palette-recent")!)).toEqual(["setting:kitchen:brightness"]);
     // Next time, it comes first.
     useUiStore().palette = false; await flushPromises();
     useUiStore().palette = true; await flushPromises();

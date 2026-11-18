@@ -178,7 +178,7 @@ useEventListener(document, "keydown", onPageKey);
 const MIN = 180;
 const HEAD = 49;
 // The height this browser keeps, written when the edge is let go or a key moved it; `height` follows the pointer.
-const keptHeight = usePreference("esp-screens.library-height", 300,
+const keptHeight = usePreference("kachel-manager.library-height", 300,
   { serializer: { read: (raw) => Math.max(MIN, Number(raw) || 300), write: (px) => String(Math.round(px)) } });
 const height = ref(keptHeight.value);
 const maxHeight = () => Math.max(MIN, Math.round(window.innerHeight * 0.7));

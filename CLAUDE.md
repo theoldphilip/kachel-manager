@@ -43,8 +43,9 @@ Der gemeinsame Stand aller Kachel-Projekte liegt in der Kachel-Zentrale (`~/kach
   (`tools/gitk`), „Kachel check“ läuft bei jedem Push, Ergebnis mit
   `~/kachel-zentrale/tools/ghk checks kachel-manager <branch>`. Erst bei ganz grün per Fast-Forward auf `main` pushen,
   danach den Hilfsbranch löschen. Ist sie rot: nicht mergen.
-- **Eigene Versionsreihe** ab 0.1.0 in `screen_manager/config.yaml`. Eine neue Nummer nur nach Philips Okay. Das
-  CHANGELOG und die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.
+- **Eigene Versionsreihe** ab 0.1.0 in `screen_manager/config.yaml`. Eine neue Nummer nur nach Philips Okay. Unsere
+  Abschnitte stehen oben im CHANGELOG als `## Kachel Manager x.y.z (...)` (ohne Firmware-Nummer, damit Tesseras
+  Werkzeuge sie nicht als ihre lesen). Die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.
 - **Prüfen:** Python-Tests (`python -m unittest discover -s tests`) und der Editor (`cd web && npm test && npm run
   build`, dann `screen_manager/app/static` mit committen). Die Firmware-Teile (`components/`, `packages/`, C++-Tests,
   Firmware-Builds) gehören zu Tessera und werden hier nicht gebaut.
@@ -58,11 +59,17 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   keiner das Gerät des anderen.
 - **Eigene Namen:** Ereignisse für Automationen heißen `kachel_*` (z. B. `kachel_show_alert`), die Layout-Sensoren
   `sensor.kachel_<node>`. Der Schlüssel `esp_screens_layout` der Export-Datei bleibt, damit ein Export aus Tessera
-  hier importiert werden kann.
+  hier importiert werden kann. Der Editor speichert im Browser unter `kachel-manager.*` statt `esp-screens.*`, weil
+  beide Editoren unter derselben Home-Assistant-Adresse laufen.
 - **Ausgeschaltet (ESP32 bleibt bei Tessera):** Firmware bauen und flashen, „Neuer Bildschirm“, Kopplung neuer
   Bildschirme mit Home Assistant, Firmware-Updates, Build-Server, `tessera_video`, das Nachziehen der YAML-Profile im
   ESPHome-Ordner. Der Server lehnt diese Anfragen ab (`kachel.refuse_esp`), der Editor blendet sie aus
   (`editor_features.esp_screens`). Kein Port 8098, kein USB/UART.
+- **Gerät** (Schritt 2a): Unter Bildschirm-Einstellungen zeigt der Kachel Manager Updates, Akku und Bildschirm des
+  Tablets aus dessen eigenen Entitäten und ändert sie über Home Assistant (`screen_manager/app/kachel_device.py`,
+  `web/src/kachel/DevicePanel.vue`, Tests `tests/test_kachel_device.py`, `web/tests/kachel-device.spec.ts`). Nur was
+  `SECTIONS` als änderbar nennt, und nur auf den Geräten des Tablets. Neue Entitäten in echod erscheinen von selbst,
+  sobald ihr Name in `SECTIONS` steht.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

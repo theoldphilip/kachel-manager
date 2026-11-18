@@ -29,7 +29,7 @@ function page() {
 }
 // Another tab of the same browser, as the channel carries it: what it says and what it hears.
 function otherTab(id = "other-tab") {
-  const channel = new FakeBroadcastChannel("esp-screens.editor"), heard: any[] = [];
+  const channel = new FakeBroadcastChannel("kachel-manager.editor"), heard: any[] = [];
   channel.onmessage = (event) => heard.push(event.data);
   const say = async (message: object) => { channel.postMessage({ tab: id, ...message }); await flushPromises(); };
   return { heard, say, editing: (at: number, screen = "hall") => say({ type: "state", screen, dirty: true, at }) };

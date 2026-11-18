@@ -8,7 +8,7 @@ import { usePreference } from "../composables/usePreference";
 const DAY = 86_400_000;
 const MAIL = "mailto:maxgramser@gmail.com?subject=" + encodeURIComponent("Funding for Tessera");
 
-const until = usePreference<number>("esp-screens.funding", 0, { serializer: { read: Number, write: String } });
+const until = usePreference<number>("kachel-manager.funding", 0, { serializer: { read: Number, write: String } });
 const open = computed(() => Date.now() >= until.value);
 function hide() { until.value = Date.now() + 7 * DAY; }
 defineExpose({ open });

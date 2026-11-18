@@ -46,6 +46,12 @@ RULES = (
     (re.compile(r'Tile settings'), 'Kachel inbox'),
     (re.compile(r'tile_settings'), 'kachel_inbox'),
 )
+# The editor's keys in the browser's storage and its channel between tabs ("esp-screens.route", "esp-screens-mode:...")
+# are Tessera's too, and both editors run under the one address of Home Assistant: ours start with kachel-manager. The
+# build's own modules (virtual:esp-screens-theme) and the Claude skill's download name stay.
+WEB_RULES = (
+    (re.compile(r'(?<=["\'`])esp-screens(?=[.\-:])(?!\.zip)'), 'kachel-manager'),
+)
 
 def files():
     for folder, patterns in PLACES:
@@ -57,8 +63,8 @@ def files():
                     continue
                 yield path, relative
 
-def renamed(text):
-    for pattern, replacement in RULES:
+def renamed(text, relative=''):
+    for pattern, replacement in RULES + (WEB_RULES if relative.startswith('web/') else ()):
         text = pattern.sub(replacement, text)
     return text
 
@@ -69,7 +75,7 @@ def main(argv=None):
     stale = []
     for path, relative in files():
         text = path.read_text(encoding='utf-8')
-        new = renamed(text)
+        new = renamed(text, relative)
         if new == text:
             continue
         stale.append(relative)

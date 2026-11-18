@@ -1285,7 +1285,23 @@
         "screen": "Screen",
         "screen_power": "Screen power",
         "screen_off_when_nobody_is_near": "Screen off when nobody is near",
-        "settings_lock": "Settings lock"
+        "settings_lock": "Settings lock",
+        "other_slot_version": "Version in the other slot",
+        "battery_protection": "Battery care",
+        "full_performance": "Full performance",
+        "dim_after_idle": "Dim when idle",
+        "night_mode": "Night now",
+        "night_hours": "Night hours",
+        "night_starts": "Night starts",
+        "night_ends": "Night ends",
+        "weekend_night_starts": "Weekend night starts",
+        "weekend_night_ends": "Weekend night ends",
+        "off_when_the_room_is_empty": "Off when the room is empty",
+        "text_size": "Text size",
+        "clock_format": "Clock",
+        "start_page": "Start page",
+        "back_to_start_page": "Back to the start page",
+        "turn_pages_with": "Turn pages with"
       }
     },
     "alerts": {
@@ -2951,7 +2967,8 @@
         "confirm_install": "Install Kachel {version} on {name}? The tablet restarts and keeps the new version only when it runs for five minutes.",
         "yes": "Yes",
         "no": "No",
-        "brightness": "Brightness"
+        "brightness": "Brightness",
+        "pages": "Pages"
       }
     },
     "update": {

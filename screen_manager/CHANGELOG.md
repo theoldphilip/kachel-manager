@@ -2,7 +2,7 @@
 
 - **The Kachel Manager.** A fork of Tessera for the Kachel screens (Alpine Linux and echod on tablets). It runs beside Tessera in the same Home Assistant: real ESP32 screens stay with Tessera, and the Kachel Manager takes only screens whose inbox is named "Kachel inbox". Its events start with `kachel_` (such as `kachel_show_alert`), its layout sensors are `sensor.kachel_<node>`, and the editor keeps its own settings in the browser.
 - **No ESP32 parts.** Building and flashing firmware, New screen, pairing, firmware updates, the build server and Video in Home Assistant are off, and the app publishes no camera port.
-- **Device.** Under Screen settings, a Kachel tablet shows its own updates (version, channel, check, install after a question, install automatically), its battery and its screen (on, off, brightness, off when nobody is near, settings lock). These are the tablet's own entities in Home Assistant, changed through Home Assistant at once.
+- **Device.** Under Screen settings, a Kachel tablet shows its own updates (version, channel, check, install after a question, install automatically, the version in the other slot), its battery (level, charger, battery care, full performance), its screen (on, off, brightness, dim when idle, night hours and the weekend's, off when the room is empty, text size, clock, settings lock) and its pages (start page, back to the start page, turn pages with). These are the tablet's own entities in Home Assistant, changed through Home Assistant at once. Tessera's own screen settings, which only an ESP32 screen has, are left out.
 
 ## 0.4.98 (firmware 0.61.0)
 

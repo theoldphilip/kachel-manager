@@ -2,7 +2,8 @@
 // Kachel Manager: the tablet's own device under Screen settings (screen_manager/app/kachel_device.py): its updates, its
 // battery and its screen, the tablet's own entities in Home Assistant, changed through Home Assistant at once. A row the
 // tablet does not have is not there, and a card without rows is not drawn. Switches, choices and buttons look as the
-// board's extras do (PluginSettings.vue); an update asks before it installs, since the tablet restarts.
+// board's extras do (PluginSettings.vue); an update asks before it installs, since the tablet restarts. In the Kachel
+// Manager it stands in for Tessera's own setting groups (SettingsTab.vue), whose entities only an ESP32 screen has.
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useDocumentVisibility } from "@vueuse/core";
 import { getJson, send } from "../api";
@@ -20,7 +21,7 @@ type Row = {
   value?: boolean | string | null; options?: string[]; unit?: string;
   latest?: string | null; pending?: boolean; installing?: boolean; progress?: number | null; brightness?: number | null;
 };
-type Section = { section: "updates" | "battery" | "screen"; rows: Row[] };
+type Section = { section: "updates" | "battery" | "screen" | "pages"; rows: Row[] };
 
 const ui = useUiStore();
 const scr = useScreenStore();
@@ -34,6 +35,7 @@ const titles = computed<Record<Section["section"], string>>(() => ({
   updates: t("editor.screen_settings.kachel_device.updates"),
   battery: t("editor.screen_settings.kachel_device.battery"),
   screen: t("editor.screen_settings.kachel_device.screen"),
+  pages: t("editor.screen_settings.kachel_device.pages"),
 }));
 
 function listen() {

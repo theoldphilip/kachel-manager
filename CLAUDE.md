@@ -68,8 +68,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 - **Gerät** (Schritt 2a): Unter Bildschirm-Einstellungen zeigt der Kachel Manager Updates, Akku und Bildschirm des
   Tablets aus dessen eigenen Entitäten und ändert sie über Home Assistant (`screen_manager/app/kachel_device.py`,
   `web/src/kachel/DevicePanel.vue`, Tests `tests/test_kachel_device.py`, `web/tests/kachel-device.spec.ts`). Nur was
-  `SECTIONS` als änderbar nennt, und nur auf den Geräten des Tablets. Neue Entitäten in echod erscheinen von selbst,
-  sobald ihr Name in `SECTIONS` steht.
+  `SECTIONS` als änderbar nennt, und nur auf den Geräten des Tablets. Gefunden wird jede Zeile über den **Namen** der
+  Entität in echod (`original_name`, z. B. „Night hours“ zu ObjectID `screen_night_hours`) und ihre Domain. Neue
+  Entitäten erscheinen, sobald ihr Name in `SECTIONS` steht; was ein Gerät nicht hat, fehlt (Fire: kein Auto-Update).
+  Tesseras eigene Bildschirm-Einstellungen blendet der Editor aus (`SettingsTab.vue`, nur mit `esp_screens`).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

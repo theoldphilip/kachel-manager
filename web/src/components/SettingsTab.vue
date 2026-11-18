@@ -20,12 +20,15 @@ import { useScreenStore } from "../stores/screen";
 import { pageReachWarning } from "../editor/pages";
 import { useUiStore } from "../stores/ui";
 import { useScreenIconsStore } from "../stores/screenIcons";
+import { useInventoryStore } from "../stores/inventory";
 
 const settings = useSettingsStore();
 const plugins = usePluginsStore();
 const scr = useScreenStore();
 const ui = useUiStore();
 const screenIcons = useScreenIconsStore();
+// Kachel Manager: whether Tessera's own groups have a screen to belong to (editor_features.esp_screens).
+const inv = useInventoryStore();
 
 const view = computed(() => settings.settingsView());
 // The plugins this screen runs that have settings: those are in each plugin's details on the Plugins tab (docs/PLUGINS.md).
@@ -113,7 +116,8 @@ const startCalibration = () => scr.currentScreen && scr.calibrateTouch(scr.curre
       <GridSettings />
       <template v-if="view && !scr.currentScreen?.virtual">
       <template v-for="group in groups" :key="group.group">
-      <section class="set-card">
+      <!-- Kachel Manager: Tessera's groups need an ESP32 screen's entities; a Kachel tablet's are under Device. -->
+      <section v-if="inv.espScreens" class="set-card">
         <h4><span class="mdi">{{ glyph(group.icon) }}</span>{{ t(`editor.screen_settings.groups.${group.group}`) }}</h4>
         <div v-for="row in group.rows" :key="row.key" class="srow" :class="[`setting-${isSwitch(row) ? 'toggle' : row.kind}`, { inactive: !needs(row) || unavailable(row), spotlit: marked === row.key }]" :data-setting="row.key"
           :title="unavailable(row) && !offline ? t('editor.screen_settings.unavailable') : ''"

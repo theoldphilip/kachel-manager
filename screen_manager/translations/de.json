@@ -1285,7 +1285,23 @@
         "screen": "Bildschirm",
         "screen_power": "Bildschirm an",
         "screen_off_when_nobody_is_near": "Bildschirm aus, wenn niemand in der Nähe ist",
-        "settings_lock": "Einstellungssperre"
+        "settings_lock": "Einstellungssperre",
+        "other_slot_version": "Version im anderen Slot",
+        "battery_protection": "Akkuschutz",
+        "full_performance": "Volle Leistung",
+        "dim_after_idle": "Dimmen bei Ruhe",
+        "night_mode": "Jetzt Nacht",
+        "night_hours": "Nachtstunden",
+        "night_starts": "Nacht beginnt",
+        "night_ends": "Nacht endet",
+        "weekend_night_starts": "Wochenende: Nacht beginnt",
+        "weekend_night_ends": "Wochenende: Nacht endet",
+        "off_when_the_room_is_empty": "Aus bei leerem Raum",
+        "text_size": "Textgröße",
+        "clock_format": "Uhrzeit",
+        "start_page": "Startseite",
+        "back_to_start_page": "Zurück zur Startseite",
+        "turn_pages_with": "Blättern mit"
       }
     },
     "alerts": {
@@ -3402,7 +3418,8 @@
         "confirm_install": "Kachel {version} auf {name} installieren? Das Tablet startet neu und behält die neue Version nur, wenn sie fünf Minuten läuft.",
         "yes": "Ja",
         "no": "Nein",
-        "brightness": "Helligkeit"
+        "brightness": "Helligkeit",
+        "pages": "Seiten"
       }
     },
     "update": {

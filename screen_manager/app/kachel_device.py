@@ -8,8 +8,7 @@ automation. Nothing here talks to the tablet itself.
 
 The tablet's entities are found by the name echod gives them (`original_name`, which a rename in Home Assistant leaves
 alone) on the screen's devices: the device of its inbox ("Kachel inbox" sits on a sub-device of the tablet), the tablet
-the sub-device belongs to, and the tablet's other sub-devices. A row the tablet does not have is left out, so a newer
-echod's entities (the battery care switch, the night hours, ...) show up here as soon as the tablet has them.
+the sub-device belongs to, and the tablet's other sub-devices. A row the tablet does not have is left out: the Fire, for one, has no switch that installs updates by itself.
 
 Only what is in SECTIONS can be changed, and only in the way its kind takes: an update installed, a switch, a choice, a
 button pressed, the screen on, off or at a brightness. Tested by tests/test_kachel_device.py.
@@ -23,23 +22,44 @@ import core
 import entity_settings
 from i18n import english, t
 
-# (section, [(key, domains, writable)]): the key is the entity's ESPHome object id in echod (its name in snake case).
+# (section, [(key, name, domain, writable)]): `name` is the entity's name in echod (its `original_name`, what it is
+# found by; echod's object ids sometimes differ, such as screen_night_hours for "Night hours"), `key` the row's own id
+# and the key of its words (addon.labels.kachel_device). echod 2.6.1 on the living room tablet has all of them.
 SECTIONS = (
-    ('updates', (('firmware', ('update',), True),
-                 ('update_channel', ('select',), True),
-                 ('check_for_updates', ('button',), True),
-                 ('update_status', ('sensor',), False),
-                 ('update_automatically', ('switch',), True))),
-    ('battery', (('battery_level', ('sensor',), False),
-                 ('charger_connected', ('binary_sensor',), False),
-                 ('battery_charging', ('binary_sensor',), False),
-                 ('battery_care', ('switch', 'binary_sensor'), True))),
-    ('screen', (('screen', ('light',), True),
-                ('screen_power', ('switch',), True),
-                ('screen_off_when_nobody_is_near', ('switch',), True),
-                ('settings_lock', ('switch',), True))),
+    ('updates', (('firmware', 'Firmware', 'update', True),
+                 ('update_channel', 'Update channel', 'select', True),
+                 ('check_for_updates', 'Check for updates', 'button', True),
+                 ('update_status', 'Update status', 'sensor', False),
+                 ('update_automatically', 'Install updates automatically', 'switch', True),
+                 ('other_slot_version', 'Other slot version', 'sensor', False))),
+    ('battery', (('battery_level', 'Battery level', 'sensor', False),
+                 ('charger_connected', 'Charger connected', 'binary_sensor', False),
+                 ('battery_charging', 'Battery charging', 'binary_sensor', False),
+                 ('battery_protection', 'Battery protection', 'switch', True),
+                 ('battery_care', 'Battery care', 'binary_sensor', False),
+                 ('full_performance', 'Full performance', 'switch', True))),
+    ('screen', (('screen', 'Screen', 'light', True),
+                ('screen_power', 'Screen power', 'switch', True),
+                ('dim_after_idle', 'Dim after idle', 'select', True),
+                ('night_mode', 'Night mode', 'switch', True),
+                ('night_hours', 'Night hours', 'select', True),
+                ('night_starts', 'Night starts', 'select', True),
+                ('night_ends', 'Night ends', 'select', True),
+                ('weekend_night_starts', 'Weekend night starts', 'select', True),
+                ('weekend_night_ends', 'Weekend night ends', 'select', True),
+                ('off_when_the_room_is_empty', 'Off when the room is empty', 'select', True),
+                ('screen_off_when_nobody_is_near', 'Screen off when nobody is near', 'switch', True),
+                ('text_size', 'Screen text size', 'select', True),
+                ('clock_format', 'Clock format', 'select', True),
+                ('settings_lock', 'Settings lock', 'switch', True))),
+    ('pages', (('start_page', 'Start page', 'select', True),
+               ('back_to_start_page', 'Back to start page', 'select', True),
+               ('turn_pages_with', 'Turn pages with', 'select', True))),
 )
-WANTED = {key: (domains, writable) for _, rows in SECTIONS for key, domains, writable in rows}
+WANTED = {key: (domain, writable) for _, rows in SECTIONS for key, _, domain, writable in rows}
+BY_NAME = {(name, domain): key for _, rows in SECTIONS for key, name, domain, _ in rows}
+# A row left out while another one says the same and can change it: the battery care reading beside its switch.
+SHOWN_BY = {'battery_care': 'battery_protection'}
 # The words a reading has no translation of are shown as Home Assistant has them.
 GONE = (None, '', 'unknown', 'unavailable')
 
@@ -64,12 +84,9 @@ def entities(manager, screen):
         if not (isinstance(item, dict) and isinstance(item.get('entity_id'), str) and item.get('device_id') in ids
                 and item.get('platform') == 'esphome' and item.get('original_name') and not item.get('disabled_by')):
             continue
-        key = entity_settings.object_id(item['original_name'])
-        domain = item['entity_id'].split('.')[0]
-        if key in WANTED and domain in WANTED[key][0]:
-            # A switch wins over a sensor of the same name (battery care: a switch once echod has one).
-            if key not in found or WANTED[key][0].index(domain) < WANTED[key][0].index(found[key].split('.')[0]):
-                found[key] = item['entity_id']
+        key = BY_NAME.get((item['original_name'], item['entity_id'].split('.')[0]))
+        if key and key not in found:
+            found[key] = item['entity_id']
     return found
 
 
@@ -88,6 +105,9 @@ def _row(key, eid, states, language, online):
     if domain in ('switch', 'select', 'button'):
         out = entity_settings.row({'key': key}, {key: eid}, states, _label(key, language), None, online)
         out['writable'] = writable
+        if domain == 'select':
+            # Every choice: a night's start and end come in quarters of an hour, 96 of them (Extras keep 48).
+            out['options'] = [o for o in attrs.get('options') or [] if isinstance(o, str)][:200]
         return out
     available = bool(online) and value not in (None, 'unavailable')
     out = {'key': key, 'entity': eid, 'label': _label(key, language), 'available': available, 'writable': writable}
@@ -119,7 +139,8 @@ def device_for(manager, inbox, language='en'):
     states = getattr(manager.ha, 'states', {}) or {}
     out = []
     for section, rows in SECTIONS:
-        drawn = [_row(key, found[key], states, language, screen.get('online')) for key, _, _ in rows if key in found]
+        drawn = [_row(key, found[key], states, language, screen.get('online')) for key, _, _, _ in rows
+                 if key in found and SHOWN_BY.get(key) not in found]
         if drawn:
             out.append({'section': section, 'rows': drawn})
     return out

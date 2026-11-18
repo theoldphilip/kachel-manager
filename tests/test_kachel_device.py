@@ -92,7 +92,7 @@ class TheDevice(unittest.TestCase):
                          ('select', 'dev', ['stable', 'dev']))
         self.assertEqual(rows['check_for_updates']['kind'], 'button')
         self.assertEqual((rows['battery_level']['kind'], rows['battery_level']['value'], rows['battery_level']['unit']), ('reading', '71', '%'))
-        self.assertEqual((rows['battery_care']['kind'], rows['battery_care']['value'], rows['battery_care']['writable']), ('flag', True, True))
+        self.assertEqual((rows['battery_care']['kind'], rows['battery_care']['value'], rows['battery_care']['writable']), ('flag', True, False))
         self.assertEqual((rows['screen']['kind'], rows['screen']['value'], rows['screen']['brightness']), ('light', True, 50))
         self.assertFalse(rows['update_status']['writable'])
 
@@ -101,11 +101,34 @@ class TheDevice(unittest.TestCase):
         self.assertEqual(set(labels), set(kachel_device.WANTED))
         self.assertIn('request', ENGLISH['addon']['errors']['kachel_device'])
 
-    def test_a_switch_wins_over_a_sensor_of_the_same_name(self):
+    def test_the_tablet_s_own_names_and_the_battery_switch_in_place_of_its_reading(self):
+        """echod 2.6.1: entities found by their names, not their object ids (\"Night hours\" is screen_night_hours), and
+        with the switch Battery protection the reading Battery care is left out."""
         ha = HA()
-        ha.registry.append(item('switch.wohnzimmer_battery_care', 'Battery care'))
+        for entity, name, state, attributes in (
+                ('switch.wohnzimmer_battery_protection', 'Battery protection', 'on', {}),
+                ('select.wohnzimmer_screen_night_hours', 'Night hours', 'Fixed', {'options': ['Off', 'Fixed']}),
+                ('select.wohnzimmer_screen_night_start', 'Night starts', '22:00',
+                 {'options': [f'{h:02}:{m:02}' for h in range(24) for m in (0, 15, 30, 45)]}),
+                ('select.wohnzimmer_start_page', 'Start page', 'As in Tessera', {'options': ['As in Tessera', '1', '2']}),
+                ('switch.wohnzimmer_screen_night_mode', 'Night mode', 'off', {})):
+            ha.registry.append(item(entity, name))
+            ha.states[entity] = {'state': state, 'attributes': attributes}
+        sections = {s['section']: {row['key']: row for row in s['rows']} for s in kachel_device.device_for(Manager(ha), 'text.wohnzimmer_kachel_inbox')}
+        self.assertEqual(list(sections), ['updates', 'battery', 'screen', 'pages'])
+        self.assertNotIn('battery_care', sections['battery'])
+        self.assertEqual((sections['battery']['battery_protection']['kind'], sections['battery']['battery_protection']['value']), ('switch', True))
+        self.assertEqual(len(sections['screen']['night_starts']['options']), 96, 'every quarter of an hour')
+        self.assertEqual(sections['screen']['night_hours']['value'], 'Fixed')
+        self.assertEqual(sections['pages']['start_page']['options'], ['As in Tessera', '1', '2'])
+        asyncio.run(kachel_device.change(Manager(ha), 'text.wohnzimmer_kachel_inbox', 'select.wohnzimmer_screen_night_start', '22:15'))
+        self.assertEqual(ha.calls, [('select', 'select_option', {'entity_id': 'select.wohnzimmer_screen_night_start', 'option': '22:15'})])
+
+    def test_a_name_in_the_wrong_domain_is_not_a_row(self):
+        ha = HA()
+        ha.registry.append(item('sensor.wohnzimmer_start_page', 'Start page'))
         found = kachel_device.entities(Manager(ha), Manager(ha).screen('text.wohnzimmer_kachel_inbox'))
-        self.assertEqual(found['battery_care'], 'switch.wohnzimmer_battery_care')
+        self.assertNotIn('start_page', found)
 
     def test_an_unknown_screen_is_refused(self):
         with self.assertRaises(ValueError):
@@ -133,7 +156,7 @@ class Changes(unittest.TestCase):
     def test_nothing_else_changes(self):
         for entity, value in (('switch.flur_settings_lock', True),            # another device
                               ('sensor.wohnzimmer_battery_level', 50),         # a reading
-                              ('binary_sensor.wohnzimmer_battery_care', True),  # no switch yet
+                              ('binary_sensor.wohnzimmer_battery_care', True),  # a reading
                               ('update.wohnzimmer_firmware', True),            # an update only installs
                               ('light.wohnzimmer_screen', 0),                  # out of range
                               ('light.wohnzimmer_screen', 'on'),
@@ -166,7 +189,7 @@ class TheRoutes(unittest.IsolatedAsyncioTestCase):
                 response = await client.get('/api/screens/text.screen/kachel/device')
                 self.assertEqual(response.status, 200)
                 rows = [row for section in await response.json() for row in section['rows']]
-                self.assertEqual([(row['key'], row['value']) for row in rows], [('settings_lock', False)])
+                self.assertEqual([(row['key'], row['value']) for row in rows], [('night_mode', True), ('settings_lock', False)])
                 csrf = (await (await client.get('/api/inventory')).json())['csrf']
                 headers = {'X-Screen-CSRF': csrf}
                 response = await client.post('/api/screens/text.screen/kachel/device', headers=headers,

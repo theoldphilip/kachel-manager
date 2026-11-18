@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))
 import redaction  # noqa: E402
 import reports  # noqa: E402
+# Kachel Manager: Tessera's tests of its website, with it on (tests/kachel_esp.py).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from kachel_esp import site_on_module  # noqa: E402
+setUpModule, tearDownModule = site_on_module()
+
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:

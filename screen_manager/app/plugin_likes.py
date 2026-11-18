@@ -35,6 +35,7 @@ from aiohttp import ClientError, ClientSession, ClientTimeout
 
 import feedback
 import atomic
+import kachel  # Kachel Manager
 
 LIKE_URL = f'{feedback.API}/plugins/{{plugin}}/like'
 RATE_URL = f'{feedback.API}/plugins/{{plugin}}/rating'
@@ -63,6 +64,8 @@ class Likes:
                      'sent': None}
         data = atomic.read_json(self.path, VERSION)
         self.usable = not atomic.frozen(self.path)   # a newer app's file: left exactly as it is
+        # Kachel Manager: no likes, ratings or counting while nothing goes to Tessera's website (kachel.TESSERA_SITE).
+        self.usable = self.usable and kachel.TESSERA_SITE
         if data:
             self.data.update({k: data[k] for k in STATE_KEYS if k in data})
         self.retry_at = 0.0   # counting that did not go waits until then (kept only while the app runs)
@@ -104,6 +107,7 @@ class Likes:
         own = session is None
         session = session or ClientSession()
         try:
+            kachel.site_closed()  # Kachel Manager: nothing goes to Tessera's website (kachel.TESSERA_SITE)
             async with session.request(method, url, headers=headers, json=body, timeout=ClientTimeout(total=10),
                                        allow_redirects=False) as response:
                 if response.status != 200:

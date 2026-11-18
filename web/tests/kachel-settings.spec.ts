@@ -36,3 +36,16 @@ describe("Screen settings in the Kachel Manager", () => {
     page.unmount();
   });
 });
+
+describe("a problem in the Kachel Manager", () => {
+  it("is reported on GitHub, and nothing offers a report for Tessera's website", async () => {
+    useInventoryStore().inventory = { connected: true, entities: [], screens: [living()],
+      editor_features: { esp_screens: false, tessera_site: false, issues: "https://github.com/theoldphilip/kachel-manager/issues" } } as any;
+    useScreenStore().selected = "living";
+    const page = mount(SettingsTab, { attachTo: document.body });
+    await flushPromises();
+    expect(page.find("#settings-report").exists()).toBe(false);
+    expect(page.find("#kachel-issue").attributes("href")).toBe("https://github.com/theoldphilip/kachel-manager/issues/new");
+    page.unmount();
+  });
+});

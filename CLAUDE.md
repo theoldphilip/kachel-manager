@@ -78,6 +78,11 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   `--check` scheitern, dann entscheiden. Automationen heißen „Kachel: …“ (IDs `kachel_…`). Seitenleiste: Kachel-Zeichen
   (`web/src/kachel/KachelMark.vue`), Handbuch und Spende (PayPal) in `web/src/kachel/links.ts`, Tesseras
   Finanzierungs-Karte aus. Store-Icon/-Logo schneidet `tools/kachel_logo.py` aus echods Startbild.
+- **Nichts an Tesseras Website** (Philip, 19.11.): `kachel.TESSERA_SITE = False` – keine Berichte, kein Feedback,
+  keine Plugin-Likes/-Bewertungen/-Zählung. Der Server lehnt die Routen ab (`kachel.site_only`), die Sender
+  (`feedback.py`, `reports.py`, `plugin_likes.py`) rufen `kachel.site_closed()` vor jeder Verbindung. Probleme meldet
+  man auf GitHub (`kachel.ISSUES`, `web/src/kachel/IssueCard.vue`). Tesseras Tests dazu laufen mit
+  `site_on_module()` aus `tests/kachel_esp.py`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

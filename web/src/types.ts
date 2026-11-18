@@ -448,7 +448,7 @@ export type VideoIntegration = {
 };
 
 export type Inventory = {
-  editor_features?: { tall_tiles?: boolean; plugins?: boolean; esp_screens?: boolean };
+  editor_features?: { tall_tiles?: boolean; plugins?: boolean; esp_screens?: boolean; tessera_site?: boolean; issues?: string };
   csrf?: string;
   connected?: boolean;
   screens: Screen[];

@@ -3225,6 +3225,11 @@
         "page_settings": "Einstellungen von {page}"
       }
     },
+    "kachel_issue": {
+      "title": "Funktioniert etwas nicht richtig?",
+      "hint": "Melde es auf GitHub, mit dem, was du getan hast und was das Tablet gezeigt hat. Der Kachel Manager schickt selbst nichts irgendwohin.",
+      "button": "Problem auf GitHub melden"
+    },
     "screen_settings": {
       "groups": {
         "brightness": "Helligkeit",

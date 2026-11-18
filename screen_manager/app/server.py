@@ -4842,7 +4842,9 @@ def create_app(manager, development=False):
     # Plugins (docs/PLUGINS.md), on in every app since 0.4.87 (core.plugins_enabled).
     editor_features = {'tall_tiles': True, 'plugins': core.plugins_enabled(),
                        # Kachel Manager: the editor hides what only an ESP32 screen needs (kachel.py).
-                       'esp_screens': kachel.ESP_SCREENS}
+                       'esp_screens': kachel.ESP_SCREENS,
+                       # Kachel Manager: whether reports, feedback and plugin likes go to Tessera's website; where else.
+                       'tessera_site': kachel.TESSERA_SITE, 'issues': kachel.ISSUES}
     app = web.Application(middlewares=[guard, kachel.refuse_esp()], client_max_size=128*1024)
     static = Path(__file__).parent / 'static'
 
@@ -4992,7 +4994,8 @@ def create_app(manager, development=False):
             screen['bar_limit'] = manager.grid_of(screen).bar_items
             # Does it work as you expect (app 0.3.10): only for a board the website knows, and never the key.
             board, device = (screen['board'] if screen['board'] in BOARD_KEYS else None), screen.get('device_id')
-            if board and device and not manager.feedback.readonly:
+            # Kachel Manager: no feedback card while nothing goes to Tessera's website (kachel.TESSERA_SITE).
+            if board and device and not manager.feedback.readonly and kachel.TESSERA_SITE:
                 if screen.get('online'):
                     manager.feedback.seen_usable(device)
                 screen['feedback'] = {**manager.feedback.view(device), 'board': board,
@@ -5001,7 +5004,7 @@ def create_app(manager, development=False):
             else:
                 screen['feedback'] = None
             # How a plugin it runs works for you (docs/PLUGINS.md, "Likes, ratings and counting"): the stars card.
-            screen['plugin_ask'] = manager.plugins.ask_card(screen) if editor_features['plugins'] else None
+            screen['plugin_ask'] = manager.plugins.ask_card(screen) if editor_features['plugins'] and kachel.TESSERA_SITE else None
         return {'csrf': csrf, 'connected': manager.ha.online, 'screens': screens,
                 'editor_features': editor_features,
                 'pending': manager.pending_profiles(screens, profiles),
@@ -5825,6 +5828,8 @@ def create_app(manager, development=False):
                        'deleting': 'addon.errors.feedback.deleting', 'storage': 'addon.errors.feedback.storage',
                        'revision': 'addon.errors.feedback.invalid', 'action': 'addon.errors.invalid_input'}
     async def feedback_start(app):
+        if not kachel.TESSERA_SITE:
+            return  # Kachel Manager: no answers to send again, no crashes kept for a report (kachel.TESSERA_SITE)
         manager.feedback.start()
         manager.reports.watch()
     app.on_startup.append(feedback_start)

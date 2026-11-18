@@ -32,6 +32,7 @@ from pathlib import Path
 
 from aiohttp import ClientError, ClientSession, ClientTimeout
 import atomic
+import kachel  # Kachel Manager
 
 LOG = logging.getLogger('screen_manager')
 
@@ -101,6 +102,7 @@ async def send(session, token, payload=None, *, delete=False):
         if len(body) > BODY_MAX:
             return {'state': 'invalid', 'status': 413}
     try:
+        kachel.site_closed()  # Kachel Manager: nothing goes to Tessera's website (kachel.TESSERA_SITE)
         async with session.request('DELETE' if delete else 'POST', FEEDBACK_URL, data=body, headers=headers,
                                    timeout=ClientTimeout(total=10), allow_redirects=False) as response:
             if delete and response.status == 204:
@@ -129,6 +131,7 @@ async def send(session, token, payload=None, *, delete=False):
 async def fetch_boards(session):
     """The website's board ids, or None when it can't be asked right now."""
     try:
+        kachel.site_closed()  # Kachel Manager: nothing goes to Tessera's website (kachel.TESSERA_SITE)
         async with session.get(BOARDS_URL, headers={'Accept': 'application/json'}, timeout=ClientTimeout(total=10),
                                allow_redirects=False) as response:
             if response.status != 200:

@@ -11,6 +11,9 @@ import { glyph } from "../model/topbar";
 import Icon from "./ui/Icon.vue";
 import { usePluginsStore, type Status } from "../stores/plugins";
 import { useUiStore } from "../stores/ui";
+// Kachel Manager: no likes while nothing goes to Tessera's website (kachel.TESSERA_SITE).
+import { useInventoryStore } from "../stores/inventory";
+const kachelInv = useInventoryStore();
 
 const plugins = usePluginsStore();
 const ui = useUiStore();
@@ -47,7 +50,7 @@ async function heart() {
       <span v-if="plugin.homes" class="plugin-numbers" :title="t('editor.plugins.numbers.homes', { n: plugin.homes }, plugin.homes)">
         <Icon name="home-outline" />{{ plugin.homes }}</span>
       <!-- A heart right on the card, for any plugin of the index: the first one opens the details, which ask once. -->
-      <button v-if="plugin.source === 'index'" type="button" class="plugin-likes" :class="{ mine: plugin.liked }" :aria-pressed="Boolean(plugin.liked)"
+      <button v-if="plugin.source === 'index' && kachelInv.tesseraSite" type="button" class="plugin-likes" :class="{ mine: plugin.liked }" :aria-pressed="Boolean(plugin.liked)"
         :title="plugin.likes ? t('editor.plugins.likes.count', { n: plugin.likes }, plugin.likes) : t('editor.plugins.likes.like_hint')"
         :aria-label="t(plugin.liked ? 'editor.plugins.likes.unlike' : 'editor.plugins.likes.like')" @click.stop="heart">
         <Icon :name="plugin.liked ? 'heart' : 'heart-outline'" /><template v-if="plugin.likes">{{ plugin.likes }}</template></button>

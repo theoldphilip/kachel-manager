@@ -53,6 +53,8 @@ export const useInventoryStore = defineStore("inventory", () => {
   // Kachel Manager: what only an ESP32 screen needs (New screen, Firmware & USB, updates, the build server, Video in Home
   // Assistant) shows only when the add-on says so; the Kachel Manager says no (screen_manager/app/kachel.py).
   const espScreens = computed(() => inventory.value.editor_features?.esp_screens !== false);
+  // Kachel Manager: whether reports, feedback and plugin likes go to Tessera's website (kachel.TESSERA_SITE).
+  const tesseraSite = computed(() => inventory.value.editor_features?.tessera_site !== false);
   // An entity by its id, the first one of that id as the list has it: a card asks for its own many times as it is drawn,
   // where looking through the whole list each time took long on a page of many tiles.
   const entityIndex = computed(() => {
@@ -277,7 +279,7 @@ export const useInventoryStore = defineStore("inventory", () => {
   }
 
   return {
-    inventory, reachable, loaded, connected, tallerTilesEnabled, pluginsEnabled, espScreens,
+    inventory, reachable, loaded, connected, tallerTilesEnabled, pluginsEnabled, espScreens, tesseraSite,
     ...lookups({ entityOf }),
     persistVirtualScreens, createVirtualScreen, onArrival, refresh, applyLive, takeBuildServer, installClaudeSkill, installVideo, restartForVideo, start,
   };

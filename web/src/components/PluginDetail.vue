@@ -17,6 +17,9 @@ import PluginOnScreens from "./plugins/PluginOnScreens.vue";
 import Icon from "./ui/Icon.vue";
 import { useUiStore } from "../stores/ui";
 import { usePluginsStore } from "../stores/plugins";
+// Kachel Manager: no likes while nothing goes to Tessera's website (kachel.TESSERA_SITE).
+import { useInventoryStore } from "../stores/inventory";
+const kachelInv = useInventoryStore();
 
 const ui = useUiStore();
 const plugins = usePluginsStore();
@@ -113,7 +116,7 @@ const history = computed(() => (!newsFrom.value ? changesBetween(text(props.plug
     <span class="plugin-icon large" :class="{ tessera: plugin.tessera }" aria-hidden="true"><span class="mdi">{{ glyph(plugin.icon) }}</span></span>
     <span class="pd-top-end">
       <!-- A heart for any plugin of the index, also one no screen runs: "great that you made this". -->
-      <button v-if="plugin.source === 'index'" type="button" class="pd-like" id="plugin-like" :class="{ on: plugin.liked }" :aria-pressed="Boolean(plugin.liked)"
+      <button v-if="plugin.source === 'index' && kachelInv.tesseraSite" type="button" class="pd-like" id="plugin-like" :class="{ on: plugin.liked }" :aria-pressed="Boolean(plugin.liked)"
         :title="t(plugin.liked ? 'editor.plugins.likes.unlike' : 'editor.plugins.likes.like_hint')"
         @click="toggleLike()"><Icon :name="plugin.liked ? 'heart' : 'heart-outline'" /><span>{{ plugin.likes || 0 }}</span></button>
       <button type="button" class="icon-btn" :aria-label="t('editor.common.close')" @click="$emit('close')"><Icon name="close" /></button>

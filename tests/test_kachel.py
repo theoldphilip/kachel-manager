@@ -1,5 +1,6 @@
 """Kachel Manager: what this fork does differently from Tessera (screen_manager/app/kachel.py, CLAUDE.md)."""
 import subprocess
+import tempfile
 import sys
 import unittest
 from pathlib import Path
@@ -60,6 +61,38 @@ class EspParts(unittest.TestCase):
         self.assertEqual(config['name'], 'Kachel Manager')
         self.assertNotIn('ports', config, "Tessera's port 8098 stays Tessera's")
         self.assertFalse(config.get('usb') or config.get('uart'))
+
+
+class TesseraSite(unittest.TestCase):
+    """Nothing goes to Tessera's website (Philip, 2026-11-19): no reports, feedback, plugin likes, ratings or counting."""
+    def test_it_is_off(self):
+        self.assertFalse(kachel.TESSERA_SITE)
+        self.assertTrue(kachel.ISSUES.startswith('https://github.com/theoldphilip/kachel-manager/'))
+
+    def test_which_requests_are_refused(self):
+        for path in ('/api/reports/abc', '/api/reports/abc.zip', '/api/reports/abc/send', '/api/screens/text.a/report',
+                     '/api/screens/text.a/feedback', '/api/plugins/weather/like', '/api/plugins/weather/rating',
+                     '/api/plugins/weather/ask', '/api/plugins/counting'):
+            self.assertTrue(kachel.site_only(path), path)
+        for path in ('/api/plugins', '/api/plugins/weather/image', '/api/screens/text.a/layout', '/api/inventory'):
+            self.assertFalse(kachel.site_only(path), path)
+
+    def test_the_senders_never_reach_it(self):
+        import asyncio
+        import feedback
+        import plugin_likes
+
+        class Session:
+            def request(self, *args, **kwargs):
+                raise AssertionError('a request to the website')
+            get = post = request
+
+        self.assertEqual(asyncio.run(feedback.send(Session(), 'key', {'revision': 1})), {'state': 'retry'})
+        self.assertIsNone(asyncio.run(feedback.fetch_boards(Session())))
+        with tempfile.TemporaryDirectory() as folder:
+            likes = plugin_likes.Likes(Path(folder) / 'plugin_likes.json')
+            self.assertFalse(likes.usable)
+            self.assertFalse(likes.view()['usable'])
 
 
 class Names(unittest.TestCase):

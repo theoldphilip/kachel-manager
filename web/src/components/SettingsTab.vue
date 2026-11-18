@@ -12,6 +12,7 @@ import Icon from "./ui/Icon.vue";
 import PluginSettings from "./PluginSettings.vue";
 // Kachel Manager: the tablet's own device (screen_manager/app/kachel_device.py).
 import KachelDevicePanel from "../kachel/DevicePanel.vue";
+import KachelIssueCard from "../kachel/IssueCard.vue";
 import { text } from "../model/plugins";
 import { choiceText, SETTING_GROUPS, settingLabel, steppedSetting, type SettingRow } from "../model/settings";
 import { useSettingsStore } from "../stores/settings";
@@ -190,7 +191,9 @@ const startCalibration = () => scr.currentScreen && scr.calibrateTouch(scr.curre
     <div v-if="scr.currentScreen && (scr.currentScreen.feedback?.available || !scr.currentScreen.virtual)" class="set-grid feedback-grid">
       <FeedbackPanel v-if="scr.currentScreen.feedback?.available" :key="`settings-${scr.currentScreen.id}`" :screen="scr.currentScreen" mode="settings" />
       <!-- A screen that doesn't work right: the troubleshooting report (ReportPanel), also behind the screen's menu. -->
-      <section v-if="!scr.currentScreen.virtual" class="set-card" id="settings-report">
+      <!-- Kachel Manager: nothing goes to Tessera's website; a problem is reported on GitHub (src/kachel/IssueCard.vue). -->
+      <KachelIssueCard v-if="!scr.currentScreen.virtual && !inv.tesseraSite" />
+      <section v-else-if="!scr.currentScreen.virtual" class="set-card" id="settings-report">
         <h4><span class="mdi">{{ glyph("F02D7") }}</span>{{ t("editor.report.card_title") }}</h4>
         <p class="hint">{{ t("editor.report.card_hint") }}</p>
         <div class="s-action">

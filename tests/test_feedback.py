@@ -12,6 +12,11 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+# Kachel Manager: Tessera's tests of its website, with it on (tests/kachel_esp.py).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from kachel_esp import site_on_module  # noqa: E402
+setUpModule, tearDownModule = site_on_module()
+
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))

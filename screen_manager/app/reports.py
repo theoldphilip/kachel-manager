@@ -43,6 +43,7 @@ from aiohttp import ClientError, ClientSession, ClientTimeout, FormData
 import atomic
 import feedback
 import redaction
+import kachel  # Kachel Manager
 from i18n import t
 
 LOG = logging.getLogger('screen_manager')
@@ -1113,6 +1114,7 @@ class Reports:
         form.add_field('report', data, filename=filename, content_type='application/zip')
         headers = {'Authorization': f'Bearer {token}', 'Accept': 'application/json'}
         try:
+            kachel.site_closed()  # Kachel Manager: nothing goes to Tessera's website (kachel.TESSERA_SITE)
             async with ClientSession() as session:
                 async with session.post(REPORTS_URL, data=form, headers=headers, timeout=ClientTimeout(total=120), allow_redirects=False) as response:
                     if response.status == 201:

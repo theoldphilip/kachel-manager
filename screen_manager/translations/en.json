@@ -2774,6 +2774,11 @@
         "page_settings": "Settings of {page}"
       }
     },
+    "kachel_issue": {
+      "title": "Something doesn't work right?",
+      "hint": "Report it on GitHub, with what you did and what the tablet showed. The Kachel Manager sends nothing anywhere by itself.",
+      "button": "Report a problem on GitHub"
+    },
     "screen_settings": {
       "groups": {
         "brightness": "Brightness",

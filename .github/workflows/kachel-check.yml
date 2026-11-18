@@ -1,13 +1,13 @@
-# Kachel Manager: the check of every pull request to main and of main itself (CLAUDE.md, "Branches, Versionen, Prüfung").
+# Kachel Manager: the check of every push, on a helper branch before it goes to main and on main itself (CLAUDE.md,
+# "Branches, Versionen, Prüfung"). GitHub lets no token open a pull request on this fork, so a push is the check.
 # Tessera's own workflows (every ESP32 board's firmware, the Docker image, the WASM preview, the build cache, Home
-# Assistant's source) are not part of this fork: Home Assistant builds the add-on from screen_manager/Dockerfile.
+# Assistant's source) are not part of this fork, and tools/kachel_names.py takes them out again after a merge from
+# Tessera: Home Assistant builds the add-on from screen_manager/Dockerfile.
 name: Kachel check
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 
 permissions:

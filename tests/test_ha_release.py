@@ -81,6 +81,7 @@ class Pins(unittest.TestCase):
         self.assertEqual(self.compared('--check', '--ignore-pins'), {'roku': {'commands': ['home']}})
         self.assertEqual(self.compared('--check'), {'roku': {'from': ['rokuecp==0.19.0'], 'commands': ['home']}})
 
+    @unittest.skip("Kachel Manager: Tessera's ha-source.yml is not part of this fork (tools/kachel_names.py)")
     def test_the_workflow_passes_the_flags_and_check_sh_does_not(self):
         workflow = (ROOT / '.github/workflows/ha-source.yml').read_text()
         self.assertIn('read_ha_source.py "$HA_CORE" --check --release', workflow)

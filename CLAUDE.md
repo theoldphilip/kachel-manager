@@ -38,8 +38,11 @@ Der gemeinsame Stand aller Kachel-Projekte liegt in der Kachel-Zentrale (`~/kach
 
 ## Branches, Versionen, Prüfung
 
-- Nur **`main`**. Jede Änderung auf einem eigenen Branch (`kachel-manager-<thema>-<datum>`) mit **Entwurfs-PR auf
-  `main`**; gemergt wird erst, wenn die Prüfung grün ist. Ist sie rot: nicht mergen.
+- Nur **`main`**. Jede Änderung auf einem eigenen Hilfsbranch (`kachel-manager-<thema>-<datum>`). GitHub lässt den
+  Token in diesem Fork keine PRs anlegen, darum gilt (REGELN §2, Ausnahme Kachel Manager): Hilfsbranch pushen
+  (`tools/gitk`), „Kachel check“ läuft bei jedem Push, Ergebnis mit
+  `~/kachel-zentrale/tools/ghk checks kachel-manager <branch>`. Erst bei ganz grün per Fast-Forward auf `main` pushen,
+  danach den Hilfsbranch löschen. Ist sie rot: nicht mergen.
 - **Eigene Versionsreihe** ab 0.1.0 in `screen_manager/config.yaml`. Eine neue Nummer nur nach Philips Okay. Das
   CHANGELOG und die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.
 - **Prüfen:** Python-Tests (`python -m unittest discover -s tests`) und der Editor (`cd web && npm test && npm run
@@ -67,5 +70,6 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 
 1. `~/kachel-zentrale/tools/gitk -C ~/kachel-manager fetch upstream --tags`
 2. Eigener Branch von `main`, `git merge <Tessera-Tag oder upstream/main>`, Konflikte lösen.
-3. `python3 tools/kachel_names.py` schreibt unsere Namen über die neuen von Tessera (`--check` zeigt nur, was fehlt).
-4. Prüfen (siehe oben), Editor neu bauen, Entwurfs-PR, nach grün mergen.
+3. `python3 tools/kachel_names.py` schreibt unsere Namen über die neuen von Tessera und entfernt Tesseras Workflows
+   wieder (`--check` zeigt nur, was fehlt). Geprüft wird nur mit `.github/workflows/kachel-check.yml`.
+4. Prüfen (siehe oben), Editor neu bauen, Hilfsbranch pushen, nach grün Fast-Forward auf `main`.

@@ -1039,6 +1039,11 @@
       },
       "kachel_device": {
         "request": "This change is not possible on this tablet."
+      },
+      "kachel_log": {
+        "none": "This device can't send its log yet.",
+        "no_answer": "The device did not send its log. Is it online?",
+        "source": "There is no such log."
       }
     },
     "status": {
@@ -2974,6 +2979,19 @@
         "no": "No",
         "brightness": "Brightness",
         "pages": "Pages"
+      },
+      "kachel_log": {
+        "title": "Log",
+        "note": "What the tablet wrote down, fetched through Home Assistant. Nothing goes to the internet: to report a problem, download the file and add it to a GitHub issue.",
+        "none": "This device can't send its log yet. A newer Kachel version brings it.",
+        "show": "Show the end",
+        "refresh": "Fetch again",
+        "download": "Download log",
+        "loading": "Fetching the log…",
+        "empty": "The log is empty.",
+        "cut": "The end of {size}.",
+        "echod": "App",
+        "boot": "Start"
       }
     },
     "update": {

@@ -96,6 +96,11 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   `esphome.screen_*` (`kachel.as_esphome_event`, Abos aus `KACHEL_SCREEN_EVENTS`), Aktionen gehen an die Plattform der
   Inbox (`kachel.NODE_DOMAINS`, `core.alert_service`), Config-Entries und Repair-Issues beider Plattformen. Nur noch
   `kachel`: `esphome` aus `PLATFORMS` streichen (Philips Wort).
+- **Protokoll holen** (19.11., mit `fire-app`): Kein SSH auf weitergegebenen Geräten. Das Gerät bietet die Aktion
+  `<domain>.<node>_log` mit Antwort (Eingabe `source` `echod`|`boot`, `offset`, `max` ≤ 64 KB; Antwort `{text, next,
+  size}`, Geheimnisse schwärzt das Gerät). `screen_manager/app/kachel_log.py` holt in Stücken, Karte „Protokoll“
+  (`web/src/kachel/LogPanel.vue`): Ende anzeigen, beide als eine Datei herunterladen. Nichts geht ins Internet.
+  Tests `tests/test_kachel_log.py`, `web/tests/kachel-log.spec.ts`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

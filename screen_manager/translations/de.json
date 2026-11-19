@@ -1039,6 +1039,11 @@
       },
       "kachel_device": {
         "request": "Diese Änderung ist auf diesem Tablet nicht möglich."
+      },
+      "kachel_log": {
+        "none": "Dieses Gerät kann noch kein Protokoll schicken.",
+        "no_answer": "Das Gerät hat kein Protokoll geschickt. Ist es online?",
+        "source": "Dieses Protokoll gibt es nicht."
       }
     },
     "status": {
@@ -3425,6 +3430,19 @@
         "no": "Nein",
         "brightness": "Helligkeit",
         "pages": "Seiten"
+      },
+      "kachel_log": {
+        "title": "Protokoll",
+        "note": "Was das Tablet aufgeschrieben hat, geholt über Home Assistant. Nichts geht ins Internet: Für eine Problemmeldung lade die Datei herunter und hänge sie an ein GitHub-Issue.",
+        "none": "Dieses Gerät kann noch kein Protokoll schicken. Eine neuere Kachel-Version bringt es mit.",
+        "show": "Ende anzeigen",
+        "refresh": "Neu holen",
+        "download": "Protokoll herunterladen",
+        "loading": "Protokoll wird geholt…",
+        "empty": "Das Protokoll ist leer.",
+        "cut": "Das Ende von {size}.",
+        "echod": "App",
+        "boot": "Start"
       }
     },
     "update": {

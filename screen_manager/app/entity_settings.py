@@ -12,6 +12,7 @@ import re
 from aiohttp import web
 
 import core
+import kachel  # Kachel Manager: kachel.ours (ESPHome or Kachel integration)
 from i18n import english, t
 
 # A media player counts with its volume (a board's speaker, features/audio.yaml): a number from 0 to 100 %.
@@ -42,7 +43,7 @@ def entities(manager, screen, settings):
     for key, domains in wanted.items():
         ours = [item for item in registry if item['entity_id'].split('.')[0] in domains]
         by_name = [item['entity_id'] for item in ours
-                   if item.get('platform') == 'esphome' and item.get('original_name')
+                   if kachel.ours(item) and item.get('original_name')
                    and object_id(item['original_name']) == key]
         by_end = [item['entity_id'] for item in ours if item['entity_id'].endswith('_' + key)]
         if by_name or by_end:

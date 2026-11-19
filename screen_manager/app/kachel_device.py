@@ -19,6 +19,7 @@ import json
 from aiohttp import web
 
 import core
+import kachel
 import entity_settings
 from i18n import english, t
 
@@ -82,7 +83,7 @@ def entities(manager, screen):
     found = {}
     for item in getattr(manager.ha, 'registry', None) or []:
         if not (isinstance(item, dict) and isinstance(item.get('entity_id'), str) and item.get('device_id') in ids
-                and item.get('platform') == 'esphome' and item.get('original_name') and not item.get('disabled_by')):
+                and kachel.ours(item) and item.get('original_name') and not item.get('disabled_by')):
             continue
         key = BY_NAME.get((item['original_name'], item['entity_id'].split('.')[0]))
         if key and key not in found:

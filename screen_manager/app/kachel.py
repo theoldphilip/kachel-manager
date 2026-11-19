@@ -51,6 +51,35 @@ def site_closed():
         from aiohttp import ClientError
         raise ClientError(SITE_REFUSED)
 
+# Where a Kachel device hangs in Home Assistant: under ESPHome, or under the Kachel integration (kachel-verbindung,
+# 2026-11-19), which speaks the same protocol with its own names. Both are searched while devices move over; the inbox's
+# name keeps Tessera's screens apart either way. Entities carry the integration as `platform`, actions are
+# <platform>.<node>_<action>, and the device's events kachel.screen_* (esphome.screen_* under ESPHome).
+PLATFORMS = ('esphome', 'kachel')
+# The device's events the app listens to, under the Kachel integration's names; they are read as their ESPHome twins.
+KACHEL_SCREEN_EVENTS = tuple(f'kachel.screen_{name}' for name in (
+    'alert', 'browse', 'calendar', 'call', 'camera', 'doorbell', 'history', 'options', 'play', 'plugin', 'setting',
+    'speaker', 'todo'))
+# Which platform the actions of a node go to (with_message_nodes keeps it): esphome unless its device is under kachel.
+NODE_DOMAINS = {}
+
+def ours(item):
+    """Whether an entity-registry item is an entity of a device this app can talk to (ESPHome or Kachel)."""
+    return isinstance(item, dict) and item.get('platform') in PLATFORMS
+
+def as_esphome_event(event):
+    """A Home Assistant event with a Kachel device's kachel.screen_* type read as its esphome.screen_* twin, so the app
+    handles both alike; every other event as it is."""
+    kind = event.get('event_type') if isinstance(event, dict) else None
+    if isinstance(kind, str) and kind.startswith('kachel.screen_'):
+        return {**event, 'event_type': 'esphome.' + kind[len('kachel.'):]}
+    return event
+
+def domain_of(node):
+    """The platform whose actions this node has (NODE_DOMAINS), esphome by default."""
+    slug = node.replace('-', '_') if isinstance(node, str) else ''
+    return NODE_DOMAINS.get(slug, 'esphome')
+
 # The ESPHome action a screen takes a whole message through (core.message_action): esphome.<node>_screen_message.
 MESSAGE_SUFFIX = '_screen_message'
 
@@ -64,7 +93,7 @@ def _mac_of(device, devices):
             if kind == 'mac' and isinstance(value, str):
                 return value.replace(':', '').lower()
         for domain, value in device.get('identifiers') or ():
-            if domain == 'esphome' and isinstance(value, str) and re.match(r'^([0-9a-f]{2}:){5}[0-9a-f]{2}', value.lower()):
+            if domain in PLATFORMS and isinstance(value, str) and re.match(r'^([0-9a-f]{2}:){5}[0-9a-f]{2}', value.lower()):
                 return value[:17].replace(':', '').lower()
         device = by_id.get(device.get('via_device_id'))
     return None
@@ -91,12 +120,18 @@ def message_node(screen, devices, esphome_services):
     return hits[0] if len(hits) == 1 else node
 
 def with_message_nodes(screens, ha):
-    """`screens` (discovered, copies) with each node corrected by message_node from what `ha` knows."""
-    services = (getattr(ha, 'services', None) or {}).get('esphome') or {}
+    """`screens` (discovered, copies) with each node corrected by message_node from what `ha` knows, and the platform
+    its actions go to remembered (NODE_DOMAINS): that of its inbox entity."""
+    all_services = getattr(ha, 'services', None) or {}
     devices = getattr(ha, 'devices', None) or []
+    platforms = {item.get('entity_id'): item.get('platform') for item in getattr(ha, 'registry', None) or ()
+                 if isinstance(item, dict) and item.get('platform') in PLATFORMS}
     for screen in screens:
         if isinstance(screen, dict):
-            screen['node'] = message_node(screen, devices, services)
+            platform = platforms.get(screen.get('id'), 'esphome')
+            screen['node'] = message_node(screen, devices, all_services.get(platform) or {})
+            if isinstance(screen['node'], str) and screen['node']:
+                NODE_DOMAINS[screen['node'].replace('-', '_')] = platform
     return screens
 
 # What a Kachel device writes into its inbox when it is reset to its factory settings and was asked "Also remove from

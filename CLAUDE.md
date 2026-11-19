@@ -90,6 +90,12 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 - **Aus HA entfernen** (19.11., mit `fire-app`): Schreibt ein Gerät bei den Werkseinstellungen `remove` (oder
   `{"status":"remove"}`) in seine Inbox, ruft die Sync-Schleife einmal `Manager.remove_screen` (ESPHome-Eintrag samt
   Gerät weg). `kachel.wants_removal`, Test `tests/test_kachel_remove.py`. Das Gerät wartet bis 20 s auf den Abbruch.
+- **Unter ESPHome oder der Kachel-Integration** (19.11., mit `kachel-verbindung-plugin`): `kachel.PLATFORMS =
+  ('esphome', 'kachel')`. Registry-Abfragen über `kachel.ours(item)` (die Regel `PLATFORM_RULES` in
+  `tools/kachel_names.py` setzt sie nach jedem Merge wieder ein), Ereignisse `kachel.screen_*` liest `server.py` als
+  `esphome.screen_*` (`kachel.as_esphome_event`, Abos aus `KACHEL_SCREEN_EVENTS`), Aktionen gehen an die Plattform der
+  Inbox (`kachel.NODE_DOMAINS`, `core.alert_service`), Config-Entries und Repair-Issues beider Plattformen. Nur noch
+  `kachel`: `esphome` aus `PLATFORMS` streichen (Philips Wort).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

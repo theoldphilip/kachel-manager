@@ -333,7 +333,8 @@ class HomeAssistant:
                         error = data.get('error') if isinstance(data.get('error'), dict) else {}
                         future.set_exception(Refused(str(error.get('message') or '')))
             elif data.get('type') == 'event':
-                event = data.get('event', {})
+                # Kachel Manager: a device under the Kachel integration sends kachel.screen_*, read as esphome.screen_*.
+                event = kachel.as_esphome_event(data.get('event', {}))
                 body = event.get('data', {})
                 callback = self.template_subs.get(data.get('id'))
                 if callback is not None:
@@ -380,7 +381,7 @@ class HomeAssistant:
                 elif event.get('event_type') in SERVICE_EVENTS:
                     # Every action counts for what the editor offers (app 0.2.67); a screen's own actions also decide
                     # how the app talks to it.
-                    self.esphome_services |= body.get('domain') == 'esphome'
+                    self.esphome_services |= body.get('domain') in kachel.PLATFORMS  # Kachel Manager: ESPHome or Kachel
                     self.services_changed.set()
                 elif event.get('event_type') in BROADCAST_EVENTS or event.get('event_type') == ALERT_EVENT:
                     # Queued, not handled here: the calls wait for results this reader has to deliver. A screen's own
@@ -503,7 +504,7 @@ class HomeAssistant:
         except Exception:  # noqa: BLE001 - a missing answer only hides a hint
             return set()
         macs = {str(issue.get('issue_id', ''))[len('service_calls_not_enabled-'):].lower()
-                for issue in (data or {}).get('issues', []) if isinstance(issue, dict) and issue.get('domain') == 'esphome'
+                for issue in (data or {}).get('issues', []) if isinstance(issue, dict) and issue.get('domain') in kachel.PLATFORMS  # Kachel Manager
                 and str(issue.get('issue_id', '')).startswith('service_calls_not_enabled-')}
         return {device.get('id') for device in self.devices or [] if isinstance(device, dict)
                 and any(isinstance(link, (list, tuple)) and len(link) == 2 and link[0] == 'mac' and str(link[1]).lower() in macs
@@ -513,8 +514,9 @@ class HomeAssistant:
         """Every action Home Assistant describes: which ESPHome actions answer (Home Assistant lists `response` for an
         action that can return one), and the descriptions the editor's choices per entity follow (app 0.2.67)."""
         services = await self.request('get_services') or {}
-        esphome = services.get('esphome', {})
-        self.responses = {f'esphome.{name}' for name, spec in esphome.items() if isinstance(spec, dict) and spec.get('response')}
+        # Kachel Manager: the devices' actions under ESPHome and under the Kachel integration (kachel.PLATFORMS).
+        self.responses = {f'{platform}.{name}' for platform in kachel.PLATFORMS for name, spec in (services.get(platform) or {}).items()
+                          if isinstance(spec, dict) and spec.get('response')}
         if isinstance(services, dict):
             self.services, self.services_rev, self.targets = services, self.services_rev + 1, {}
         try:
@@ -687,6 +689,9 @@ class HomeAssistant:
                     await self.request('subscribe_events', event_type=media_library.PLAY_EVENT)
                     await self.request('subscribe_events', event_type=speakers.SPEAKER_EVENT)
                     await self.request('subscribe_events', event_type='repairs_issue_registry_updated')
+                    # Kachel Manager: the same events of a device under the Kachel integration (kachel.as_esphome_event).
+                    for event_type in kachel.KACHEL_SCREEN_EVENTS:
+                        await self.request('subscribe_events', event_type=event_type)
                     for event_type in (*REGISTRY_EVENTS, *BROADCAST_EVENTS, ALERT_EVENT, *TILE_EVENTS, *SERVICE_EVENTS, *doorbell.EVENTS, doorbell.EVENT):
                         await self.request('subscribe_events', event_type=event_type)
                     self.states = {s['entity_id']: s for s in await self.request('get_states')}
@@ -916,8 +921,9 @@ class HomeAssistant:
 
     async def esphome_entries(self):
         """Home Assistant's ESPHome integrations, by their entry id: the entry behind each screen."""
-        entries = await self.request('config_entries/get', domain='esphome')
-        return {entry['entry_id']: entry for entry in entries or [] if isinstance(entry, dict) and entry.get('entry_id')}
+        # Kachel Manager: the devices' entries under ESPHome and under the Kachel integration (kachel.PLATFORMS).
+        entries = [entry for platform in kachel.PLATFORMS for entry in await self.request('config_entries/get', domain=platform) or []]
+        return {entry['entry_id']: entry for entry in entries if isinstance(entry, dict) and entry.get('entry_id')}
 
     async def reload_entry(self, entry_id):
         """Load one integration again, as its Reload in Home Assistant's menu does: an ESPHome screen connects anew."""
@@ -1540,7 +1546,7 @@ class Manager:
         state yet (a screen restarts). True when the clock changed."""
         if not self.region.pinned or not self.ha.online or not getattr(self.ha, 'registry', None):
             return False
-        switches = [item['entity_id'] for item in self.ha.registry if item.get('platform') == 'esphome'
+        switches = [item['entity_id'] for item in self.ha.registry if kachel.ours(item)
                     and item.get('original_name') == '24-hour clock' and not item.get('disabled_by')]
         states = [self.ha.states.get(entity, {}).get('state') for entity in switches]
         if any(state not in ('on', 'off') for state in states):
@@ -1629,7 +1635,7 @@ class Manager:
         stored under the old id. The screen is recognised by its device: an inbox this run saw on the same
         device, or (after a restart) a stored inbox id that carries one of the device's entity id prefixes."""
         current = {item['entity_id']: item.get('device_id') for item in items
-                   if item.get('platform') == 'esphome' and item['entity_id'].startswith('text.') and item.get('device_id')
+                   if kachel.ours(item) and item['entity_id'].startswith('text.') and item.get('device_id')
                    and item.get('original_name') in NAME_TILE_SETTINGS and not item.get('disabled_by')}
         # Pending migrations belong to the same device too. A renamed inbox may
         # be the first opportunity to obtain its verified grid after an update.
@@ -1972,7 +1978,7 @@ class Manager:
         if self._settings_source is not registry:
             by_device = {}
             for item in registry:
-                if item.get('platform') == 'esphome' and item.get('device_id'):
+                if kachel.ours(item) and item.get('device_id'):
                     by_device.setdefault(item['device_id'], []).append(item)
             index, calibrate = {}, {}
             for device, items in by_device.items():
@@ -4628,7 +4634,7 @@ class Manager:
             return None
         for entry in entries.get('data', {}).get('entries', []):
             data = entry.get('data') or {}
-            if entry.get('domain') == 'esphome' and data.get('host') == screen.get('ip'):
+            if entry.get('domain') in kachel.PLATFORMS and data.get('host') == screen.get('ip'):  # Kachel Manager
                 return data.get('noise_psk')
         return None
 

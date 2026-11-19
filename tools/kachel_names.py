@@ -74,6 +74,14 @@ FILE_RULES = {
     'tests/test_addon_translations.py': ((re.compile(r'Identify, from Tessera'), 'Identify, from the Kachel Manager'),),
     'web/tests/layoutbot.spec.ts': ((re.compile(r'Update the Tessera app:'), 'Update the Kachel Manager:'),),
 }
+# A device's entities under ESPHome or under the Kachel integration (kachel.PLATFORMS, kachel.ours): the registry checks
+# of Tessera's sources that ask for platform 'esphome'. firmware.py's `platform: esphome` is YAML, not the registry.
+PLATFORM_FILES = {'screen_manager/app/core.py', 'screen_manager/app/server.py', 'screen_manager/app/entity_settings.py',
+                  'screen_manager/app/calls.py'}
+PLATFORM_RULES = (
+    (re.compile(r"""item\.get\((['"])platform\1\) == (['"])esphome\2"""), 'kachel.ours(item)'),
+    (re.compile(r"""item\.get\((['"])platform\1\) != (['"])esphome\2"""), 'not kachel.ours(item)'),
+)
 TEXTS = ROOT / 'tools' / 'kachel_texts.json'
 TRANSLATIONS = ROOT / 'screen_manager' / 'translations'
 
@@ -92,6 +100,7 @@ def renamed(text, relative=''):
     rules = RULES + (WEB_RULES if relative.startswith('web/') else ())
     rules += AUTOMATION_RULES if relative in AUTOMATION_FILES else ()
     rules += FILE_RULES.get(relative, ())
+    rules += PLATFORM_RULES if relative in PLATFORM_FILES else ()
     for pattern, replacement in rules:
         text = pattern.sub(replacement, text)
     return text

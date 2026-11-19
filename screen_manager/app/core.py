@@ -940,7 +940,7 @@ def device_prefixes(registry, device_id):
     prefixes = set()
     for item in registry:
         name = item.get('original_name')
-        if item.get('device_id') != device_id or item.get('platform') != 'esphome' or not isinstance(name, str):
+        if item.get('device_id') != device_id or not kachel.ours(item) or not isinstance(name, str):
             continue
         object_id, suffix = item['entity_id'].split('.', 1)[-1], '_' + entity_slug(name)
         if len(suffix) > 1 and object_id.endswith(suffix) and len(object_id) > len(suffix):
@@ -1038,7 +1038,7 @@ def setting_entities(items):
     included), or None when the screen does not own its settings yet (firmware before 0.2.49)."""
     found, owned = {}, False
     for item in items:
-        if item.get('platform') != 'esphome':
+        if not kachel.ours(item):
             continue
         name, domain = item.get('original_name'), item['entity_id'].split('.', 1)[0]
         owned = owned or name in OWNED_SETTINGS_MARKERS
@@ -1053,7 +1053,7 @@ def calibrate_entity(items):
     this screen's panel has no calibration wizard (every capacitive board, and firmware before 0.2.44)."""
     domain, name = CALIBRATE_BUTTON
     for item in items:
-        if (item.get('platform') == 'esphome' and item.get('original_name') == name
+        if (kachel.ours(item) and item.get('original_name') == name
                 and item['entity_id'].split('.', 1)[0] == domain):
             return item['entity_id']
     return None
@@ -2809,7 +2809,8 @@ BROADCAST_EVENTS = {BROADCAST_SHOW: 'show_alert', BROADCAST_DISMISS: 'dismiss_al
 
 def alert_service(node, action='show_alert'):
     """Home Assistant registers a device's actions as esphome.<node>_<action>, dashes as underscores."""
-    return f"esphome.{node.replace('-', '_')}_{action}" if isinstance(node, str) and node else None
+    # Kachel Manager: under ESPHome or the Kachel integration, whichever the device hangs under (kachel.domain_of).
+    return f"{kachel.domain_of(node)}.{node.replace('-', '_')}_{action}" if isinstance(node, str) and node else None
 
 def limit_boards():
     """{look: the catalog's names of the boards with that look} (boards.json), so whatever shows the alert limits
@@ -2991,20 +2992,20 @@ def alert_targets(screens):
 
 def screen_items(registry):
     """The ESPHome entities that describe a screen; the subset `discover_screens` needs."""
-    return [item for item in registry if item.get('platform') == 'esphome' and item.get('original_name') in SCREEN_ENTITY_NAMES]
+    return [item for item in registry if kachel.ours(item) and item.get('original_name') in SCREEN_ENTITY_NAMES]
 
 def discover_screens(registry, states, devices, areas):
     """Paired screens: every enabled ESPHome inbox with the diagnostics of its device."""
     device_map = {d['id']: d for d in devices}
     area_map = {a['area_id']: a['name'] for a in areas}
     versions = {item.get('device_id'): states.get(item['entity_id'], {}).get('state', 'unknown') for item in registry
-                if item.get('platform') == 'esphome' and item.get('original_name') in NAME_SCREEN_FIRMWARE}
+                if kachel.ours(item) and item.get('original_name') in NAME_SCREEN_FIRMWARE}
     boards = {item.get("device_id"): "guition" for item in registry
-              if item.get("platform") == "esphome" and item.get("original_name") in NAME_GUITION_TYPE}
+              if kachel.ours(item) and item.get("original_name") in NAME_GUITION_TYPE}
     def diagnostic(names, pattern):
         found = {}
         for item in registry:
-            if item.get('platform') == 'esphome' and item.get('original_name') in names:
+            if kachel.ours(item) and item.get('original_name') in names:
                 value = states.get(item['entity_id'], {}).get('state', '')
                 # A screen that restarts reports "unavailable", which reads like a device name.
                 if isinstance(value, str) and value not in ('unknown', 'unavailable') and re.fullmatch(pattern, value):
@@ -3025,11 +3026,11 @@ def discover_screens(registry, states, devices, areas):
     languages = diagnostic(NAME_SCREEN_LANGUAGE, r'[a-z]{2,3}(-[A-Za-z0-9]{2,8})?')
     # Firmware from before the languages (0.2.75 and older) has no such sensor: it speaks English, with fewer letters.
     speaks = {item.get('device_id') for item in registry
-              if item.get('platform') == 'esphome' and item.get('original_name') in NAME_SCREEN_LANGUAGE}
+              if kachel.ours(item) and item.get('original_name') in NAME_SCREEN_LANGUAGE}
     screens = []
     for item in registry:
         eid = item['entity_id']
-        if not (item.get('platform') == 'esphome' and eid.startswith('text.') and item.get('original_name') in NAME_TILE_SETTINGS and not item.get('disabled_by')):
+        if not (kachel.ours(item) and eid.startswith('text.') and item.get('original_name') in NAME_TILE_SETTINGS and not item.get('disabled_by')):
             continue
         device = device_map.get(item.get('device_id'), {})
         state = states.get(eid, {})

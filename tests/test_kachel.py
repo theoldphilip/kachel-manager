@@ -130,6 +130,47 @@ class MessageNode(unittest.TestCase):
         self.assertEqual([screen['node'] for screen in screens], ['kachel_223cb8', None])
 
 
+class KachelIntegration(unittest.TestCase):
+    """A device under the Kachel integration (kachel-verbindung, 2026-11-19) as under ESPHome: platform kachel, actions
+    kachel.<node>_<action>, events kachel.screen_*."""
+    def tearDown(self):
+        kachel.NODE_DOMAINS.clear()
+
+    def test_both_platforms_are_ours(self):
+        self.assertEqual(kachel.PLATFORMS, ('esphome', 'kachel'))
+        self.assertTrue(kachel.ours({'platform': 'kachel'}))
+        self.assertTrue(kachel.ours({'platform': 'esphome'}))
+        self.assertFalse(kachel.ours({'platform': 'mqtt'}))
+        self.assertFalse(kachel.ours(None))
+
+    def test_its_events_read_as_esphomes(self):
+        self.assertEqual(kachel.as_esphome_event({'event_type': 'kachel.screen_setting', 'data': {'a': 1}}),
+                         {'event_type': 'esphome.screen_setting', 'data': {'a': 1}})
+        event = {'event_type': 'kachel_show_alert'}
+        self.assertIs(kachel.as_esphome_event(event), event)
+        self.assertIn('kachel.screen_doorbell', kachel.KACHEL_SCREEN_EVENTS)
+
+    def test_a_screen_finds_its_screen_under_the_kachel_integration(self):
+        registry = [registry_item('text.fire_kachel_inbox', 'Kachel inbox', 'd'), registry_item('sensor.fire_device_name', 'Device name', 'd'),
+                    registry_item('sensor.fire_screen_firmware', 'Screen firmware', 'd')]
+        for item in registry:
+            item['platform'] = 'kachel'
+        states = {'text.fire_kachel_inbox': {'state': 'Synced'}, 'sensor.fire_device_name': {'state': 'kachel-fire'},
+                  'sensor.fire_screen_firmware': {'state': '0.60.0'}}
+        screens = core.discover_screens(registry, states, [{'id': 'd', 'name': 'Fire'}], [])
+        self.assertEqual([(screen['id'], screen['node']) for screen in screens], [('text.fire_kachel_inbox', 'kachel-fire')])
+
+        class Ha:
+            services = {'kachel': {'kachel_fire_screen_message': {'response': {'optional': True}}}}
+            devices = [{'id': 'd', 'connections': [['mac', 'aa:bb:cc:dd:ee:ff']]}]
+        Ha.registry = registry
+        kachel.with_message_nodes(screens, Ha())
+        self.assertEqual(core.message_action('kachel-fire'), 'kachel.kachel_fire_screen_message')
+        self.assertEqual(core.alert_service('kachel-fire'), 'kachel.kachel_fire_show_alert')
+        # A node nobody placed stays with ESPHome, as before.
+        self.assertEqual(core.alert_service('office-1'), 'esphome.office_1_show_alert')
+
+
 class Names(unittest.TestCase):
     def test_no_tessera_names_left(self):
         """After a merge from Tessera, tools/kachel_names.py writes our names; this says when it was not run."""

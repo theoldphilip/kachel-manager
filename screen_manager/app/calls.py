@@ -11,6 +11,7 @@ import array
 from dataclasses import dataclass
 import math
 import secrets
+import kachel  # Kachel Manager: kachel.ours (ESPHome or Kachel integration)
 
 RING_SECONDS = 45
 TILE, FEATURE, FIRMWARE = 'screen.call', 'call', '0.62.0'  # the first firmware with the module call
@@ -225,7 +226,7 @@ def switch_on(items, states, switch):
     domain, name = switch
     for item in items or []:
         entity = item.get('entity_id') or ''
-        if item.get('platform') == 'esphome' and item.get('original_name') == name and entity.split('.', 1)[0] == domain:
+        if kachel.ours(item) and item.get('original_name') == name and entity.split('.', 1)[0] == domain:
             return ((states or {}).get(entity) or {}).get('state') == 'on'
     return False
 

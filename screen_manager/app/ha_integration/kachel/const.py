@@ -12,9 +12,10 @@ CONF_NOISE_PSK: Final = "noise_psk"
 CONF_DEVICE_NAME: Final = "device_name"
 CONF_BOARD: Final = "board"
 
-# The boards this integration takes. Step 2, point 1: only the Fire (Philip, 2026-11-19).
-# Everything else (Wohnzimmer: Tessera/ESPHome) stays with the ESPHome integration.
-SUPPORTED_BOARDS: Final = frozenset({"fire8"})
+# The boards this integration takes: the Kachel base devices, Fire and Laufband ("Basis gleich", Philip
+# 2026-11-19 20:51; Laufband added on his word, 2026-11-19 22:18). The Wohnzimmer (gta3xl) stays with Tessera/ESPHome.
+# Keep in line with manifest.json "zeroconf".
+SUPPORTED_BOARDS: Final = frozenset({"fire8", "a12s"})
 
 CLIENT_INFO: Final = "Home Assistant Kachel"
 

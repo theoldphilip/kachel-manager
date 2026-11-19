@@ -48,6 +48,7 @@ from .const import (
     DOMAIN,
     SUPPORTED_BOARDS,
 )
+from .keys import async_get_key_store
 from .manager import async_zeroconf, create_client
 
 _LOGGER = logging.getLogger(__name__)
@@ -91,6 +92,7 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
         self._board: str | None = None
         self._noise_psk: str | None = None
         self._device_info: DeviceInfo | None = None
+        self._mac: str | None = None
 
     # --- steps -------------------------------------------------------------------------------
 
@@ -186,6 +188,12 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
             # The device took the zero key: it waits for a Home Assistant to give it one.
             return await self._async_provision(result.info)
         if result.needs_key:
+            # A device added before keeps its key when its entry goes (keys.py): try the kept one.
+            if (kept := await self._async_kept_key()) is not None:
+                kept_result = await self._async_try(kept)
+                if kept_result.info is not None:
+                    self._noise_psk = kept
+                    return await self._async_finish(kept_result.info)
             return await self.async_step_encryption_key()
         if self.source == SOURCE_REAUTH:
             return self.async_abort(reason=result.error or ERROR_CONNECT)
@@ -210,6 +218,8 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
         except (InvalidEncryptionKeyAPIError, RequiresEncryptionAPIError) as err:
             if name := getattr(err, "received_name", None):
                 self._name = self._name or name
+            if mac := getattr(err, "received_mac", None):
+                self._mac = format_mac(mac)
             return KeyResult(error=ERROR_INVALID_KEY, needs_key=True)
         except ResolveAPIError:
             return KeyResult(error=ERROR_RESOLVE)
@@ -225,7 +235,9 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
         if (checked := await self._async_check_device(info)) is not None:
             return checked
         assert self._host is not None
-        new_key = base64.b64encode(secrets.token_bytes(32))
+        # A key kept from before is given again; otherwise a new one.
+        kept = await async_get_key_store(self.hass).async_get(format_mac(info.mac_address))
+        new_key = kept.encode() if kept else base64.b64encode(secrets.token_bytes(32))
         cli = create_client(self._host, self._port, ZERO_NOISE_PSK, await async_zeroconf(self.hass))
         try:
             await cli.connect()
@@ -239,6 +251,15 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason=ERROR_SET_KEY)
         self._noise_psk = new_key.decode()
         return await self._async_finish(info)
+
+    async def _async_kept_key(self) -> str | None:
+        """The key kept for this device (by the MAC the device or its announcement gave)."""
+        mac = self._mac or self.unique_id
+        if self.source == SOURCE_REAUTH:
+            mac = self._get_reauth_entry().unique_id
+        if not mac:
+            return None
+        return await async_get_key_store(self.hass).async_get(mac)
 
     async def _async_check_device(self, info: DeviceInfo) -> ConfigFlowResult | None:
         """Refuse a device that is not ours to take (wrong board, or still in ESPHome)."""
@@ -257,6 +278,10 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
         """Create (or, on reauth, update) the entry."""
         if (checked := await self._async_check_device(info)) is not None:
             return checked
+        if self._noise_psk:
+            await async_get_key_store(self.hass).async_set(
+                format_mac(info.mac_address), self._noise_psk
+            )
         data = {
             CONF_HOST: self._host,
             CONF_PORT: self._port,

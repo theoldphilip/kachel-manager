@@ -9,6 +9,14 @@
 3. **Kachel** in der Seitenleiste öffnen. Das Add-on läuft über Home Assistant Ingress und braucht kein eigenes
    Login und kein Token.
 
+## Kachel-Integration
+
+Die Kachel-Geräte verbinden sich künftig über die eigene Integration **Kachel** mit Home Assistant statt über ESPHome.
+Der Kachel Manager bringt sie mit. Unter **Einstellungen → Kachel-Integration** tippst du auf **Installieren**, dann
+schreibt er sie nach `/homeassistant/custom_components/kachel`. Vorher schreibt er nichts dorthin. Danach Home Assistant
+neu starten (das macht der Kachel Manager nicht selbst) und das Gerät unter **Einstellungen → Geräte & Dienste**
+aufnehmen. Bringt eine neue Version des Kachel Managers eine neuere Integration mit, steht dort **Aktualisieren**.
+
 ## Ein Tablet verbinden
 
 Ein Kachel-Gerät hat in Home Assistant die Auswahl **Managed by**. Steht sie auf **Kachel Manager**, meldet das Tablet

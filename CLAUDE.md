@@ -101,6 +101,12 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   size}`, Geheimnisse schwärzt das Gerät). `screen_manager/app/kachel_log.py` holt in Stücken, Karte „Protokoll“
   (`web/src/kachel/LogPanel.vue`): Ende anzeigen, beide als eine Datei herunterladen. Nichts geht ins Internet.
   Tests `tests/test_kachel_log.py`, `web/tests/kachel-log.spec.ts`.
+- **Kachel-Integration installieren** (19.11., Wunsch `kachel-verbindung-plugin`, Philips Weg): Kopie von
+  `custom_components/kachel` aus `kachel-verbindung` in `screen_manager/app/ha_integration/kachel` (Stand
+  `kachel_integration.SOURCE_COMMIT`; neue Version mit `tools/kachel_integration_copy.sh <commit>`). Einstellungen →
+  Kachel-Integration schreibt den Ordner auf Knopfdruck ganz neu nach `/homeassistant/custom_components/kachel`, nur wenn
+  er anders ist; Neustart nur anzeigen, nie selbst; kein Config-Entry. Tests `tests/test_kachel_integration.py`,
+  `web/tests/kachel-integration.spec.ts`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

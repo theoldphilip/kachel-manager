@@ -7,6 +7,7 @@ import { haProfile, matchLanguage, numberText, type NumberMarks, type NumberStyl
 import BuildLog from "./BuildLog.vue";
 import BuildServerCard from "./BuildServerCard.vue";
 import Icon from "./ui/Icon.vue";
+import KachelIntegrationCard from "../kachel/IntegrationCard.vue";
 import { useUiStore } from "../stores/ui";
 import { useRegionStore } from "../stores/region";
 import { useBuildsStore } from "../stores/builds";
@@ -217,6 +218,9 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
           <button type="button" class="tool" @click="ui.go('#events')"><span class="tool-icon">!</span><span class="tx"><b>{{ t("editor.nav.events") }}</b><small>{{ t("editor.settings.alerts.detail") }}</small></span></button>
         </div>
       </section>
+      <!-- Kachel Manager: the Home Assistant integration `kachel`, written on request (src/kachel/IntegrationCard.vue); not
+           with Tessera's ESP32 parts on, as in Tessera's own tests. -->
+      <KachelIntegrationCard v-if="!inv.espScreens" />
       <section v-if="inv.pluginsEnabled && inv.espScreens" class="card" id="video">
         <h2>{{ t("editor.settings.video.title") }}</h2>
         <p>{{ t("editor.settings.video.text") }}</p>

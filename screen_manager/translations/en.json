@@ -1044,6 +1044,9 @@
         "none": "This device can't send its log yet.",
         "no_answer": "The device did not send its log. Is it online?",
         "source": "There is no such log."
+      },
+      "kachel_integration": {
+        "not_written": "Could not write the Kachel integration to {folder}: {reason}"
       }
     },
     "status": {
@@ -3153,6 +3156,18 @@
         "forget_confirm": "Forget {name}? Screens build here again. To remove Tessera there too, remove it from the paired devices of the build server.",
         "forget_go": "Forget",
         "unavailable": "This Tessera can't talk to a build server."
+      },
+      "kachel_integration": {
+        "title": "Kachel integration",
+        "text": "Connects the Kachel devices to Home Assistant in place of ESPHome. The Kachel Manager brings it along and writes it into Home Assistant only when you press Install. Afterwards Home Assistant needs a restart; you then add a device under Settings → Devices & services.",
+        "install": "Install",
+        "update": "Update to {version}",
+        "not_installed": "Not installed",
+        "newer": "Version {there} there, {version} available",
+        "restart": "Restart Home Assistant to load version {version}",
+        "running": "Version {version} running",
+        "written": "The Kachel integration is in place. Restart Home Assistant to load it.",
+        "writes": "Writes {path}"
       }
     },
     "firmware": {

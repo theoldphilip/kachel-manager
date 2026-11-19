@@ -1044,6 +1044,9 @@
         "none": "Dieses Gerät kann noch kein Protokoll schicken.",
         "no_answer": "Das Gerät hat kein Protokoll geschickt. Ist es online?",
         "source": "Dieses Protokoll gibt es nicht."
+      },
+      "kachel_integration": {
+        "not_written": "Die Kachel-Integration ließ sich nicht nach {folder} schreiben: {reason}"
       }
     },
     "status": {
@@ -3604,6 +3607,18 @@
         "forget_confirm": "{name} vergessen? Bildschirme werden wieder hier gebaut. Um Tessera auch dort zu entfernen, entferne es aus den gekoppelten Geräten des Build-Servers.",
         "forget_go": "Vergessen",
         "unavailable": "Dieses Tessera kann nicht mit einem Build-Server sprechen."
+      },
+      "kachel_integration": {
+        "title": "Kachel-Integration",
+        "text": "Verbindet die Kachel-Geräte mit Home Assistant, an Stelle von ESPHome. Der Kachel Manager bringt sie mit und schreibt sie erst nach Home Assistant, wenn du auf Installieren tippst. Danach braucht Home Assistant einen Neustart; ein Gerät nimmst du dann unter Einstellungen → Geräte & Dienste auf.",
+        "install": "Installieren",
+        "update": "Auf {version} aktualisieren",
+        "not_installed": "Nicht installiert",
+        "newer": "Version {there} vorhanden, {version} verfügbar",
+        "restart": "Home Assistant neu starten, damit Version {version} läuft",
+        "running": "Version {version} läuft",
+        "written": "Die Kachel-Integration liegt bereit. Starte Home Assistant neu, damit sie geladen wird.",
+        "writes": "Schreibt {path}"
       }
     },
     "firmware": {

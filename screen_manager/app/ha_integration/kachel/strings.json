@@ -1,0 +1,72 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Add a Kachel device",
+        "description": "Address of the Kachel device (port 6053 unless changed).",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      },
+      "discovery_confirm": {
+        "title": "Kachel device found",
+        "description": "Add the Kachel device {name}?"
+      },
+      "encryption_key": {
+        "title": "Encryption key",
+        "description": "{name} already has an encryption key. Enter it, or open the window to add a Home Assistant on the device's setup page and try again: the integration then sets a key of its own.",
+        "data": {
+          "noise_psk": "Encryption key"
+        }
+      }
+    },
+    "error": {
+      "invalid_psk": "The encryption key is not accepted.",
+      "connection_error": "Cannot connect to the device.",
+      "resolve_error": "The address cannot be resolved."
+    },
+    "abort": {
+      "already_configured": "This device is already added.",
+      "reauth_successful": "The key was updated.",
+      "not_kachel_board": "This device is not a Kachel device this integration takes.",
+      "no_mac": "The device did not say its MAC address.",
+      "held_by_esphome": "The ESPHome integration still has this device. Remove it there first: a device is in one integration only.",
+      "set_key_failed": "The device did not take the new encryption key. Open the adoption window on the device again and retry.",
+      "wrong_device": "That address belongs to a different device.",
+      "connection_error": "Cannot connect to the device.",
+      "invalid_psk": "The encryption key is not accepted."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kachel device options",
+        "data": {
+          "allow_service_calls": "Allow the device to perform Home Assistant actions"
+        },
+        "data_description": {
+          "allow_service_calls": "The device asks Home Assistant to run actions, for example for the calendar or the to-do list. Turn off if you do not trust the device."
+        }
+      }
+    }
+  },
+  "issues": {
+    "service_calls_not_allowed": {
+      "title": "{name} is not permitted to perform Home Assistant actions",
+      "description": "The Kachel device {name} tried to perform a Home Assistant action, but this is turned off.\n\nIf you trust this device, allow it in the options of the Kachel integration."
+    }
+  },
+  "exceptions": {
+    "action_call_failed": {
+      "message": "The action {call_name} on {device_name} failed: {error}"
+    },
+    "action_call_timeout": {
+      "message": "The action {call_name} on {device_name} did not answer in time"
+    },
+    "not_connected": {
+      "message": "{device_name} is not connected, the action {call_name} cannot run"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Kachel-Gerät hinzufügen",
+        "description": "Adresse des Kachel-Geräts (Port 6053, falls nicht geändert).",
+        "data": {
+          "host": "Adresse",
+          "port": "Port"
+        }
+      },
+      "discovery_confirm": {
+        "title": "Kachel-Gerät gefunden",
+        "description": "Kachel-Gerät {name} hinzufügen?"
+      },
+      "encryption_key": {
+        "title": "Schlüssel",
+        "description": "{name} hat schon einen Schlüssel. Gib ihn ein – oder öffne auf der Einrichtungsseite des Geräts das Fenster zum Hinzufügen und versuche es erneut: Dann setzt die Integration einen eigenen Schlüssel.",
+        "data": {
+          "noise_psk": "Schlüssel"
+        }
+      }
+    },
+    "error": {
+      "invalid_psk": "Der Schlüssel wird nicht angenommen.",
+      "connection_error": "Keine Verbindung zum Gerät.",
+      "resolve_error": "Die Adresse lässt sich nicht auflösen."
+    },
+    "abort": {
+      "already_configured": "Dieses Gerät ist schon hinzugefügt.",
+      "reauth_successful": "Der Schlüssel wurde aktualisiert.",
+      "not_kachel_board": "Dieses Gerät nimmt die Kachel-Integration nicht.",
+      "no_mac": "Das Gerät hat seine MAC-Adresse nicht genannt.",
+      "held_by_esphome": "Die ESPHome-Integration hat dieses Gerät noch. Erst dort entfernen: Ein Gerät gehört nur zu einer Integration.",
+      "set_key_failed": "Das Gerät hat den neuen Schlüssel nicht angenommen. Fenster am Gerät erneut öffnen und nochmal versuchen.",
+      "wrong_device": "Unter dieser Adresse ist ein anderes Gerät.",
+      "connection_error": "Keine Verbindung zum Gerät.",
+      "invalid_psk": "Der Schlüssel wird nicht angenommen."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen des Kachel-Geräts",
+        "data": {
+          "allow_service_calls": "Gerät darf Home-Assistant-Aktionen ausführen"
+        },
+        "data_description": {
+          "allow_service_calls": "Das Gerät bittet Home Assistant, Aktionen auszuführen, zum Beispiel für Kalender oder To-do-Liste. Ausschalten, wenn du dem Gerät nicht traust."
+        }
+      }
+    }
+  },
+  "issues": {
+    "service_calls_not_allowed": {
+      "title": "{name} darf keine Home-Assistant-Aktionen ausführen",
+      "description": "Das Kachel-Gerät {name} wollte eine Home-Assistant-Aktion ausführen, das ist aber ausgeschaltet.\n\nWenn du dem Gerät vertraust, erlaube es in den Optionen der Kachel-Integration."
+    }
+  },
+  "exceptions": {
+    "action_call_failed": {
+      "message": "Die Aktion {call_name} auf {device_name} ist fehlgeschlagen: {error}"
+    },
+    "action_call_timeout": {
+      "message": "Die Aktion {call_name} auf {device_name} hat nicht rechtzeitig geantwortet"
+    },
+    "not_connected": {
+      "message": "{device_name} ist nicht verbunden, die Aktion {call_name} kann nicht laufen"
+    }
+  }
+}

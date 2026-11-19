@@ -144,3 +144,8 @@ const reading = (row: Row) => row.value === null || row.value === undefined ? "â
     </div>
   </section>
 </template>
+
+<style scoped>
+/* The version and its word beside it ("0.0.9 Â· Aktuell") need room between them, as the buttons beside a choice do. */
+.kachel-device .s-status + .s-status, .kachel-device .s-status + .btn { margin-left: 8px; }
+</style>

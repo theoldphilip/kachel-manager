@@ -92,6 +92,6 @@ async function download() {
 .kachel-log {
   max-height: 360px; overflow: auto; margin: 10px 0 0; padding: 10px; border-radius: 8px;
   background: var(--surface-2, rgba(127, 127, 127, 0.1)); font-size: 12px; line-height: 1.4;
-  white-space: pre-wrap; overflow-wrap: anywhere;
+  white-space: pre;
 }
 </style>

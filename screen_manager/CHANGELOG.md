@@ -1,5 +1,6 @@
 ## Kachel Manager 0.1.2 (based on Tessera 0.4.98)
 
+- **A device reset to its factory settings can leave Home Assistant by itself.** When a Kachel device writes `remove` into its inbox (asked "Also remove from Home Assistant?" before its factory reset), the app removes it as Remove in the editor does: its ESPHome entry with the device and its entities, and what this app kept for it. Once per device; should Home Assistant refuse, the device shows how to remove it by hand.
 - **A device whose name is not its ESPHome node still gets its pages.** A screen names its node in the sensor Device name, and every action the app calls is built from it. When Home Assistant has no such action (a Kachel device that shows its own name there while ESPHome still knows it as kachel-223cb8), the app now takes the screen's action that ends with the last six digits of the device's MAC address, if exactly one does, instead of being refused again and again.
 
 ## Kachel Manager 0.1.1 (based on Tessera 0.4.98)

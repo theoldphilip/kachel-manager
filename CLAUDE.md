@@ -87,6 +87,9 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   name“. Kennt Home Assistant für diesen Namen keine `…_screen_message`, nimmt `kachel.message_node` die eine Aktion,
   die auf die letzten 6 Stellen der MAC des Geräts endet (Sicherheitsnetz, Haken in `server.py`: `screens`, `screen`,
   `inventory`).
+- **Aus HA entfernen** (19.11., mit `fire-app`): Schreibt ein Gerät bei den Werkseinstellungen `remove` (oder
+  `{"status":"remove"}`) in seine Inbox, ruft die Sync-Schleife einmal `Manager.remove_screen` (ESPHome-Eintrag samt
+  Gerät weg). `kachel.wants_removal`, Test `tests/test_kachel_remove.py`. Das Gerät wartet bis 20 s auf den Abbruch.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

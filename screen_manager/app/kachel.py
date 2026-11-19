@@ -99,6 +99,26 @@ def with_message_nodes(screens, ha):
             screen['node'] = message_node(screen, devices, services)
     return screens
 
+# What a Kachel device writes into its inbox when it is reset to its factory settings and was asked "Also remove from
+# Home Assistant?" (fire-app, 2026-11-19): the app removes it as the editor's Remove does (Manager.remove_screen: its
+# ESPHome entry with the device and its entities). The device waits up to 20 s for its connection to drop.
+REMOVE_STATUS = 'remove'
+
+def wants_removal(screen):
+    """Whether this discovered screen asks to be removed from Home Assistant: its inbox says REMOVE_STATUS, also as
+    {"status": "remove"}."""
+    status = screen.get('status') if isinstance(screen, dict) else None
+    if not isinstance(status, str):
+        return False
+    text = status.strip()
+    if text.startswith('{'):
+        try:
+            import json
+            text = str((json.loads(text) or {}).get('status', '')).strip()
+        except (ValueError, AttributeError):
+            return False
+    return text == REMOVE_STATUS
+
 def esp_only(path):
     """Whether a request to `path` is for what only an ESP32 screen needs."""
     if not isinstance(path, str):

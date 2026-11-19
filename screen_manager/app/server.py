@@ -1134,6 +1134,8 @@ class Manager:
         self._registry_source, self._registry_index = None, {}
         self._items_source, self._items = None, []
         self._screens_key, self._screens = None, []
+        # Kachel Manager: the inboxes that asked to leave Home Assistant, each removed (or tried) once (kachel.wants_removal).
+        self.kachel_removing = set()
         self._verified_screens_key, self._verified_screens = None, {}
         self._watched_key, self._watched = None, set()
         self._seen_registry = None
@@ -3651,6 +3653,17 @@ class Manager:
             for screen in screens:
                 inbox = screen['id']
                 before = self.status.get(inbox)
+                # Kachel Manager: a device that is reset to its factory settings asks to leave Home Assistant
+                # (kachel.wants_removal); it is removed as the editor's Remove does, once.
+                if kachel.wants_removal(screen) and inbox not in self.kachel_removing:
+                    self.kachel_removing.add(inbox)
+                    try:
+                        await self.remove_screen(inbox)
+                        LOG.info('%s asked to leave Home Assistant (factory settings): removed', screen.get('name') or inbox)
+                        changed = True
+                    except Exception as error:  # noqa: BLE001 - the device shows its hint to remove it by hand
+                        LOG.warning('%s asked to leave Home Assistant, but it could not be removed (%s)', screen.get('name') or inbox, error)
+                    continue
                 if not screen['online']:
                     self.sent.pop(inbox, None)
                     if inbox in self.page_senders: self.page_senders[inbox].disconnected()

@@ -1306,7 +1306,10 @@
         "clock_format": "Clock",
         "start_page": "Start page",
         "back_to_start_page": "Back to the start page",
-        "turn_pages_with": "Turn pages with"
+        "turn_pages_with": "Turn pages with",
+        "update_outcome": "Last update",
+        "theme_mode": "Theme",
+        "language": "Language"
       }
     },
     "alerts": {
@@ -2978,7 +2981,12 @@
         "yes": "Yes",
         "no": "No",
         "brightness": "Brightness",
-        "pages": "Pages"
+        "pages": "Pages",
+        "outcome": {
+          "installed": "Installed",
+          "rolled_back": "Rolled back",
+          "failed": "Failed"
+        }
       },
       "kachel_log": {
         "title": "Log",

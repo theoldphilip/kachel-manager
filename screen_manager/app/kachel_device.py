@@ -32,7 +32,8 @@ SECTIONS = (
                  ('check_for_updates', 'Check for updates', 'button', True),
                  ('update_status', 'Update status', 'sensor', False),
                  ('update_automatically', 'Install updates automatically', 'switch', True),
-                 ('other_slot_version', 'Other slot version', 'sensor', False))),
+                 ('other_slot_version', 'Other slot version', 'sensor', False),
+                 ('update_outcome', 'Update outcome', 'event', False))),
     ('battery', (('battery_level', 'Battery level', 'sensor', False),
                  ('charger_connected', 'Charger connected', 'binary_sensor', False),
                  ('battery_charging', 'Battery charging', 'binary_sensor', False),
@@ -52,6 +53,8 @@ SECTIONS = (
                 ('screen_off_when_nobody_is_near', 'Screen off when nobody is near', 'switch', True),
                 ('text_size', 'Screen text size', 'select', True),
                 ('clock_format', 'Clock format', 'select', True),
+                ('theme_mode', 'Theme mode', 'select', True),
+                ('language', 'Screen language', 'select', True),
                 ('settings_lock', 'Settings lock', 'switch', True))),
     ('pages', (('start_page', 'Start page', 'select', True),
                ('back_to_start_page', 'Back to start page', 'select', True),
@@ -63,6 +66,8 @@ BY_NAME = {(name, domain): key for _, rows in SECTIONS for key, name, domain, _ 
 SHOWN_BY = {'battery_care': 'battery_protection'}
 # The words a reading has no translation of are shown as Home Assistant has them.
 GONE = (None, '', 'unknown', 'unavailable')
+# What echod's "Update outcome" event says about the last update (internal/feature/firmware).
+OUTCOMES = ('installed', 'rolled_back', 'failed')
 
 
 def devices_of(manager, screen):
@@ -122,6 +127,11 @@ def _row(key, eid, states, language, online):
         level = attrs.get('brightness')
         out.update(kind='light', value=value == 'on',
                    brightness=round(level / 255 * 100) if isinstance(level, (int, float)) else None)
+    elif domain == 'event':
+        # The last update's outcome (echod: installed, rolled_back, failed) and when it came; an event's state is its time.
+        kind = attrs.get('event_type')
+        out.update(kind='outcome', value=kind if kind in OUTCOMES else None,
+                   at=value if isinstance(value, str) and value not in GONE else None)
     elif domain == 'binary_sensor':
         out.update(kind='flag', value=value == 'on' if value not in GONE else None)
     else:

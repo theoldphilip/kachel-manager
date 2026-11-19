@@ -17,9 +17,9 @@ import { useScreenStore } from "../stores/screen";
 
 type Row = {
   key: string; entity: string; label: Texts; available: boolean; writable: boolean;
-  kind: "update" | "select" | "button" | "switch" | "light" | "flag" | "reading" | null;
+  kind: "update" | "select" | "button" | "switch" | "light" | "flag" | "reading" | "outcome" | null;
   value?: boolean | string | null; options?: string[]; unit?: string;
-  latest?: string | null; pending?: boolean; installing?: boolean; progress?: number | null; brightness?: number | null;
+  latest?: string | null; at?: string | null; pending?: boolean; installing?: boolean; progress?: number | null; brightness?: number | null;
 };
 type Section = { section: "updates" | "battery" | "screen" | "pages"; rows: Row[] };
 
@@ -84,6 +84,14 @@ function brighter(row: Row, by: number) {
 const choices = (row: Row) => (row.options || []).map((option) => [option, option] as [string, string]);
 const flag = (value: Row["value"]) => value === null || value === undefined ? "–"
   : value ? t("editor.screen_settings.kachel_device.yes") : t("editor.screen_settings.kachel_device.no");
+// The last update's outcome and when it came, in the editor's language: "Installed · 19.11., 21:05".
+function outcome(row: Row) {
+  if (typeof row.value !== "string") return "–";
+  const word = t(`editor.screen_settings.kachel_device.outcome.${row.value}`);
+  const at = row.at ? new Date(row.at) : null;
+  return at && !isNaN(at.getTime())
+    ? `${word} · ${at.toLocaleString(editorLanguage(), { day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" })}` : word;
+}
 const reading = (row: Row) => row.value === null || row.value === undefined ? "–"
   : `${/^-?\d+(\.\d+)?$/.test(String(row.value)) ? editorNumber(Number(row.value)) : row.value}${row.unit ? ` ${row.unit}` : ""}`;
 </script>
@@ -128,6 +136,7 @@ const reading = (row: Row) => row.value === null || row.value === undefined ? "�
             <button type="button" class="switch" role="switch" :aria-checked="row.value ? 'true' : 'false'" :disabled="!row.available"
               :aria-label="text(row.label)" @click="set(row, !row.value)"></button>
           </template>
+          <span v-else-if="row.kind === 'outcome'" class="s-status">{{ outcome(row) }}</span>
           <span v-else-if="row.kind === 'flag' || row.kind === 'switch'" class="s-status">{{ flag(row.value) }}</span>
           <span v-else class="s-status">{{ reading(row) }}</span>
         </div>

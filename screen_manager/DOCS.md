@@ -28,11 +28,11 @@ der Name, rechts Uhrzeit, Datum oder Entitäten.
 Unter **Bildschirmeinstellungen → Gerät** stehen die Einstellungen, die das Tablet selbst in Home Assistant meldet:
 
 - **Updates:** installierte Version, Update-Kanal, Suche nach Updates, automatische Updates, die Version im anderen
-  Slot. Ein Update fragt vor dem Installieren, weil das Tablet danach neu startet. Den Slot wechselt der Kachel
+  Slot und wie das letzte Update ausging (installiert, zurückgesetzt, fehlgeschlagen). Ein Update fragt vor dem Installieren, weil das Tablet danach neu startet. Den Slot wechselt der Kachel
   Manager nicht, er zeigt ihn nur.
 - **Akku:** Ladestand, Ladegerät, Akkuschutz, volle Leistung.
 - **Bildschirm:** Helligkeit, Dimmen bei Ruhe, Nachtmodus und Nachtstunden (auch am Wochenende), aus bei leerem
-  Raum, Textgröße, Uhrzeit-Format, Einstellungssperre.
+  Raum, Textgröße, Uhrzeit-Format, Design (hell/dunkel), Sprache, Einstellungssperre.
 - **Seiten:** Startseite, zurück zur Startseite, blättern mit.
 
 Dieselben Einstellungen stehen in Home Assistant beim Gerät des Tablets. Eine Änderung hier oder dort erscheint

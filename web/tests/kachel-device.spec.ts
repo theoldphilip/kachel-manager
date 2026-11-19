@@ -16,6 +16,8 @@ const SECTIONS = [
   { section: "updates", rows: [
     { key: "firmware", entity: "update.w_firmware", kind: "update", label: { en: "Kachel version" }, available: true, writable: true,
       value: "2.5.0-b9", latest: "2.5.0-b10", pending: true, installing: false, progress: null },
+    { key: "update_outcome", entity: "event.w_update_outcome", kind: "outcome", label: { en: "Last update" }, available: true,
+      writable: false, value: "rolled_back", at: "2026-11-19T20:05:00Z" },
     { key: "update_channel", entity: "select.w_update_channel", kind: "select", label: { en: "Update channel" }, available: true,
       writable: true, value: "dev", options: ["stable", "dev"] },
   ] },
@@ -58,6 +60,7 @@ describe("the tablet's device", () => {
     expect(wrapper.find("[data-setting=battery_care]").text()).toContain("Yes");
     expect(wrapper.find("[data-setting=battery_care] button").exists()).toBe(false);
     expect(wrapper.find("[data-setting=screen] output").text()).toBe("50 %");
+    expect(wrapper.find("[data-setting=update_outcome]").text()).toContain("Rolled back · ");
   });
 
   it("installs an update only after the question, and changes a switch, a choice and the brightness at once", async () => {

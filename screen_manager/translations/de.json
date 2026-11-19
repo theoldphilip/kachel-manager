@@ -1306,7 +1306,10 @@
         "clock_format": "Uhrzeit",
         "start_page": "Startseite",
         "back_to_start_page": "Zurück zur Startseite",
-        "turn_pages_with": "Blättern mit"
+        "turn_pages_with": "Blättern mit",
+        "update_outcome": "Letztes Update",
+        "theme_mode": "Design",
+        "language": "Sprache"
       }
     },
     "alerts": {
@@ -3429,7 +3432,12 @@
         "yes": "Ja",
         "no": "Nein",
         "brightness": "Helligkeit",
-        "pages": "Seiten"
+        "pages": "Seiten",
+        "outcome": {
+          "installed": "Installiert",
+          "rolled_back": "Zurückgesetzt",
+          "failed": "Fehlgeschlagen"
+        }
       },
       "kachel_log": {
         "title": "Protokoll",

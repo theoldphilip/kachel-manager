@@ -124,6 +124,30 @@ class TheDevice(unittest.TestCase):
         asyncio.run(kachel_device.change(Manager(ha), 'text.wohnzimmer_kachel_inbox', 'select.wohnzimmer_screen_night_start', '22:15'))
         self.assertEqual(ha.calls, [('select', 'select_option', {'entity_id': 'select.wohnzimmer_screen_night_start', 'option': '22:15'})])
 
+    def test_theme_language_and_the_last_update_on_the_fire(self):
+        """kachel-fire/app: Theme mode and Screen language are choices beside the screen's own, Update outcome an event
+        whose state is its time. The Tessera sensor "Screen language" is no row: only the select is."""
+        ha = HA()
+        for entity, name, state, attributes in (
+                ('select.fire_screen_theme_mode', 'Theme mode', 'Dark', {'options': ['Dark', 'Light']}),
+                ('select.fire_screen_language', 'Screen language', 'Deutsch', {'options': ['English', 'Deutsch']}),
+                ('sensor.fire_tessera_screen_language', 'Screen language', 'de', {}),
+                ('event.fire_update_outcome', 'Update outcome', '2026-11-19T20:05:00+00:00', {'event_type': 'rolled_back'})):
+            ha.registry.append(item(entity, name))
+            ha.states[entity] = {'state': state, 'attributes': attributes}
+        rows = {row['key']: row for s in kachel_device.device_for(Manager(ha), 'text.wohnzimmer_kachel_inbox') for row in s['rows']}
+        self.assertEqual((rows['theme_mode']['kind'], rows['theme_mode']['value']), ('select', 'Dark'))
+        self.assertEqual((rows['language']['entity'], rows['language']['options']), ('select.fire_screen_language', ['English', 'Deutsch']))
+        self.assertEqual((rows['update_outcome']['kind'], rows['update_outcome']['value'], rows['update_outcome']['at'],
+                          rows['update_outcome']['writable']), ('outcome', 'rolled_back', '2026-11-19T20:05:00+00:00', False))
+        ha.states['event.fire_update_outcome'] = {'state': 'unknown', 'attributes': {'event_type': 'something'}}
+        rows = {row['key']: row for s in kachel_device.device_for(Manager(ha), 'text.wohnzimmer_kachel_inbox') for row in s['rows']}
+        self.assertEqual((rows['update_outcome']['value'], rows['update_outcome']['at']), (None, None))
+        with self.assertRaises(ValueError):
+            asyncio.run(kachel_device.change(Manager(ha), 'text.wohnzimmer_kachel_inbox', 'event.fire_update_outcome', 'x'))
+        asyncio.run(kachel_device.change(Manager(ha), 'text.wohnzimmer_kachel_inbox', 'select.fire_screen_language', 'English'))
+        self.assertEqual(ha.calls[-1], ('select', 'select_option', {'entity_id': 'select.fire_screen_language', 'option': 'English'}))
+
     def test_a_name_in_the_wrong_domain_is_not_a_row(self):
         ha = HA()
         ha.registry.append(item('sensor.wohnzimmer_start_page', 'Start page'))

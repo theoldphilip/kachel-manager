@@ -1436,7 +1436,9 @@ class Manager:
         if key != self._verified_screens_key:
             self._verified_screens_key = key
             self._verified_screens = {item['id']: item for item in discover_screens(items, ha.states, ha.devices, ha.areas)}
-        return self._verified_screens.get(inbox)
+        found = self._verified_screens.get(inbox)
+        # Kachel Manager: the node whose actions Home Assistant really offers (kachel.message_node).
+        return kachel.with_message_nodes([dict(found)], ha)[0] if found else None
 
     def reported_grid(self, inbox):
         """The grid the screen reports itself ("Screen layout", firmware 0.2.77+), or None when it says nothing.
@@ -1555,7 +1557,9 @@ class Manager:
 
     def inventory(self):
         """(screens, every tile/top-bar entity): the full walk over the registry, for the editor and saving."""
-        return discover(self.ha.registry, self.ha.states, self.ha.devices, self.ha.areas, list(getattr(self.ha, 'words_by_language', {}).values()))
+        screens, entities = discover(self.ha.registry, self.ha.states, self.ha.devices, self.ha.areas, list(getattr(self.ha, 'words_by_language', {}).values()))
+        # Kachel Manager: the node whose actions Home Assistant really offers (kachel.message_node).
+        return kachel.with_message_nodes(screens, self.ha), entities
 
     def screen_registry(self):
         """The few registry entries that describe screens; rebuilt only when HA delivers a new registry."""
@@ -1575,7 +1579,8 @@ class Manager:
         if key != self._screens_key:
             self._screens_key, self._screens = key, discover_screens(items, ha.states, ha.devices, ha.areas)
             self.follow_renamed_inboxes(items)
-        return [dict(screen) for screen in self._screens]
+        # Kachel Manager: the node whose actions Home Assistant really offers (kachel.message_node).
+        return kachel.with_message_nodes([dict(screen) for screen in self._screens], ha)
 
     def screen(self, inbox):
         screens = self.screens()

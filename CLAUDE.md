@@ -83,8 +83,23 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   (`feedback.py`, `reports.py`, `plugin_likes.py`) rufen `kachel.site_closed()` vor jeder Verbindung. Probleme meldet
   man auf GitHub (`kachel.ISSUES`, `web/src/kachel/IssueCard.vue`). Tesseras Tests dazu laufen mit
   `site_on_module()` aus `tests/kachel_esp.py`.
+- **Knotenname** (19.11.): Alle Aktionen eines Geräts heißen `esphome.<node>_…`, `<node>` aus dem Sensor „Device
+  name“. Kennt Home Assistant für diesen Namen keine `…_screen_message`, nimmt `kachel.message_node` die eine Aktion,
+  die auf die letzten 6 Stellen der MAC des Geräts endet (Sicherheitsnetz, Haken in `server.py`: `screens`, `screen`,
+  `inventory`).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
+
+## Aufteilung und Basisdesign (Philip, 19.11.)
+
+- **Entwickelt wird mit dem Fire** (`kachel-fire`/`app`, Board `fire8`): Es ist die Werkbank und Quelle der Basis.
+  Das **Wohnzimmer** bleibt bei Tessera und arbeitet für sich; später ist es der **Prüfstein**: Ziel sind alle
+  Funktionen des Wohnzimmers über den Kachel Manager (Liste `wohnzimmer-funktionen.md` von `wohnzimmer-app`). Das
+  **Laufband** nutzt Kachel Manager und Verbindung, zeigt aber seine eigene Anzeige (keine frei belegbaren Seiten).
+- **Erinnerungspflicht (REGELN §2):** Wünscht Philip hier eine Änderung am **Basisdesign** (Einstellungsmenü,
+  Ersteinrichtung, Werkseinstellungen, Tastatur, Design des Geräts), erst fragen: „Das Basisdesign macht `fire-app` am
+  Fire – soll ich es als Wunsch an `fire-app` geben?“ und nicht selbst bauen. Sagt Philip ausdrücklich, ich soll es
+  selbst machen, gilt sein Wort. Ausgenommen: Wohnzimmer und Laufband-Anzeige.
 
 ## Neues vom Original übernehmen
 

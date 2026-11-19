@@ -12,6 +12,7 @@ is reported as an issue on GitHub (ISSUES).
 
 Tested by tests/test_kachel.py.
 """
+import re
 
 # The name of a Kachel screen's inbox entity (a text entity of its ESPHome device), as echod gives it.
 INBOX_NAME = 'Kachel inbox'
@@ -49,6 +50,54 @@ def site_closed():
     if not TESSERA_SITE:
         from aiohttp import ClientError
         raise ClientError(SITE_REFUSED)
+
+# The ESPHome action a screen takes a whole message through (core.message_action): esphome.<node>_screen_message.
+MESSAGE_SUFFIX = '_screen_message'
+
+def _mac_of(device, devices):
+    """The MAC address Home Assistant knows for a screen's device or the device it hangs under, as 12 hex digits."""
+    by_id = {d.get('id'): d for d in devices or () if isinstance(d, dict)}
+    seen = set()
+    while isinstance(device, dict) and device.get('id') not in seen:
+        seen.add(device.get('id'))
+        for kind, value in device.get('connections') or ():
+            if kind == 'mac' and isinstance(value, str):
+                return value.replace(':', '').lower()
+        for domain, value in device.get('identifiers') or ():
+            if domain == 'esphome' and isinstance(value, str) and re.match(r'^([0-9a-f]{2}:){5}[0-9a-f]{2}', value.lower()):
+                return value[:17].replace(':', '').lower()
+        device = by_id.get(device.get('via_device_id'))
+    return None
+
+def message_node(screen, devices, esphome_services):
+    """The node whose esphome.<node>_screen_message Home Assistant really offers for this screen.
+
+    A screen names its node in the sensor "Device name", and every action this app calls is built from it. A Kachel
+    device that shows a name of its own there (the Fire after its first setup: "fire-test") while ESPHome still knows it
+    by its node ("kachel-223cb8") would be sent everything under an action Home Assistant does not have, and refuse it.
+    A safety net: when Home Assistant has no action for the named node, the one that ends with the last six digits of the
+    device's MAC address (ESPHome's own suffix for a node) is taken, if exactly one does. Otherwise, or before Home
+    Assistant's actions are known, the screen's own word stands."""
+    node = screen.get('node')
+    known = {name[:-len(MESSAGE_SUFFIX)] for name in esphome_services or () if isinstance(name, str) and name.endswith(MESSAGE_SUFFIX)}
+    if not known or (isinstance(node, str) and node.replace('-', '_') in known):
+        return node
+    device = next((d for d in devices or () if isinstance(d, dict) and d.get('id') == screen.get('device_id')), None)
+    mac = _mac_of(device, devices)
+    if not mac:
+        return node
+    suffix = mac[-6:]
+    hits = [name for name in known if name == suffix or name.endswith('_' + suffix)]
+    return hits[0] if len(hits) == 1 else node
+
+def with_message_nodes(screens, ha):
+    """`screens` (discovered, copies) with each node corrected by message_node from what `ha` knows."""
+    services = (getattr(ha, 'services', None) or {}).get('esphome') or {}
+    devices = getattr(ha, 'devices', None) or []
+    for screen in screens:
+        if isinstance(screen, dict):
+            screen['node'] = message_node(screen, devices, services)
+    return screens
 
 def esp_only(path):
     """Whether a request to `path` is for what only an ESP32 screen needs."""

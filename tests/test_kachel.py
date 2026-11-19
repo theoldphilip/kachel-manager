@@ -95,6 +95,41 @@ class TesseraSite(unittest.TestCase):
             self.assertFalse(likes.view()['usable'])
 
 
+class MessageNode(unittest.TestCase):
+    """The safety net for a device whose "Device name" is not its ESPHome node (the Fire, 2026-11-19)."""
+    PARENT = {'id': 'p', 'connections': [['mac', '98:cc:f3:22:3c:b8']], 'via_device_id': None}
+    INBOX = {'id': 'd', 'connections': [], 'identifiers': [], 'via_device_id': 'p'}
+    SERVICES = {'wohnzimmer_screen_message': {}, 'kachel_223cb8_screen_message': {}, 'techo5_panel_6591d3_screen_message': {}}
+
+    def node(self, node, devices=None, services=None):
+        return kachel.message_node({'node': node, 'device_id': 'd'}, devices if devices is not None else [self.PARENT, self.INBOX],
+                                   self.SERVICES if services is None else services)
+
+    def test_the_named_node_stands_when_home_assistant_has_it(self):
+        self.assertEqual(self.node('techo5-panel-6591d3'), 'techo5-panel-6591d3')
+
+    def test_a_name_without_an_action_takes_the_node_of_the_devices_mac(self):
+        self.assertEqual(self.node('fire-test'), 'kachel_223cb8')
+        self.assertEqual(core.message_action(self.node('fire-test')), 'esphome.kachel_223cb8_screen_message')
+        # Its MAC in the inbox device's identifier works as well as the parent's connection.
+        inbox = {'id': 'd', 'identifiers': [['esphome', '98:cc:f3:22:3c:b8_64']]}
+        self.assertEqual(self.node('fire-test', devices=[inbox]), 'kachel_223cb8')
+
+    def test_without_a_sure_answer_the_screens_word_stands(self):
+        self.assertEqual(self.node('fire-test', services={}), 'fire-test')
+        self.assertEqual(self.node('fire-test', devices=[]), 'fire-test')
+        two = {**self.SERVICES, 'other_223cb8_screen_message': {}}
+        self.assertEqual(self.node('fire-test', services=two), 'fire-test')
+        self.assertEqual(self.node('fire-test', services={'wohnzimmer_screen_message': {}}), 'fire-test')
+
+    def test_the_manager_gets_corrected_copies(self):
+        class Ha:
+            services = {'esphome': self.SERVICES}
+            devices = [self.PARENT, self.INBOX]
+        screens = kachel.with_message_nodes([{'node': 'fire-test', 'device_id': 'd'}, {'node': None, 'device_id': 'x'}], Ha())
+        self.assertEqual([screen['node'] for screen in screens], ['kachel_223cb8', None])
+
+
 class Names(unittest.TestCase):
     def test_no_tessera_names_left(self):
         """After a merge from Tessera, tools/kachel_names.py writes our names; this says when it was not run."""

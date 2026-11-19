@@ -1,3 +1,7 @@
+## Kachel Manager 0.1.2 (based on Tessera 0.4.98)
+
+- **A device whose name is not its ESPHome node still gets its pages.** A screen names its node in the sensor Device name, and every action the app calls is built from it. When Home Assistant has no such action (a Kachel device that shows its own name there while ESPHome still knows it as kachel-223cb8), the app now takes the screen's action that ends with the last six digits of the device's MAC address, if exactly one does, instead of being refused again and again.
+
 ## Kachel Manager 0.1.1 (based on Tessera 0.4.98)
 
 - **Its own page in the add-on store.** The Kachel mark the tablets show while they start (cut from echod's splash by `tools/kachel_logo.py`) as icon and logo, and in the editor's sidebar beside the name Kachel, instead of Tessera's mosaic, and its own Info and Documentation pages in German: installing, connecting a tablet with Managed by, Layout, Device, and what stays with Tessera.

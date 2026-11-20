@@ -92,8 +92,11 @@ const query = computed(() => ui.search.trim().toLocaleLowerCase());
 const entries = computed(() => [...pluginEntries.value, ...(inv.inventory.builtin || []), ...inv.inventory.entities]);
 const filterNow = computed<LibraryFilter>(() => ({ query: query.value, pages: pagesOffered.value, pictures: scr.pictures, textTiles: Boolean(scr.currentScreen?.text_tiles), callTiles: Boolean(scr.currentScreen?.call_tiles), todoLists: Boolean(scr.currentScreen?.todo_lists), hidePlaced: ui.hidePlaced, counts: chosen.value }));
 const base = computed(() => libraryBase(entries.value, filterNow.value));
-const pool = computed(() => base.value.filter((e) => !ui.room || e.area === ui.room));
-const matches = computed(() => libraryMatches(pool.value, ui.filter, query.value));
+// Kachel Manager: a search looks through the whole library, whatever room or kind is chosen (Philip, 2026-11-20: a calendar
+// without a room was not found while a room stayed chosen); without a search the room and the kind narrow it as before.
+const everywhere = computed(() => !inv.espScreens && Boolean(query.value));
+const pool = computed(() => base.value.filter((e) => !ui.room || everywhere.value || e.area === ui.room));
+const matches = computed(() => libraryMatches(pool.value, everywhere.value ? "" : ui.filter, query.value));
 // Nothing here for what is typed, because of a kind, a room or the hide switch: how many the whole library has for it.
 const elsewhere = computed(() => query.value && !matches.value.length && (ui.filter || ui.room || ui.hidePlaced)
   ? libraryBase(entries.value, { ...filterNow.value, hidePlaced: false }).length : 0);

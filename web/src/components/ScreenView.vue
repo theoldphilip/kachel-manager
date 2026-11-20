@@ -10,6 +10,7 @@ import LayoutBotKey from "./LayoutBotKey.vue";
 import LayoutView from "./LayoutView.vue";
 import SettingsTab from "./SettingsTab.vue";
 import KachelLogPanel from "../kachel/LogPanel.vue";
+import KachelFunctionsPanel from "../kachel/FunctionsPanel.vue";
 import ScreenPluginsTab from "./ScreenPluginsTab.vue";
 import Drawer from "./Drawer.vue";
 import FeedbackPanel from "./FeedbackPanel.vue";
@@ -166,6 +167,10 @@ useEventListener(document, "keydown", onKey);
         <Icon name="puzzle-outline" />{{ t("editor.screen_view.tabs.plugins") }}
         <span v-if="builds.buildOf(screen)?.by === 'plugins'" class="spin small" role="img" :aria-label="t('editor.build.plugins')"></span>
       </button>
+      <!-- Kachel Manager: what is set up for the tablet (src/kachel/FunctionsPanel.vue). -->
+      <button v-if="!screen.virtual && !inv.espScreens" type="button" id="tab-functions" role="tab" :aria-pressed="ui.tab === 'functions' ? 'true' : 'false'" :aria-selected="ui.tab === 'functions'" @click="ui.tab = 'functions'; insp.closeInspector()">
+        <Icon name="tune-variant" />{{ t("editor.kachel_functions.title") }}
+      </button>
       <!-- Kachel Manager: the tablet's log as a tab of its own, beside its pages and its device (src/kachel/LogPanel.vue). -->
       <button v-if="!screen.virtual && !inv.espScreens" type="button" id="tab-log" role="tab" :aria-pressed="ui.tab === 'log' ? 'true' : 'false'" :aria-selected="ui.tab === 'log'" @click="ui.tab = 'log'; insp.closeInspector()">
         <Icon name="format-list-bulleted" />{{ t("editor.screen_settings.kachel_log.title") }}
@@ -232,6 +237,7 @@ useEventListener(document, "keydown", onKey);
       <LayoutView v-if="ui.tab === 'layout'" />
       <SettingsTab v-else-if="ui.tab === 'settings'" />
       <div v-else-if="ui.tab === 'log'" class="settings kachel-log-tab"><KachelLogPanel /></div>
+      <div v-else-if="ui.tab === 'functions'" class="settings kachel-functions-tab"><KachelFunctionsPanel /></div>
       <ScreenPluginsTab v-else />
     </div>
     <Drawer />

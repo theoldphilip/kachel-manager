@@ -53,6 +53,13 @@ Unter **Bildschirmeinstellungen → Gerät** stehen die Einstellungen, die das T
 Dieselben Einstellungen stehen in Home Assistant beim Gerät des Tablets. Eine Änderung hier oder dort erscheint
 sofort auf beiden Seiten. Was ein Gerät nicht hat (der Fire etwa kein automatisches Update), fehlt.
 
+## Funktionen
+
+Im Reiter **Funktionen** eines Geräts richtest du ein, was das Tablet können soll: **Präsenz** (Sensoren, die melden,
+dass jemand da ist), **Blättern** (Wischen, Lautstärketasten, Fernbedienung), **Sprachassistent** und **Meldungen**
+(Klingel, Post, Pakete, Müllabfuhr, Wetterwarnungen, verpasste Meldungen). Das Tablet zeigt eine Einstellung nur, wenn
+ihre Funktion hier eingerichtet ist. Was nicht eingerichtet ist, ist aus.
+
 ## Automationen
 
 Die Ereignisse des Kachel Managers beginnen mit `kachel_` (etwa `kachel_show_alert`), damit sie sich nicht mit

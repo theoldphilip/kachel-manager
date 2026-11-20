@@ -1047,6 +1047,9 @@
       },
       "kachel_integration": {
         "not_written": "Die Kachel-Integration ließ sich nicht nach {folder} schreiben: {reason}"
+      },
+      "kachel_functions": {
+        "request": "Diese Funktionen sind auf diesem Tablet nicht möglich."
       }
     },
     "status": {
@@ -5034,6 +5037,49 @@
         "all": "Alle Bildschirme"
       },
       "preview": "Ansehen"
+    },
+    "kachel_functions": {
+      "title": "Funktionen",
+      "intro": "Was für dieses Tablet eingerichtet ist. Das Tablet zeigt eine Einstellung nur, wenn ihre Funktion hier eingerichtet ist; was nicht eingerichtet ist, ist aus.",
+      "unsupported": "Dieses Tablet kann noch keine Funktionen annehmen. Eine neuere Kachel-Version bringt es mit; was du hier speicherst, geht dann raus.",
+      "presence": {
+        "title": "Präsenz",
+        "hint": "Sensoren, die melden, dass jemand da ist. Das Tablet kann dann den Bildschirm ausschalten, wenn der Raum leer ist.",
+        "add": "Sensor hinzufügen …"
+      },
+      "page_turn": {
+        "title": "Blättern",
+        "hint": "Womit am Tablet geblättert werden kann."
+      },
+      "assist": {
+        "title": "Sprachassistent",
+        "hint": "Das Tablet macht bei Assist von Home Assistant mit. Ein- oder Ausschalten startet die App des Tablets neu.",
+        "pipeline": "Assistent (optional)"
+      },
+      "notices": {
+        "title": "Meldungen",
+        "hint": "Welche Meldungen das Tablet zeigt und woher sie kommen.",
+        "doorbell": "Klingel",
+        "post": "Post",
+        "parcels": "Pakete",
+        "waste": "Müllabfuhr",
+        "weather": "Wetterwarnungen",
+        "missed": "Verpasste Meldungen"
+      },
+      "ways": {
+        "swipe": "Wischen",
+        "buttons": "Lautstärketasten",
+        "remote": "Fernbedienung",
+        "tap_clock": "Tippen auf die Uhr",
+        "wake_word": "Weckwort"
+      },
+      "none": "Keine",
+      "remove": "Entfernen",
+      "save": "Speichern",
+      "saved": "Gespeichert. Das Tablet bekommt es sofort.",
+      "unsaved": "Noch nicht gespeichert",
+      "delivered": "Das Tablet hat es",
+      "waiting": "Das Tablet bekommt es, sobald es verbunden ist"
     }
   }
 }

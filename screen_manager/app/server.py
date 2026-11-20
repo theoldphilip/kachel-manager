@@ -22,6 +22,7 @@ import kachel_log
 import kachel_integration
 import kachel_keep
 import kachel_board
+import kachel_functions
 import calendar_feed
 import todo_feed
 import doorbell
@@ -1083,6 +1084,8 @@ class Manager:
         # last: the last full send; pinged: the last keepalive ping.
         self.sent, self.status, self.last, self.pinged = {}, {}, {}, {}
         self.page_senders = {}
+        # Kachel Manager: what is set up for each Kachel device (kachel_functions.py).
+        self.kachel_functions = kachel_functions.Functions(self.path.parent)
         self.page_capabilities = CapabilityCache(self.path.parent / 'page-capabilities.json')
         self._compiled_records, self._compiled_layouts = None, {}
         self._compiled_store_stamp = object()
@@ -1667,6 +1670,7 @@ class Manager:
         self.page_capabilities.forget(old)
         self.page_values.pop(old, None)
         self.icons.renamed(old, new)
+        if getattr(self, 'kachel_functions', None): self.kachel_functions.renamed(old, new)  # Kachel Manager
         if self.updates.renamed(old, new):
             moved.append('update history')
         for store in (self.sent, self.status, self.last, self.pinged):
@@ -3175,7 +3179,9 @@ class Manager:
             watched |= {eid for device in self.setting_index().values() for eid in device.values()}
             watched |= set(savers)
             self._watched_key, self._watched = key, watched
-        return set(self._watched)
+        # Kachel Manager: the presence sensors a device's functions name (kachel_functions.py).
+        functions = getattr(self, 'kachel_functions', None)
+        return set(self._watched) | (functions.watched() if functions else set())
 
     def energy_prefs(self):
         """Home Assistant's Energy settings as last read (energy/get_prefs), {} before the first answer."""
@@ -3686,6 +3692,11 @@ class Manager:
                     self.status[inbox] = english('addon.status.offline')
                     changed = changed or self.status[inbox] != before
                     continue
+                # Kachel Manager: the device's functions and presence, in the session its pages opened (kachel_functions.py).
+                try:
+                    await kachel_functions.sync(self, inbox)
+                except Exception as error:  # noqa: BLE001 - the next turn of the loop tries again
+                    LOG.warning('%s: functions not delivered (%s)', screen.get('name') or inbox, error)
                 try:
                     if inbox not in self.layouts:
                         sender = self.page_senders.get(inbox)
@@ -6347,6 +6358,8 @@ def create_app(manager, development=False):
     kachel_log.routes(app, manager)
     # Kachel Manager: the Home Assistant integration `kachel`, written on request (kachel_integration.py).
     kachel_integration.routes(app, manager)
+    # Kachel Manager: a device's functions (kachel_functions.py).
+    kachel_functions.routes(app, manager)
     app.router.add_get('/', index)
     app.router.add_get('/api/inventory', inventory)
     app.router.add_get('/api/capabilities', capabilities)

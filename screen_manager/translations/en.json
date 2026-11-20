@@ -1047,6 +1047,9 @@
       },
       "kachel_integration": {
         "not_written": "Could not write the Kachel integration to {folder}: {reason}"
+      },
+      "kachel_functions": {
+        "request": "These functions are not possible on this tablet."
       }
     },
     "status": {
@@ -5034,6 +5037,49 @@
         "all": "All screens"
       },
       "preview": "Look"
+    },
+    "kachel_functions": {
+      "title": "Functions",
+      "intro": "What is set up for this tablet. The tablet shows a setting only when its function is set up here; whatever is not set up is off.",
+      "unsupported": "This tablet can't take functions yet. A newer Kachel version brings it; what you save here goes out then.",
+      "presence": {
+        "title": "Presence",
+        "hint": "Sensors that say someone is near. The tablet can then turn its screen off when the room is empty.",
+        "add": "Add a sensor…"
+      },
+      "page_turn": {
+        "title": "Turn pages",
+        "hint": "How pages can be turned on the tablet."
+      },
+      "assist": {
+        "title": "Voice assistant",
+        "hint": "The tablet takes part in Home Assistant's Assist. Turning it on or off restarts the tablet's app.",
+        "pipeline": "Assistant (optional)"
+      },
+      "notices": {
+        "title": "Notices",
+        "hint": "Which notices the tablet shows, and where each comes from.",
+        "doorbell": "Doorbell",
+        "post": "Post",
+        "parcels": "Parcels",
+        "waste": "Waste collection",
+        "weather": "Weather warnings",
+        "missed": "Missed notices"
+      },
+      "ways": {
+        "swipe": "Swipe",
+        "buttons": "Volume keys",
+        "remote": "Remote",
+        "tap_clock": "Tap the clock",
+        "wake_word": "Wake word"
+      },
+      "none": "None",
+      "remove": "Remove",
+      "save": "Save",
+      "saved": "Saved. The tablet gets it at once.",
+      "unsaved": "Not saved yet",
+      "delivered": "The tablet has it",
+      "waiting": "The tablet gets it when it connects"
     }
   }
 }

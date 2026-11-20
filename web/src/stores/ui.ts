@@ -94,8 +94,8 @@ export const useUiStore = defineStore("ui", () => {
   }
 
   // ---- What is open: the open screen's tab, its menu, the search, and on a phone its sheets ----
-  // Kachel Manager: "log", the tablet's log as a tab of its own (src/kachel/LogPanel.vue).
-  const tab = ref<"layout" | "settings" | "plugins" | "log">("layout");
+  // Kachel Manager: "log", the tablet's log, and "functions", what is set up for it, as tabs of their own (src/kachel/).
+  const tab = ref<"layout" | "settings" | "plugins" | "log" | "functions">("layout");
   const menuOpen = ref(false);
   const palette = ref(false);
   const addSheet = ref(false);

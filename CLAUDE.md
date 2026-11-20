@@ -118,6 +118,11 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   `web/src/kachel/kachel-theme.css` (nach `app.css` geladen, nur Farben/Ecken/Abstände; Türkis `#2BB3A3`, runde Tasten,
   Karten). Tesseras Dateien bleiben möglichst unverändert. Ohne `ESP_SCREENS` kein ESPHome-Update und keine wartenden
   Profile im Inventar (`server.py`). Weitere Schritte: Übersicht, Reiter je Gerät, Gerät als Kartenmenü, Suche über alles.
+- **Funktionen** (20.11., mit `fire-app`, Protokoll `functions` v2): Reiter „Funktionen“ (`web/src/kachel/FunctionsPanel.vue`),
+  gespeichert je Inbox in `/data/kachel_functions.json` (`kachel_functions.py`, `clean` prüft wie das Tablet). Die
+  Sync-Schleife schickt `{"op":"functions",…}` in der Sitzung einmal je Hello und bei Änderung, nur bei Hello-Wort
+  `functions`; `{"op":"presence","present"}` nach dem Hello, bei Änderung und spätestens alle 60 s. Präsenz-Sensoren
+  wecken die Schleife (`watched_entities`). Tests `tests/test_kachel_functions.py`, `web/tests/kachel-functions.spec.ts`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

@@ -1781,7 +1781,7 @@
       "fold": "Collapse sidebar",
       "unfold": "Expand sidebar",
       "resize": "Resize sidebar: drag, or use the arrow keys; double-click to reset",
-      "screens": "Screens",
+      "screens": "Devices",
       "refresh": "Refresh",
       "update": {
         "button": "Update",
@@ -1837,12 +1837,12 @@
         "done": "{name} is removed.",
         "kept": "{name} is removed. Its profile {file} is still in the ESPHome folder."
       },
-      "home": "Overview of your screens",
+      "home": "Overview of your devices",
       "dev_chip": "This is the dev version of the app: every screen it builds comes from the dev branch."
     },
     "palette": {
       "groups": {
-        "screens": "Screens",
+        "screens": "Devices",
         "actions": "Actions",
         "add": "Add to this screen"
       },
@@ -1854,14 +1854,14 @@
       "identify_needs": "Needs a newer firmware",
       "export": "Export layout",
       "export_detail": "Download and copy as JSON",
-      "placeholder": "Search screens, entities, actions…",
+      "placeholder": "Search devices, entities, actions…",
       "empty": "Nothing matches. Type part of a screen, entity or action."
     },
     "search": {
       "groups": {
         "recent": "Recent",
-        "settings": "Screen settings",
-        "tiles": "On your screens",
+        "settings": "Device settings",
+        "tiles": "On your devices",
         "plugins": "Plugins"
       },
       "hint": {
@@ -1911,7 +1911,7 @@
       "kachel_join_hint": "How a tablet joins Home Assistant"
     },
     "broken": {
-      "screens": "1 screen | {n} screens",
+      "screens": "1 device | {n} devices",
       "summary": {
         "missing": "1 tile on {screens} shows an entity that no longer exists | {n} tiles on {screens} show an entity that no longer exists",
         "unavailable": "1 tile on {screens} shows an entity that has been unavailable for a while | {n} tiles on {screens} show an entity that has been unavailable for a while",
@@ -1962,7 +1962,7 @@
         "identify_hint": "blink the screen",
         "identify_needs": "Needs firmware 0.2.31 or newer",
         "copy": "Copy layout from…",
-        "copy_screens": "{n} screen | {n} screens",
+        "copy_screens": "{n} device | {n} devices",
         "copy_none": "no other screen",
         "copy_tiles": "{n} tile | {n} tiles",
         "export": "Export layout",
@@ -2652,7 +2652,7 @@
       "call": {
         "section": "Call",
         "who": "Calls",
-        "who_hint_all": "A tap opens the list of screens.",
+        "who_hint_all": "A tap opens the list of devices.",
         "who_hint_one": "A tap calls this screen at once.",
         "everyone": "Choose from the list",
         "kind": "Kind of call",
@@ -3091,10 +3091,10 @@
         "download": "Download for claude.ai",
         "upload": "Upload the zip in Claude under Customize → Skills."
       },
-      "title": "Everything around your screens.",
-      "back": "← My screens",
+      "title": "Everything around your devices.",
+      "back": "← My devices",
       "screens": {
-        "title": "Screens",
+        "title": "Devices",
         "text": "Add a screen, or build and reinstall the firmware of one you already have.",
         "firmware_detail": "Build and install via USB or Wi-Fi"
       },
@@ -3427,9 +3427,9 @@
       },
       "sections": "Sections",
       "nav": {
-        "screens": "Your screens",
+        "screens": "Your devices",
         "howto": "In an automation",
-        "all": "All screens",
+        "all": "All devices",
         "fields": "The fields",
         "icons": "Icons",
         "colors": "Colors",
@@ -3450,7 +3450,7 @@
         "flash_hint": "Four times when the alert arrives.",
         "sending": "Sending…",
         "send": "Send alert",
-        "sent_all": "Sent to {n} screen. | Sent to {n} screens.",
+        "sent_all": "Sent to {n} device. | Sent to {n} devices.",
         "nothing": "No screen could show it: check that a screen is online with firmware {version} or newer."
       },
       "white": "White (default)",
@@ -3476,7 +3476,7 @@
       "edit_yaml": "Edit in YAML",
       "copy_yaml": "Copy YAML",
       "all": {
-        "title": "All screens at once",
+        "title": "All devices at once",
         "text": "Fire the event {show} with the same fields, and the Kachel Manager passes the alert on to every screen that is online, including screens you add later. {dismiss} clears it everywhere. In an automation, add the {event} action or paste the example under {edit}. Leave out the fields you don't use. The Kachel Manager has to be running for this.",
         "event": "Fire manual event"
       },
@@ -3591,7 +3591,7 @@
             "help": "An icon, a color, a camera picture if you like, and whether it blinks."
           },
           "screens": {
-            "title": "Which screens?",
+            "title": "Which devices?",
             "help": "Pick the screens that show it, and how long it stays."
           },
           "try": {
@@ -3632,7 +3632,7 @@
         }
       },
       "hero": {
-        "title": "An alert on your screens",
+        "title": "An alert on your devices",
         "text": "A card over everything on the screen, with a button: when someone is at the door, the washing is done or a window is left open. The wizard walks you through it and adds the automation to Home Assistant.",
         "create": "Create an alert automation",
         "empty": "No alert automation yet. Create one above and it shows up here."
@@ -4016,7 +4016,7 @@
     },
     "phone": {
       "menu": "Menu",
-      "screens": "Screens",
+      "screens": "Devices",
       "add_tile": "Add tile",
       "add_to_cell": "Goes in place {cell} on {page}",
       "add_to_page": "Goes in the first free place on {page}",
@@ -4689,7 +4689,7 @@
         "every_screen": "Every screen",
         "summary": {
           "starts": "Starts on",
-          "screens": "Screens",
+          "screens": "Devices",
           "title": "Name in Home Assistant"
         },
         "domain": {
@@ -4780,7 +4780,7 @@
             "help": "The ring's view can have a key that opens the door after a second tap: a lock, or another action such as a script or a gate's button. You can leave it out."
           },
           "screens": {
-            "title": "Which screens?",
+            "title": "Which devices?",
             "help": "Pick the screens that show the ring. Each one says what it can do with it."
           },
           "name": {
@@ -4820,7 +4820,7 @@
         }
       },
       "hero": {
-        "title": "Your doorbell on your screens",
+        "title": "Your doorbell on your devices",
         "text": "Someone rings, and your screens show who is at the door: live with sound on a P4 screen, as a picture or an alert on the others. The wizard walks you through it and adds the automation to Home Assistant.",
         "create": "Create a doorbell automation",
         "empty": "No doorbell automation yet. Create one above and it shows up here."
@@ -5034,7 +5034,7 @@
       "update_app": "Update the Kachel Manager: this editor places Layoutbot's plans itself.",
       "scope": {
         "here": "This screen",
-        "all": "All screens"
+        "all": "All devices"
       },
       "preview": "Look"
     },

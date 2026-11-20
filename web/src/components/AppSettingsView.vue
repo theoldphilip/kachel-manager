@@ -171,11 +171,12 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
             <option v-for="own in lang.languages" :key="own.code" :value="own.code">{{ own.checked ? own.name : t("editor.settings.language.unchecked", { name: own.name }) }}</option>
           </select>
           <small v-if="lang.setting === 'auto' && !haName" id="language-ha-missing">{{ t("editor.settings.language.ha_missing") }}</small>
-          <i18n-t v-if="unchecked" keypath="editor.settings.language.help" tag="small" id="language-help" scope="global">
+          <i18n-t v-if="unchecked && inv.espScreens" keypath="editor.settings.language.help" tag="small" id="language-help" scope="global">
             <template #name>{{ unchecked.name }}</template>
             <template #guide><a :href="GUIDE" target="_blank" rel="noopener">{{ t("editor.settings.language.guide") }}</a></template>
           </i18n-t>
-          <small>{{ t("editor.settings.language.update_hint") }}</small>
+          <!-- Kachel Manager: a tablet takes a new language at once, no firmware update; Tessera's translation guide is Tessera's. -->
+          <small v-if="inv.espScreens">{{ t("editor.settings.language.update_hint") }}</small>
         </div>
         <div class="field">
           <label class="f-label" for="time-format">{{ t("editor.settings.language.time") }}</label>
@@ -243,7 +244,8 @@ const useProfile = () => whileSaving(() => region.saveLanguage(different.value))
           <template #path><code id="video-path">{{ video?.path || "/homeassistant/custom_components/tessera_video" }}</code></template>
         </i18n-t>
       </section>
-      <section class="card" id="claude">
+      <!-- Kachel Manager: Tessera's Claude skill speaks of Tessera's ESP32 screens; it is not the Kachel Manager's. -->
+      <section v-if="inv.espScreens" class="card" id="claude">
         <h2>Claude</h2>
         <p>{{ t("editor.settings.claude.text") }}</p>
         <div class="actions">

@@ -52,7 +52,7 @@ describe("the Alerts page", () => {
     expect(jumps).toContain("alerts-all");
     expect(jumps).toContain("alerts-one");
     for (const id of jumps) expect(page.find(`#${id}`).exists(), id).toBe(true);
-    expect(page.find("[data-jump='alerts-all']").text()).toBe("All screens");
+    expect(page.find("[data-jump='alerts-all']").text()).toBe("All devices");
     expect(page.find("[data-jump='alerts-one']").text()).toBe("One screen");
   });
 

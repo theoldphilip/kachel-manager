@@ -1781,7 +1781,7 @@
       "fold": "Seitenleiste einklappen",
       "unfold": "Seitenleiste ausklappen",
       "resize": "Breite der Seitenleiste: ziehen oder Pfeiltasten verwenden; Doppelklick setzt sie zurück",
-      "screens": "Bildschirme",
+      "screens": "Geräte",
       "refresh": "Neu laden",
       "update": {
         "button": "Aktualisieren",
@@ -1837,12 +1837,12 @@
         "done": "{name} wurde entfernt.",
         "kept": "{name} wurde entfernt. Das Profil {file} liegt noch im ESPHome-Ordner."
       },
-      "home": "Übersicht deiner Bildschirme",
+      "home": "Übersicht deiner Geräte",
       "dev_chip": "Das ist die Dev-Version der App: Jeder Bildschirm, den sie baut, kommt vom Dev-Branch."
     },
     "palette": {
       "groups": {
-        "screens": "Bildschirme",
+        "screens": "Geräte",
         "actions": "Aktionen",
         "add": "Zu diesem Bildschirm hinzufügen"
       },
@@ -1854,14 +1854,14 @@
       "identify_needs": "Braucht eine neuere Firmware",
       "export": "Layout exportieren",
       "export_detail": "Als JSON herunterladen und kopieren",
-      "placeholder": "Bildschirme, Entitäten, Aktionen suchen…",
+      "placeholder": "Geräte, Entitäten, Aktionen suchen…",
       "empty": "Nichts gefunden. Gib einen Teil eines Bildschirm-, Entitäts- oder Aktionsnamens ein."
     },
     "search": {
       "groups": {
         "recent": "Zuletzt",
-        "settings": "Bildschirmeinstellungen",
-        "tiles": "Auf deinen Bildschirmen",
+        "settings": "Geräteeinstellungen",
+        "tiles": "Auf deinen Geräten",
         "plugins": "Plugins"
       },
       "hint": {
@@ -1911,7 +1911,7 @@
       "kachel_join_hint": "So nimmst du ein Tablet in Home Assistant auf"
     },
     "broken": {
-      "screens": "1 Bildschirm | {n} Bildschirmen",
+      "screens": "1 Gerät | {n} Geräten",
       "summary": {
         "missing": "1 Kachel auf {screens} zeigt eine Entität, die es nicht mehr gibt | {n} Kacheln auf {screens} zeigen eine Entität, die es nicht mehr gibt",
         "unavailable": "1 Kachel auf {screens} zeigt eine Entität, die seit einer Weile nicht verfügbar ist | {n} Kacheln auf {screens} zeigen eine Entität, die seit einer Weile nicht verfügbar ist",
@@ -1962,7 +1962,7 @@
         "identify_hint": "Bildschirm blinken lassen",
         "identify_needs": "Braucht Firmware 0.2.31 oder neuer",
         "copy": "Layout kopieren von…",
-        "copy_screens": "{n} Bildschirm | {n} Bildschirme",
+        "copy_screens": "{n} Gerät | {n} Geräte",
         "copy_none": "kein anderer Bildschirm",
         "copy_tiles": "{n} Kachel | {n} Kacheln",
         "export": "Layout exportieren",
@@ -3103,7 +3103,7 @@
       "call": {
         "section": "Anruf",
         "who": "Ruft an",
-        "who_hint_all": "Ein Tippen öffnet die Liste der Bildschirme.",
+        "who_hint_all": "Ein Tippen öffnet die Liste der Geräte.",
         "who_hint_one": "Ein Tippen ruft diesen Bildschirm sofort an.",
         "everyone": "Aus der Liste wählen",
         "kind": "Art des Anrufs",
@@ -3542,10 +3542,10 @@
         "download": "Für claude.ai herunterladen",
         "upload": "Lade die ZIP-Datei in Claude unter Anpassen → Skills hoch."
       },
-      "title": "Alles rund um deine Bildschirme.",
-      "back": "← Meine Bildschirme",
+      "title": "Alles rund um deine Geräte.",
+      "back": "← Meine Geräte",
       "screens": {
-        "title": "Bildschirme",
+        "title": "Geräte",
         "text": "Füge einen Bildschirm hinzu oder erstelle und installiere die Firmware eines vorhandenen neu.",
         "firmware_detail": "Per USB oder Wi-Fi erstellen und installieren"
       },
@@ -3878,9 +3878,9 @@
       },
       "sections": "Abschnitte",
       "nav": {
-        "screens": "Deine Bildschirme",
+        "screens": "Deine Geräte",
         "howto": "In einer Automation",
-        "all": "Alle Bildschirme",
+        "all": "Alle Geräte",
         "fields": "Die Felder",
         "icons": "Symbole",
         "colors": "Farben",
@@ -3901,7 +3901,7 @@
         "flash_hint": "Viermal, wenn die Meldung ankommt.",
         "sending": "Wird gesendet…",
         "send": "Meldung senden",
-        "sent_all": "An {n} Bildschirm gesendet. | An {n} Bildschirme gesendet.",
+        "sent_all": "An {n} Gerät gesendet. | An {n} Geräte gesendet.",
         "nothing": "Kein Bildschirm konnte sie anzeigen: Prüfe, ob ein Bildschirm mit Firmware {version} oder neuer online ist."
       },
       "white": "Weiß (Standard)",
@@ -3927,7 +3927,7 @@
       "edit_yaml": "In YAML bearbeiten",
       "copy_yaml": "YAML kopieren",
       "all": {
-        "title": "Alle Bildschirme auf einmal",
+        "title": "Alle Geräte auf einmal",
         "text": "Löse das Ereignis {show} mit denselben Feldern aus, und der Kachel Manager gibt die Meldung an jeden Bildschirm weiter, der online ist, auch an später hinzugefügte. {dismiss} entfernt sie überall. Nimm in einer Automation die Aktion {event} oder füge das Beispiel unter {edit} ein. Lass die Felder weg, die du nicht brauchst. Dafür muss der Kachel Manager laufen.",
         "event": "Manuelles Ereignis auslösen"
       },
@@ -4042,7 +4042,7 @@
             "help": "Ein Symbol, eine Farbe, wenn du willst ein Kamerabild, und ob sie blinkt."
           },
           "screens": {
-            "title": "Welche Bildschirme?",
+            "title": "Welche Geräte?",
             "help": "Wähle die Bildschirme, die sie zeigen, und wie lange sie bleibt."
           },
           "try": {
@@ -4083,7 +4083,7 @@
         }
       },
       "hero": {
-        "title": "Eine Meldung auf deinen Bildschirmen",
+        "title": "Eine Meldung auf deinen Geräten",
         "text": "Eine Karte über allem auf dem Bildschirm, mit einer Taste: wenn jemand an der Tür ist, die Wäsche fertig ist oder ein Fenster offen steht. Der Assistent führt dich hindurch und legt die Automation in Home Assistant an.",
         "create": "Meldungs-Automation erstellen",
         "empty": "Noch keine Meldungs-Automation. Erstelle oben eine, dann erscheint sie hier."
@@ -4467,7 +4467,7 @@
     },
     "phone": {
       "menu": "Menü",
-      "screens": "Bildschirme",
+      "screens": "Geräte",
       "add_tile": "Kachel hinzufügen",
       "add_to_cell": "Kommt an Platz {cell} auf {page}",
       "add_to_page": "Kommt an den ersten freien Platz auf {page}",
@@ -4689,7 +4689,7 @@
         "every_screen": "Jeder Bildschirm",
         "summary": {
           "starts": "Startet bei",
-          "screens": "Bildschirme",
+          "screens": "Geräte",
           "title": "Name in Home Assistant"
         },
         "domain": {
@@ -4780,7 +4780,7 @@
             "help": "Die Klingelansicht kann eine Taste haben, die nach einem zweiten Tippen die Tür öffnet: ein Schloss oder eine andere Aktion wie ein Skript oder die Taste eines Tors. Du kannst es weglassen."
           },
           "screens": {
-            "title": "Welche Bildschirme?",
+            "title": "Welche Geräte?",
             "help": "Wähle die Bildschirme, die das Klingeln zeigen. Bei jedem steht, was er damit kann."
           },
           "name": {
@@ -4820,7 +4820,7 @@
         }
       },
       "hero": {
-        "title": "Deine Türklingel auf deinen Bildschirmen",
+        "title": "Deine Türklingel auf deinen Geräten",
         "text": "Jemand klingelt, und deine Bildschirme zeigen, wer vor der Tür steht: live mit Ton auf einem P4-Bildschirm, als Bild oder Meldung auf den anderen. Der Assistent führt dich hindurch und legt die Automation in Home Assistant an.",
         "create": "Türklingel-Automation erstellen",
         "empty": "Noch keine Türklingel-Automation. Erstelle oben eine, dann erscheint sie hier."
@@ -5034,7 +5034,7 @@
       "update_app": "Aktualisiere den Kachel Manager: Dieser Editor platziert die Pläne von Layoutbot selbst.",
       "scope": {
         "here": "Dieser Bildschirm",
-        "all": "Alle Bildschirme"
+        "all": "Alle Geräte"
       },
       "preview": "Ansehen"
     },

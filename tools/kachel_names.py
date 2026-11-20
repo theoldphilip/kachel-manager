@@ -73,6 +73,7 @@ FILE_RULES = {
     # Tests that quote a text of tools/kachel_texts.json.
     'tests/test_addon_translations.py': ((re.compile(r'Identify, from Tessera'), 'Identify, from the Kachel Manager'),),
     'web/tests/layoutbot.spec.ts': ((re.compile(r'Update the Tessera app:'), 'Update the Kachel Manager:'),),
+    'web/tests/alerts-cheatsheet.spec.ts': ((re.compile(r'toBe\("All screens"\)'), 'toBe("All devices")'),),
 }
 # A device's entities under ESPHome or under the Kachel integration (kachel.PLATFORMS, kachel.ours): the registry checks
 # of Tessera's sources that ask for platform 'esphome'. firmware.py's `platform: esphome` is YAML, not the registry.
@@ -137,6 +138,7 @@ def texts(check):
         language = path.stem
         text = path.read_text(encoding='utf-8')
         new = text
+        by_path = {}
         for key, value in strings(json.loads(text)):
             if key.startswith(keep):
                 continue
@@ -150,9 +152,23 @@ def texts(check):
             last = key.rsplit('.', 1)[-1]
             old = f'{json.dumps(last)}: {json.dumps(value, ensure_ascii=False)}'
             if new.count(old) != 1:
-                unknown.append(f'{path.name} {key} (not found once)')
+                by_path[key] = want   # the same words under another key too: set it by its path below
                 continue
             new = new.replace(old, f'{json.dumps(last)}: {json.dumps(want, ensure_ascii=False)}')
+        if by_path:
+            # Kachel Manager: a text whose words stand under other keys as well ("Bildschirme" as a heading and a group)
+            # is set by its dotted path, when the file is written as json.dumps writes it (indent 2), so nothing else moves.
+            tree = json.loads(new)
+            if json.dumps(tree, ensure_ascii=False, indent=2) + '\n' != new:
+                unknown.extend(f'{path.name} {key} (not found once)' for key in by_path)
+            else:
+                for key, want in by_path.items():
+                    node = tree
+                    *parents, last = key.split('.')
+                    for part in parents:
+                        node = node[part]
+                    node[last] = want
+                new = json.dumps(tree, ensure_ascii=False, indent=2) + '\n'
         if new != text:
             stale.append(path.relative_to(ROOT).as_posix())
             if not check:

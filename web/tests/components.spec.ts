@@ -1582,7 +1582,7 @@ describe("a page that moves as a whole", () => {
 // The home key in the top bar (app 0.2.122, firmware 0.2.100+), the Tessera mark since firmware 0.10.0: the mockup
 // draws what the screen draws.
 describe("the home key on the mockup", () => {
-  const mark = 'fill="#FFC107"';
+  const mark = 'fill="#2BB3A3"';   // Kachel Manager: the Kachel mark in place of Tessera's (TesseraMark.vue)
   const props = (page: number) => ({ page, pages: 3, entries: [], moving: null });
   const bar = (page: number) => mount(DevicePage, { props: props(page) }).find(".bar-wrap").html();
   beforeEach(() => {

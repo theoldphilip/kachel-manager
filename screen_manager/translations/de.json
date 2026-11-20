@@ -1947,8 +1947,9 @@
       "offline": "Offline · Änderungen werden gespeichert",
       "tabs": {
         "plugins": "Plugins",
-        "layout": "Layout",
-        "settings": "Bildschirmeinstellungen"
+        "layout": "Seiten",
+        "settings": "Bildschirmeinstellungen",
+        "kachel_device": "Gerät"
       },
       "sent": "Gespeichert · gesendet",
       "all_saved": "Alles gespeichert",

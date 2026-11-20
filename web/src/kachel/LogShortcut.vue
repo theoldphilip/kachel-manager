@@ -2,7 +2,7 @@
 // Kachel Manager: the way to a device's log from Settings (Fire test, 2026-11-20: the card "Log" was not found under
 // each screen's own settings). One button per Kachel device opens that screen's settings at its card "Log"
 // (src/kachel/LogPanel.vue); nothing is fetched here.
-import { computed, nextTick } from "vue";
+import { computed } from "vue";
 import { t } from "../i18n";
 import { useInventoryStore } from "../stores/inventory";
 import { useScreenStore } from "../stores/screen";
@@ -21,9 +21,7 @@ async function open(screen: Screen) {
   if (scr.selected !== screen.id) await session.select(screen.id);
   if (scr.selected !== screen.id) return;
   await ui.go("");
-  ui.tab = "settings";
-  await nextTick();
-  setTimeout(() => document.getElementById("settings-kachel-log")?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+  ui.tab = "log";
 }
 </script>
 

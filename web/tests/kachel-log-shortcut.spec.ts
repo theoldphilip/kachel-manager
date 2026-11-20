@@ -20,6 +20,6 @@ describe("the way to a device's log", () => {
     await button.trigger("click");
     await flushPromises();
     expect(select).toHaveBeenCalledWith("text.fire_kachel_inbox");
-    expect(useUiStore().tab).toBe("settings");
+    expect(useUiStore().tab).toBe("log");
   });
 });

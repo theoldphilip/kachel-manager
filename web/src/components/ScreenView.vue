@@ -9,6 +9,7 @@ import { useConfirm } from "../composables/useConfirm";
 import LayoutBotKey from "./LayoutBotKey.vue";
 import LayoutView from "./LayoutView.vue";
 import SettingsTab from "./SettingsTab.vue";
+import KachelLogPanel from "../kachel/LogPanel.vue";
 import ScreenPluginsTab from "./ScreenPluginsTab.vue";
 import Drawer from "./Drawer.vue";
 import FeedbackPanel from "./FeedbackPanel.vue";
@@ -159,11 +160,15 @@ useEventListener(document, "keydown", onKey);
         <Icon name="view-dashboard-outline" />{{ t("editor.screen_view.tabs.layout") }}
       </button>
       <button v-if="!screen.virtual || doc.gridWay" type="button" id="tab-settings" role="tab" :aria-pressed="ui.tab === 'settings' ? 'true' : 'false'" :aria-selected="ui.tab === 'settings'" @click="ui.tab = 'settings'; insp.closeInspector()">
-        <Icon name="cog-outline" />{{ t("editor.screen_view.tabs.settings") }}
+        <Icon name="cog-outline" />{{ inv.espScreens ? t("editor.screen_view.tabs.settings") : t("editor.screen_view.tabs.kachel_device") }}
       </button>
       <button v-if="!screen.virtual && plugins.pluginsEnabled" type="button" id="tab-plugins" role="tab" :aria-pressed="ui.tab === 'plugins' ? 'true' : 'false'" :aria-selected="ui.tab === 'plugins'" @click="ui.tab = 'plugins'; insp.closeInspector()">
         <Icon name="puzzle-outline" />{{ t("editor.screen_view.tabs.plugins") }}
         <span v-if="builds.buildOf(screen)?.by === 'plugins'" class="spin small" role="img" :aria-label="t('editor.build.plugins')"></span>
+      </button>
+      <!-- Kachel Manager: the tablet's log as a tab of its own, beside its pages and its device (src/kachel/LogPanel.vue). -->
+      <button v-if="!screen.virtual && !inv.espScreens" type="button" id="tab-log" role="tab" :aria-pressed="ui.tab === 'log' ? 'true' : 'false'" :aria-selected="ui.tab === 'log'" @click="ui.tab = 'log'; insp.closeInspector()">
+        <Icon name="format-list-bulleted" />{{ t("editor.screen_settings.kachel_log.title") }}
       </button>
     </div>
     <div class="head-right">
@@ -226,6 +231,7 @@ useEventListener(document, "keydown", onKey);
     <div class="work">
       <LayoutView v-if="ui.tab === 'layout'" />
       <SettingsTab v-else-if="ui.tab === 'settings'" />
+      <div v-else-if="ui.tab === 'log'" class="settings kachel-log-tab"><KachelLogPanel /></div>
       <ScreenPluginsTab v-else />
     </div>
     <Drawer />

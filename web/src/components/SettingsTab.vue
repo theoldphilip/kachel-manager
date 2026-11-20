@@ -12,7 +12,6 @@ import Icon from "./ui/Icon.vue";
 import PluginSettings from "./PluginSettings.vue";
 // Kachel Manager: the tablet's own device (screen_manager/app/kachel_device.py).
 import KachelDevicePanel from "../kachel/DevicePanel.vue";
-import KachelLogPanel from "../kachel/LogPanel.vue";
 import KachelIssueCard from "../kachel/IssueCard.vue";
 import { text } from "../model/plugins";
 import { choiceText, SETTING_GROUPS, settingLabel, steppedSetting, type SettingRow } from "../model/settings";
@@ -146,8 +145,6 @@ const startCalibration = () => scr.currentScreen && scr.calibrateTouch(scr.curre
       </template>
       <!-- Kachel Manager: the tablet's updates, battery and screen (kachel/DevicePanel.vue). -->
       <KachelDevicePanel />
-      <!-- Kachel Manager: the tablet's log through Home Assistant (kachel/LogPanel.vue). -->
-      <KachelLogPanel />
       <!-- The board's extras (docs/SETTINGS.md, "A board's own settings"): what only this board has, the same switches as
            on the screen's own settings page under Extras and in Home Assistant. -->
       <section v-if="boardExtras" class="set-card" id="settings-extras">

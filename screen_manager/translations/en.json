@@ -1946,9 +1946,10 @@
       "identified": "{name} blinks and shows a card for a few seconds.",
       "offline": "Offline · changes are saved",
       "tabs": {
-        "layout": "Layout",
+        "layout": "Pages",
         "settings": "Screen settings",
-        "plugins": "Plugins"
+        "plugins": "Plugins",
+        "kachel_device": "Device"
       },
       "sent": "Saved · sent to screen",
       "all_saved": "All saved",

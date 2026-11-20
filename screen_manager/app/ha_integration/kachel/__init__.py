@@ -10,7 +10,11 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.typing import ConfigType
 
+from . import ffmpeg_proxy
+from .const import DOMAIN
 from .manager import KachelData, KachelManager, async_zeroconf, client_from_entry
 from .services import async_remove_device_actions
 
@@ -18,6 +22,7 @@ PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
     Platform.LIGHT,
+    Platform.MEDIA_PLAYER,
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
@@ -27,6 +32,14 @@ PLATFORMS: list[Platform] = [
 ]
 
 type KachelConfigEntry = ConfigEntry[KachelData]
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Once for all devices: the ffmpeg proxy that converts what the speakers play."""
+    ffmpeg_proxy.async_setup(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: KachelConfigEntry) -> bool:

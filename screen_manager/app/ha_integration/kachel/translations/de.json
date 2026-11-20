@@ -67,6 +67,12 @@
     },
     "not_connected": {
       "message": "{device_name} ist nicht verbunden, die Aktion {call_name} kann nicht laufen"
+    },
+    "enqueue_mode_not_supported": {
+      "message": "Das Gerät kann nicht mit Modus {enqueue} einreihen"
+    },
+    "repeat_mode_not_supported": {
+      "message": "Das Gerät kann nicht mit Modus {repeat_mode} wiederholen"
     }
   }
 }

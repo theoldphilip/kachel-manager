@@ -67,6 +67,12 @@
     },
     "not_connected": {
       "message": "{device_name} is not connected, the action {call_name} cannot run"
+    },
+    "enqueue_mode_not_supported": {
+      "message": "The device cannot queue with mode {enqueue}"
+    },
+    "repeat_mode_not_supported": {
+      "message": "The device cannot repeat with mode {repeat_mode}"
     }
   }
 }

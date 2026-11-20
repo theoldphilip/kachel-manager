@@ -92,6 +92,36 @@ function outcome(row: Row) {
   return at && !isNaN(at.getTime())
     ? `${word} · ${at.toLocaleString(editorLanguage(), { day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" })}` : word;
 }
+// The menu (the redesign, 2026-11-20): one card per section as the tablet's own settings show them (kachel-zentrale
+// design/einstellungen.png), a symbol in a circle, what is in it and how it stands now; a tap opens its rows.
+const open = ref<Section["section"] | null>(null);
+watch(() => scr.currentScreen?.id, () => { open.value = null; });
+const opened = computed(() => sections.value.find((s) => s.section === open.value) || null);
+const MENU: Record<Section["section"], { icon: string; tint: string }> = {
+  screen: { icon: "F00DF", tint: "amber" }, pages: { icon: "F056E", tint: "blue" },
+  updates: { icon: "F06B0", tint: "teal" }, battery: { icon: "F0084", tint: "green" },
+};
+const about = computed<Record<Section["section"], string>>(() => ({
+  screen: t("editor.screen_settings.kachel_device.menu.about.screen"), pages: t("editor.screen_settings.kachel_device.menu.about.pages"),
+  updates: t("editor.screen_settings.kachel_device.menu.about.updates"), battery: t("editor.screen_settings.kachel_device.menu.about.battery"),
+}));
+const ORDER: Section["section"][] = ["screen", "pages", "updates", "battery"];
+const menu = computed(() => ORDER.map((key) => sections.value.find((s) => s.section === key)).filter((s): s is Section => Boolean(s)));
+const rowOf = (section: Section, key: string) => section.rows.find((row) => row.key === key);
+function standing(section: Section) {
+  if (section.section === "screen") {
+    const light = rowOf(section, "screen");
+    return light && light.brightness !== null && light.brightness !== undefined && light.value ? t("editor.screen_settings.kachel_device.menu.brightness", { value: editorNumber(light.brightness) })
+      : light && light.value === false ? t("editor.screen_settings.kachel_device.menu.off") : "";
+  }
+  if (section.section === "pages") { const start = rowOf(section, "start_page"); return start?.value ? t("editor.screen_settings.kachel_device.menu.start", { page: String(start.value) }) : ""; }
+  if (section.section === "updates") {
+    const fw = rowOf(section, "firmware");
+    return fw?.pending && fw.latest ? t("editor.screen_settings.kachel_device.menu.offered", { version: fw.latest }) : fw?.value ? t("editor.screen_settings.kachel_device.menu.version", { version: String(fw.value) }) : "";
+  }
+  const level = rowOf(section, "battery_level"), charging = rowOf(section, "battery_charging");
+  return level?.value ? `${reading(level)}${charging?.value ? ` · ${t("editor.screen_settings.kachel_device.menu.charging")}` : ""}` : "";
+}
 const reading = (row: Row) => row.value === null || row.value === undefined ? "–"
   : `${/^-?\d+(\.\d+)?$/.test(String(row.value)) ? editorNumber(Number(row.value)) : row.value}${row.unit ? ` ${row.unit}` : ""}`;
 </script>
@@ -100,8 +130,19 @@ const reading = (row: Row) => row.value === null || row.value === undefined ? "�
   <section v-if="sections.length" class="set-card" id="settings-kachel-device">
     <h4><span class="mdi">{{ glyph("F0493") }}</span>{{ t("editor.screen_settings.kachel_device.title") }}</h4>
     <p class="hint">{{ t("editor.screen_settings.kachel_device.note") }}</p>
-    <div v-for="section in sections" :key="section.section" class="plugin-settings kachel-device" :data-section="section.section">
-      <h5>{{ titles[section.section] }}</h5>
+    <div v-if="!opened" class="kachel-menu">
+      <button v-for="section in menu" :key="section.section" type="button" class="kachel-menu-card" :data-menu="section.section" @click="open = section.section">
+        <span class="kachel-circle" :class="MENU[section.section].tint"><span class="mdi">{{ glyph(MENU[section.section].icon) }}</span></span>
+        <span class="kachel-menu-text">
+          <b>{{ titles[section.section] }}</b>
+          <small>{{ about[section.section] }}</small>
+          <em v-if="standing(section)" :class="MENU[section.section].tint">{{ standing(section) }}</em>
+        </span>
+        <span class="mdi kachel-menu-go">{{ glyph("F0142") }}</span>
+      </button>
+    </div>
+    <div v-for="section in opened ? [opened] : []" :key="section.section" class="plugin-settings kachel-device" :data-section="section.section">
+      <h5 class="kachel-back-row"><button type="button" class="kachel-back" :aria-label="t('editor.screen_settings.kachel_device.menu.back')" @click="open = null"><span class="mdi">{{ glyph("F004D") }}</span></button>{{ titles[section.section] }}</h5>
       <div v-for="row in section.rows" :key="row.key" class="srow" :class="{ inactive: !row.available }" :data-setting="row.key"
         :title="row.available ? '' : t('editor.screen_settings.unavailable')">
         <span class="s-label">{{ text(row.label) }}</span>
@@ -148,4 +189,23 @@ const reading = (row: Row) => row.value === null || row.value === undefined ? "�
 <style scoped>
 /* The version and its word beside it ("0.0.9 · Aktuell") need room between them, as the buttons beside a choice do. */
 .kachel-device .s-status + .s-status, .kachel-device .s-status + .btn { margin-left: 8px; }
+</style>
+
+<style scoped>
+.kachel-menu { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; padding: 6px 0 4px; }
+.kachel-menu-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: var(--surface-2);
+  border: 1px solid var(--line); text-align: left; color: var(--ink); }
+.kachel-menu-card:hover { border-color: var(--line-strong); }
+.kachel-circle { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; flex: none; }
+.kachel-menu-text { display: grid; min-width: 0; flex: 1; }
+.kachel-menu-text b { font-size: 15px; }
+.kachel-menu-text small { color: var(--muted); font-size: 12px; }
+.kachel-menu-text em { font-style: normal; font-size: 12.5px; }
+.kachel-menu-go { color: var(--muted); font-size: 20px; }
+.amber { color: #d8941c; } .kachel-circle.amber { background: rgba(224, 160, 58, 0.16); }
+.blue { color: #4f86f0; } .kachel-circle.blue { background: rgba(80, 140, 255, 0.16); }
+.teal { color: var(--accent); } .kachel-circle.teal { background: var(--accent-soft); }
+.green { color: #2fa86c; } .kachel-circle.green { background: rgba(63, 191, 127, 0.16); }
+.kachel-back-row { display: flex; align-items: center; gap: 10px; }
+.kachel-back { width: 32px; height: 32px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: 18px; color: var(--ink); }
 </style>

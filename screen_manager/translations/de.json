@@ -3446,6 +3446,21 @@
           "installed": "Installiert",
           "rolled_back": "Zurückgesetzt",
           "failed": "Fehlgeschlagen"
+        },
+        "menu": {
+          "brightness": "Helligkeit {value} %",
+          "off": "Aus",
+          "start": "Startseite: {page}",
+          "offered": "Neu: {version} bereit",
+          "version": "Version {version}",
+          "charging": "lädt",
+          "back": "Zurück",
+          "about": {
+            "screen": "Helligkeit, Nacht, Design, Sprache",
+            "pages": "Startseite, zurück zur Startseite",
+            "updates": "Version, Kanal, installieren",
+            "battery": "Ladestand, Netzteil, Akkuschutz"
+          }
         }
       },
       "kachel_log": {

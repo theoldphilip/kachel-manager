@@ -34,6 +34,11 @@ const SECTIONS = [
   ] },
 ];
 
+async function show(wrapper: Awaited<ReturnType<typeof panel>>, section: string) {
+  if (wrapper.find(".kachel-back").exists()) await wrapper.find(".kachel-back").trigger("click");
+  await wrapper.find(`[data-menu=${section}]`).trigger("click");
+}
+
 async function panel() {
   openScreen(SCREEN);
   const wrapper = mount(DevicePanel);
@@ -53,13 +58,21 @@ describe("the tablet's device", () => {
     expect(wrapper.find("#settings-kachel-device").exists()).toBe(false);
   });
 
-  it("shows the sections and their rows", async () => {
+  it("shows a menu of its sections, as the tablet does, and each section's rows behind its card", async () => {
     const wrapper = await panel();
-    expect(wrapper.findAll("[data-section]").map((s) => s.attributes("data-section"))).toEqual(["updates", "battery", "screen"]);
+    expect(wrapper.findAll("[data-menu]").map((s) => s.attributes("data-menu"))).toEqual(["screen", "updates", "battery"]);
+    expect(wrapper.find("[data-menu=screen]").text()).toContain("Brightness 50 %");
+    expect(wrapper.find("[data-menu=updates]").text()).toContain("New: 2.5.0-b10 ready");
+    expect(wrapper.find("[data-menu=battery]").text()).toContain("71 %");
+    expect(wrapper.find("[data-section]").exists()).toBe(false);
+    await show(wrapper, "battery");
+    expect(wrapper.findAll("[data-section]").map((s) => s.attributes("data-section"))).toEqual(["battery"]);
     expect(wrapper.find("[data-setting=battery_level]").text()).toContain("71 %");
     expect(wrapper.find("[data-setting=battery_care]").text()).toContain("Yes");
     expect(wrapper.find("[data-setting=battery_care] button").exists()).toBe(false);
+    await show(wrapper, "screen");
     expect(wrapper.find("[data-setting=screen] output").text()).toBe("50 %");
+    await show(wrapper, "updates");
     expect(wrapper.find("[data-setting=update_outcome]").text()).toContain("Rolled back · ");
   });
 
@@ -67,6 +80,7 @@ describe("the tablet's device", () => {
     const wrapper = await panel();
     const replies = [false, true];
     const asked = answerDialogs(() => replies.shift() ?? false);
+    await show(wrapper, "updates");
     await wrapper.find("[data-setting=firmware] button").trigger("click");
     await flushPromises();
     expect(asked).toHaveLength(1);
@@ -76,10 +90,13 @@ describe("the tablet's device", () => {
     await flushPromises();
     expect(asked).toHaveLength(2);
     expect(send).toHaveBeenLastCalledWith("screens/text.wohnzimmer_kachel_inbox/kachel/device", "POST", { entity: "update.w_firmware", value: "install" });
+    await show(wrapper, "screen");
     await wrapper.find("[data-setting=settings_lock] button.switch").trigger("click");
     expect(send).toHaveBeenLastCalledWith("screens/text.wohnzimmer_kachel_inbox/kachel/device", "POST", { entity: "switch.w_settings_lock", value: true });
+    await show(wrapper, "updates");
     await wrapper.findAll("[data-setting=update_channel] .seg button")[0].trigger("click");
     expect(send).toHaveBeenLastCalledWith("screens/text.wohnzimmer_kachel_inbox/kachel/device", "POST", { entity: "select.w_update_channel", value: "stable" });
+    await show(wrapper, "screen");
     await wrapper.findAll("[data-setting=screen] .step button")[1].trigger("click");
     expect(send).toHaveBeenLastCalledWith("screens/text.wohnzimmer_kachel_inbox/kachel/device", "POST", { entity: "light.w_screen", value: 60 });
   });

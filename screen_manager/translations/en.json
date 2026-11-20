@@ -2995,6 +2995,21 @@
           "installed": "Installed",
           "rolled_back": "Rolled back",
           "failed": "Failed"
+        },
+        "menu": {
+          "brightness": "Brightness {value} %",
+          "off": "Off",
+          "start": "Start page: {page}",
+          "offered": "New: {version} ready",
+          "version": "Version {version}",
+          "charging": "charging",
+          "back": "Back",
+          "about": {
+            "screen": "Brightness, night, theme, language",
+            "pages": "Start page, back to the start page",
+            "updates": "Version, channel, install",
+            "battery": "Level, charger, battery care"
+          }
         }
       },
       "kachel_log": {

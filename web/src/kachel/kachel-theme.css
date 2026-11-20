@@ -94,3 +94,46 @@ input, select, textarea { border-radius: 10px; }
 .kachel-facts { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; color: var(--muted); font-size: 12.5px; }
 .kachel-facts b { color: var(--ink); font-weight: 600; }
 .home-new.kachel-join { border-radius: 20px; min-height: 120px; }
+
+/* Pages (redesign, round 2): one page at a time, its pages as tabs above it (LayoutView.vue), the library as a column at
+   the right instead of a drawer along the bottom. */
+.kachel-work { display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr); }
+.kachel-work > .canvas { grid-column: 1; grid-row: 1; min-height: 0; }
+.kachel-work > .library { grid-column: 2; grid-row: 1; height: auto !important; border-top: 0; border-left: 1px solid var(--line); }
+.kachel-work > .library .lib-grip { display: none; }
+.kachel-work > .library .lib-head { flex-wrap: wrap; height: auto; padding: 12px 14px 8px; gap: 8px; }
+.kachel-work > .library .lib-search { max-width: none; flex-basis: 100%; }
+.kachel-work > .library .lib-search input { height: 36px; border-radius: 999px; }
+.kachel-work > .library .lib-body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+.kachel-work > .library .lib-rail { border-right: 0; border-bottom: 1px solid var(--line); max-height: 150px; padding: 6px 10px; }
+.kachel-work > .library .lib-domains { display: flex; flex-wrap: wrap; gap: 4px; }
+.kachel-work > .library .lib-domains button { border-radius: 999px; height: 28px; background: var(--surface-2); }
+.kachel-work > .library .lib-rail-title { width: 100%; padding: 6px 2px 2px; }
+.kachel-work > .library .lib-grid { grid-template-columns: 1fr; gap: 4px; }
+.kachel-work > .library .ent { height: 50px; border-radius: 12px; border-color: transparent; background: var(--surface-2); }
+.kachel-work > .library .ent .av { width: 32px; height: 32px; border-radius: 50%; }
+.kachel-work > .library .lib-title .lib-chevron { display: none; }
+.page-pills { padding: 4px 0 12px; }
+.page-pills button { height: 34px; padding: 0 16px; border: 0; background: var(--surface-2); font-weight: 600; }
+.page-pills button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border: 0; }
+.page-pills button[aria-pressed="true"] b { color: inherit; }
+.page-pills .page-pill-add { background: transparent; border: 1px dashed var(--line-strong); color: var(--muted); font-weight: 500; }
+.kachel-work #layout-preview { flex-direction: column; align-items: center; overflow: visible; gap: 6px; }
+.kachel-work .page-pills { justify-content: center; }
+.kachel-work .offer { flex-wrap: wrap; }
+.kachel-work #layout-preview .page { flex: none; width: var(--mockup-width); max-width: 100%; }
+
+/* The page as the tablet shows it (redesign, round 2): a tablet in the dark theme ("Theme mode" not Light, the Kachel
+   default) gets its mockup dark too, in the Kachel design's colours; Tessera's mockup is always light. */
+.kachel-dark .device { background: #0f1112; color: #eceeef; box-shadow: 0 0 0 10px #262a2d, 0 10px 30px rgba(0, 0, 0, 0.35); }
+.kachel-dark .device .tile { background: #1d2124; border-color: #2a2f33; color: #eceeef; }
+.kachel-dark .device .tile:hover { border-color: #3a4146; }
+.kachel-dark .device .tile .nm, .kachel-dark .device .tile .big { color: #eceeef; }
+.kachel-dark .device .tile .sub, .kachel-dark .device .tile small { color: #9aa3a8; }
+.kachel-dark .device svg text { fill: #e6e9ea; }
+.kachel-dark .device .tile.empty, .kachel-dark .device .cell.empty, .kachel-dark .device .empty { background: transparent; border-color: #2c3134; color: #5d666b; }
+.kachel-dark .device .cell { background: rgba(255, 255, 255, 0.03); border-color: #2c3134; color: #5d666b; }
+.kachel-dark .device .cell:hover { border-color: var(--kachel-teal); color: var(--kachel-teal); }
+.kachel-work .page-pills button[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink) !important; }
+.kachel-work #auto-layout-offer { flex-wrap: wrap; border-radius: var(--kachel-radius); }
+.kachel-work #auto-layout-offer .notice-text { flex: 1 1 320px; white-space: normal; }

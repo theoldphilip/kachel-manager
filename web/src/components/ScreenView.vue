@@ -233,7 +233,8 @@ useEventListener(document, "keydown", onKey);
   <!-- Stars for a plugin it runs (docs/PLUGINS.md, "Likes, ratings and counting"), never at once with the card above. -->
   <PluginRatingCard v-if="inv.pluginsEnabled" :key="`rate-${screen.id}`" :screen="screen" />
   <div class="body" id="body">
-    <div class="work">
+    <!-- Kachel Manager: the pages at the left, the library as a column at the right (src/kachel/kachel-theme.css). -->
+    <div class="work" :class="{ 'kachel-work': !inv.espScreens && !ui.phone && ui.tab === 'layout', 'kachel-dark': Boolean(screen.kachel) && screen.kachel?.theme !== 'Light' }">
       <LayoutView v-if="ui.tab === 'layout'" />
       <SettingsTab v-else-if="ui.tab === 'settings'" />
       <div v-else-if="ui.tab === 'log'" class="settings kachel-log-tab"><KachelLogPanel /></div>

@@ -11,6 +11,7 @@ import { frameOf, pillMetrics, uiScale } from "../model/ui-scale";
 import { useDocumentStore } from "./document";
 import { useSettingsStore } from "./settings";
 import { useUiStore } from "./ui";
+import { useInventoryStore } from "./inventory";
 
 // The tile grid of a page, as CSS variables: the mockup is the screen's own shape, whatever board it is. Every mockup has
 // the same shorter side (MOCKUP_SIDE), so a screen keeps its size against its neighbours: a 800 x 480 page lying down is
@@ -55,7 +56,9 @@ export const useCanvasStore = defineStore("canvas", () => {
     const scale = ui.phone ? 1 : Math.min(2, Math.max(0.5, Number(zoom.value) || 1));
     // A phone draws the page across its whole width, the same on every page (before, a page took the width of its
     // contents there, and one with a long name stood wider than the next).
-    const width = ui.phone && room.value ? room.value.width : Math.max(least, Math.min(life, fit)) * scale;
+    // Kachel Manager: one page at a time (LayoutView.vue), as large as the room for it, as the redesign draws it.
+    const fill = !useInventoryStore().espScreens && !ui.phone && room.value;
+    const width = ui.phone && room.value ? room.value.width : fill ? Math.max(least, fit) * scale : Math.max(least, Math.min(life, fit)) * scale;
     const rounded = Math.round(width * 10) / 10;
     // The glass in editor pixels, and the -/+ pill at the size the screen draws it (model/ui-scale.ts).
     const glass = rounded / shape.width, pill = pillMetrics(shape);

@@ -23,6 +23,7 @@ import Icon from './ui/Icon.vue';
 import type { IconName } from '../model/ui-icons';
 import { titleOf } from '../model/pages';
 import { useUiStore } from "../stores/ui";
+import { useInventoryStore } from "../stores/inventory";
 import { useBuildsStore } from "../stores/builds";
 import { useScreenStore } from "../stores/screen";
 import { useDragStore } from "../stores/drag";
@@ -35,6 +36,7 @@ import GrowTip from "./GrowTip.vue";
 import LayoutBot from "./LayoutBot.vue";
 
 const ui = useUiStore();
+const inv = useInventoryStore();
 const builds = useBuildsStore();
 const scr = useScreenStore();
 const dragging = useDragStore();
@@ -51,13 +53,17 @@ const recoveryField = (field: string) => t(({ title: 'editor.topbar.screen_name'
   page_titles: 'editor.pages.title', header: 'editor.topbar.title', settings: 'editor.screen_view.tabs.settings' } as Record<string, string>)[field] || 'editor.common.unknown');
 // From 700 px down the pages stand one at a time (composables/useWidths.ts).
 const narrow = useAtMost('narrow');
-const simplePages = computed(() => narrow.value
+// Kachel Manager (redesign, 2026-11-20): one page at a time, as large as fits, with its pages as tabs above it, as on
+// the tablet, on every width; the row of pages and the map are Tessera's (src/kachel/kachel-theme.css, ScreenView.vue).
+const kachelOne = computed(() => !inv.espScreens && !ui.phone);
+const onePage = computed(() => narrow.value || kachelOne.value);
+const simplePages = computed(() => onePage.value
   ? [Math.max(0, doc.document?.pages.findIndex((page) => page.id === doc.selectedPageId) ?? 0) + 1]
   : Array.from({ length: shown.value }, (_, index) => index + 1));
 
 // On a phone (app 0.4.40) the pages stand one at a time, as on the glass: a swipe goes to the next, the page's name
 // under it opens the list of pages, and the map is the full editor's.
-const mode = computed(() => ui.phone ? "simple" : doc.editorMode);
+const mode = computed(() => ui.phone || kachelOne.value ? "simple" : doc.editorMode);
 const selectedIndex = computed(() => Math.max(0, doc.document?.pages.findIndex((page) => page.id === doc.selectedPageId) ?? 0));
 function stepPage(step: number) {
   const list = doc.document?.pages || [];
@@ -86,7 +92,7 @@ watchEffect(() => {
   const width = canvasSize.width.value, height = canvasSize.height.value;
   // A phone fills its width with the page (stores/canvas.ts); a narrow page that is not a phone keeps the sizes above.
   canvas.room = width <= 0 || height <= 0 || (narrow.value && !ui.phone) ? null
-    : ui.phone ? { width, height } : { width: width - 10, height: height - 110 };
+    : ui.phone ? { width, height } : kachelOne.value ? { width: width - 40, height: height - 190 } : { width: width - 10, height: height - 110 };
 });
 onBeforeUnmount(() => { canvas.room = null; });
 const zoomPercent = computed(() => `${Math.round(canvas.zoom * 100)}%`);
@@ -145,7 +151,7 @@ function onCanvasClick(e: MouseEvent) {
     </div>
     <template v-else>
     <div v-if="!ui.phone" class="editor-toolbar">
-      <div class="seg views" role="group" :aria-label="t('editor.pages.mode')">
+      <div v-if="!kachelOne" class="seg views" role="group" :aria-label="t('editor.pages.mode')">
         <button type="button" :aria-pressed="doc.editorMode === 'simple'" @click="doc.setEditorMode('simple')"><Icon name="view-column-outline" />{{ t('editor.pages.view_row') }}</button>
         <button type="button" :aria-pressed="doc.editorMode === 'advanced'" @click="doc.setEditorMode('advanced')"><Icon name="sitemap-outline" />{{ t('editor.pages.view_map') }}</button>
       </div>
@@ -227,9 +233,10 @@ function onCanvasClick(e: MouseEvent) {
     </template>
     <PageMap v-else-if="mode === 'advanced'" :key="String(narrow)" :compact="narrow" />
     <div v-else ref="pagesView" class="pages" id="layout-preview" :aria-label="t('editor.layout.aria')">
-      <div v-if="narrow && !ui.phone" class="page-pills" role="group" :aria-label="t('editor.pages.choose_page')">
+      <div v-if="onePage && !ui.phone" class="page-pills" role="group" :aria-label="t('editor.pages.choose_page')">
         <button v-for="(page, index) in doc.document!.pages" :key="page.id" type="button" :aria-pressed="doc.selectedPageId === page.id ? 'true' : 'false'"
           @click="doc.selectedPageId = page.id"><b>{{ index + 1 }}</b> {{ titleOf(doc.document!, page) }}</button>
+        <button v-if="kachelOne" type="button" class="page-pill-add" :disabled="!canAdd" @click="ui.pageWizardOpen = true"><Icon name="plus" />{{ t('editor.layout.add_page') }}</button>
       </div>
       <DevicePage v-for="page in simplePages" :key="doc.document?.pages[page - 1]?.id || page" :page="page - 1" :entries="entries" :pages="pages" :moving="dragging.moving" />
       <div v-if="ui.phone && doc.document" class="phone-pager">
@@ -242,7 +249,7 @@ function onCanvasClick(e: MouseEvent) {
         </span>
         <p class="phone-hint">{{ t(doc.document.pages.length > 1 ? "editor.phone.hint_pages" : "editor.phone.hint") }}</p>
       </div>
-      <div v-if="!narrow" class="page ghost" :style="{ ...canvas.deviceStyle, flexBasis: ghostSize.width }" :class="{ disabled: !canAdd }">
+      <div v-if="!onePage" class="page ghost" :style="{ ...canvas.deviceStyle, flexBasis: ghostSize.width }" :class="{ disabled: !canAdd }">
         <div class="page-head"><span class="page-name muted">{{ t("editor.page.label", { page: shown + 1 }) }}</span></div>
         <div class="device" :class="{ compact: canvas.isCompact }" :style="{ ...canvas.deviceStyle, ...ghostSize, aspectRatio: 'auto' }" id="add-page" role="button" :tabindex="canAdd ? 0 : -1" @click="canAdd && (ui.pageWizardOpen = true)" @keydown.enter.prevent="canAdd && (ui.pageWizardOpen = true)">
           <span class="ghost-plus"><Icon name="plus" /></span>

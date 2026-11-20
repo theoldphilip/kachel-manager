@@ -43,7 +43,8 @@ const insp = useInspectorStore();
 // Open: on a wider page the drawer along the bottom, remembered; on a phone (app 0.4.40) a sheet that opens for a tile
 // and goes once it is added, closed or swiped away. Closing it there forgets the cell it was opened for.
 const open = computed({
-  get: () => ui.phone ? ui.addSheet : ui.libraryOpen,
+  // Kachel Manager: beside the page as a column of its own, the library is always open (src/kachel/kachel-theme.css).
+  get: () => ui.phone ? ui.addSheet : ui.libraryOpen || !inv.espScreens,
   set: (value: boolean) => {
     if (!ui.phone) { ui.libraryOpen = value; return; }
     ui.addSheet = value;

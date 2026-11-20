@@ -1908,7 +1908,9 @@
       "in_tessera": "Update in Tessera first",
       "kachel_version": "Kachel {version}",
       "kachel_join": "New device",
-      "kachel_join_hint": "How a tablet joins Home Assistant"
+      "kachel_join_hint": "How a tablet joins Home Assistant",
+      "kachel_pages": "{n} page | {n} pages",
+      "kachel_battery": "Battery"
     },
     "broken": {
       "screens": "1 device | {n} devices",

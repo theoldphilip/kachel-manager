@@ -174,10 +174,12 @@ const lastLog = () => {
         <button type="button" class="nav-item" :data-tip="`screen:${screen.id}`" :aria-current="isSelected(screen) ? 'true' : 'false'"
           :aria-label="screenTip(screen)" :title="tip(`screen:${screen.id}`, screenTip(screen)) ? undefined : subline(screen)?.text"
           v-tooltip="tip(`screen:${screen.id}`, screenTip(screen))" @click="choose(screen)">
-          <span class="board-icon mdi" aria-hidden="true">{{ boardIcon(screen) }}</span>
+          <!-- Kachel Manager: a tablet is a dot that says whether it is online, and its device under its name. -->
+          <span v-if="screen.kachel" class="kachel-dot" :class="{ off: !screen.online }" aria-hidden="true"></span>
+          <span v-else class="board-icon mdi" aria-hidden="true">{{ boardIcon(screen) }}</span>
           <!-- Folded, the row keeps its news as a dot on the icon: an update ready, or one that waits. -->
           <span v-if="sidebar.folded && ['update', 'waiting'].includes(status(screen))" class="fold-badge" :class="status(screen)" aria-hidden="true"></span>
-          <span class="name">{{ screen.name }}</span>
+          <span class="name">{{ screen.name }}<small v-if="screen.kachel?.device" class="kachel-device-name">{{ screen.kachel.device }}</small></span>
           <span v-if="screen.id === scr.selected && doc.dirty" class="unsaved" role="img" :aria-label="t('editor.common.unsaved')" :title="t('editor.common.unsaved')"></span>
           <ProgressRing v-if="status(screen) === 'running'" class="row-ring" :percent="builds.buildProgress(screen)?.percent ?? 0" :label="subline(screen)?.text || ''" />
           <Icon v-else-if="status(screen) === 'failed'" name="alert-circle-outline" class="sub-icon failed" />

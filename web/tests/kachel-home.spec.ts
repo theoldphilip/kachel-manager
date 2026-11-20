@@ -9,16 +9,18 @@ import { useScreenStore } from "../src/stores/screen";
 import { loadLayout, screenFixture } from "./helpers/fixtures";
 
 describe("the overview", () => {
-  it("names the device and its Kachel version, and says how a tablet joins", () => {
+  it("names the device, and its Kachel version and battery under it, and says how a tablet joins", () => {
     const inv = useInventoryStore();
     inv.inventory.editor_features = { ...(inv.inventory.editor_features || {}), esp_screens: false } as any;
     inv.inventory.screens = [screenFixture({ id: "text.fire_kachel_inbox", name: "Fire", online: true, area: "Test",
-      kachel: { version: "0.0.9-dev5", board: "fire8", device: "Amazon Fire HD 8 Plus" },
+      kachel: { version: "0.0.9-dev5", board: "fire8", device: "Amazon Fire HD 8 Plus", battery: 64 },
       shape: { width: 1280, height: 800, columns: 4, rows: 3 }, layout: { title: "Fire", tiles: [] } } as any)];
     useScreenStore().selected = null;
     loadLayout(null);
     const home = mount(HomeView);
-    expect(home.find(".home-name small").text()).toBe("Test · Amazon Fire HD 8 Plus · Kachel 0.0.9-dev5");
+    expect(home.find(".home-name small").text()).toBe("Test · Amazon Fire HD 8 Plus");
+    expect(home.find(".kachel-facts").text()).toContain("Kachel 0.0.9-dev5");
+    expect(home.find(".kachel-facts").text()).toContain("Battery 64 %");
     expect(home.find(".kachel-join").attributes("href")).toBe(JOIN);
     expect(home.text()).toContain("How a tablet joins Home Assistant");
   });

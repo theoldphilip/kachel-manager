@@ -31,18 +31,20 @@ class Info(unittest.TestCase):
     def test_the_fire(self):
         ha = HA([item('sensor.philiponfire_kachel_version', 'Kachel version'),
                  item('sensor.philiponfire_kachel_board', 'Kachel board'),
-                 item('sensor.other_kachel_board', 'Kachel board', 'other')],
+                 item('sensor.other_kachel_board', 'Kachel board', 'other'),
+                 item('sensor.philiponfire_battery_level', 'Battery level')],
                 {'sensor.philiponfire_kachel_version': {'state': '0.0.9-dev5'},
                  'sensor.philiponfire_kachel_board': {'state': 'fire8'},
-                 'sensor.other_kachel_board': {'state': 'a12s'}})
+                 'sensor.other_kachel_board': {'state': 'a12s'},
+                 'sensor.philiponfire_battery_level': {'state': '64.0'}})
         self.assertEqual(kachel_board.info(Manager(ha), SCREEN),
-                         {'version': '0.0.9-dev5', 'board': 'fire8', 'device': 'Amazon Fire HD 8 Plus'})
+                         {'version': '0.0.9-dev5', 'board': 'fire8', 'device': 'Amazon Fire HD 8 Plus', 'battery': 64})
 
     def test_the_update_entity_and_an_unknown_board(self):
         ha = HA([item('update.x_firmware', 'Firmware', platform='esphome'), item('sensor.x_kachel_board', 'Kachel board')],
                 {'update.x_firmware': {'state': 'off', 'attributes': {'installed_version': '3.1.0'}},
                  'sensor.x_kachel_board': {'state': 'newboard'}})
-        self.assertEqual(kachel_board.info(Manager(ha), SCREEN), {'version': '3.1.0', 'board': 'newboard', 'device': 'newboard'})
+        self.assertEqual(kachel_board.info(Manager(ha), SCREEN), {'version': '3.1.0', 'board': 'newboard', 'device': 'newboard', 'battery': None})
 
     def test_nothing_known(self):
         ha = HA([item('sensor.x_kachel_version', 'Kachel version')], {'sensor.x_kachel_version': {'state': 'unavailable'}})

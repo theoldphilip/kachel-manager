@@ -1908,7 +1908,9 @@
       "in_tessera": "Zuerst in Tessera aktualisieren",
       "kachel_version": "Kachel {version}",
       "kachel_join": "Neues Gerät",
-      "kachel_join_hint": "So nimmst du ein Tablet in Home Assistant auf"
+      "kachel_join_hint": "So nimmst du ein Tablet in Home Assistant auf",
+      "kachel_pages": "{n} Seite | {n} Seiten",
+      "kachel_battery": "Akku"
     },
     "broken": {
       "screens": "1 Gerät | {n} Geräten",

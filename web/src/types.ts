@@ -300,7 +300,7 @@ export type Screen = {
   id: string; name: string; ha_name?: string; online: boolean; area?: string; firmware?: string; board?: string;
   virtual?: boolean;
   // Kachel Manager: the Kachel version and the device (screen_manager/app/kachel_board.py), shown in place of firmware and board.
-  kachel?: { version: string | null; board: string | null; device: string | null } | null;
+  kachel?: { version: string | null; board: string | null; device: string | null; battery?: number | null } | null;
   layout: Layout; update?: UpdateInfo; settings?: SettingsView; delivery?: string; status?: string;
   screensaver?: ScreensaverView;
   page_document?: PageDocument | PendingMigration | null;

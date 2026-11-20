@@ -18,7 +18,7 @@ GONE = (None, '', 'unknown', 'unavailable')
 
 
 def info(manager, screen):
-    """{version, board, device} of a screen's tablet, each None when it does not say; None for no Kachel device."""
+    """{version, board, device, battery} of a screen's tablet, each None when it does not say; None for no Kachel device."""
     ids = kachel_device.devices_of(manager, screen)
     if not ids:
         return None
@@ -34,6 +34,11 @@ def info(manager, screen):
             found['version'] = state['state']
         elif name == 'Kachel board' and domain == 'sensor' and state.get('state') not in GONE:
             found['board'] = state['state']
+        elif name == 'Battery level' and domain == 'sensor' and state.get('state') not in GONE:
+            try:
+                found['battery'] = round(float(state['state']))
+            except (TypeError, ValueError):
+                pass
         elif name == 'Firmware' and domain == 'update':
             installed = (state.get('attributes') or {}).get('installed_version')
             if isinstance(installed, str) and installed:
@@ -42,4 +47,5 @@ def info(manager, screen):
     board = found.get('board')
     if not version and not board:
         return None
-    return {'version': version, 'board': board, 'device': DEVICES.get(board, board) if board else None}
+    return {'version': version, 'board': board, 'device': DEVICES.get(board, board) if board else None,
+            'battery': found.get('battery')}

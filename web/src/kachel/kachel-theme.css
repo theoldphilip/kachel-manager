@@ -77,3 +77,20 @@
 .set-card { padding: 8px 18px 12px; }
 .set-card h4 .mdi { color: var(--accent); }
 input, select, textarea { border-radius: 10px; }
+
+/* The sidebar's devices (redesign, round 2): a dot that says online, the device under the name. */
+.screen-item .nav-item { height: auto; min-height: 44px; padding: 6px 10px; }
+.screen-item .name { display: grid; min-width: 0; flex: 1; line-height: 1.25; }
+.kachel-device-name { font-size: 11.5px; color: var(--muted); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kachel-dot { width: 9px; height: 9px; border-radius: 50%; background: #3fbf7f; flex: none; margin: 0 4px 0 2px; }
+.kachel-dot.off { background: var(--muted); opacity: 0.5; }
+
+/* The overview's cards: larger, rounder, the tablet on a calm stage, and a line of facts under the name. */
+.home-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+.home-card { border-radius: 20px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
+.home-stage { height: 250px; background: var(--surface-2); }
+.home-head h1 { font-size: 26px; font-weight: 700; }
+.home-name strong { font-size: 16px; }
+.kachel-facts { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; color: var(--muted); font-size: 12.5px; }
+.kachel-facts b { color: var(--ink); font-weight: 600; }
+.home-new.kachel-join { border-radius: 20px; min-height: 120px; }

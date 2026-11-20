@@ -56,8 +56,8 @@ const scale = (style: Record<string, string>, shape: { width: number; height: nu
 // A build on its way (queued or running): its ring stands where the light is, and its step is the line under the name.
 const building = (screen: Screen) => Boolean(builds.buildOf(screen) || builds.isBuilding(screen));
 // Kachel Manager: a Kachel device is named as the device it is (kachel_board.py), not by an ESP32 board.
-const place = (screen: Screen) => [screen.area, screen.kachel ? screen.kachel.device || "" : screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : "",
-  screen.kachel?.version ? t("editor.home.kachel_version", { version: screen.kachel.version }) : ""].filter(Boolean).join(" · ");
+const pagesOf = (screen: Screen) => ((screen.page_document as any)?.layout?.pages?.length as number | undefined) || 0;
+const place = (screen: Screen) => [screen.area, screen.kachel ? screen.kachel.device || "" : screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : ""].filter(Boolean).join(" · ");
 onMounted(entities.loadOverview);
 </script>
 
@@ -113,6 +113,12 @@ onMounted(entities.loadOverview);
             <small v-else-if="!scr.screenSubline(screen) && broken.onScreen(screen).length" class="broken">{{ t("editor.broken.short", broken.onScreen(screen).length) }}</small>
             <small v-else-if="scr.screenSubline(screen)" :class="scr.screenSubline(screen)!.kind">{{ scr.screenSubline(screen)!.text }}</small>
             <small v-else-if="place(screen)">{{ place(screen) }}</small>
+            <!-- Kachel Manager: what the tablet runs, how many pages it has, its battery (kachel_board.py). -->
+            <span v-if="screen.kachel" class="kachel-facts">
+              <span v-if="screen.kachel.version">{{ t("editor.home.kachel_version", { version: "" }) }}<b>{{ screen.kachel.version }}</b></span>
+              <span v-if="pagesOf(screen)">{{ t("editor.home.kachel_pages", { n: pagesOf(screen) }, pagesOf(screen)) }}</span>
+              <span v-if="screen.kachel.battery !== null && screen.kachel.battery !== undefined">{{ t("editor.home.kachel_battery") }} <b>{{ screen.kachel.battery }} %</b></span>
+            </span>
           </span>
           <!-- A screen with 4 MB of flash on ESPHome's partition table (app 0.4.82): its next update comes from Tessera. -->
           <span v-if="screen.update_in_tessera" class="home-badge" :title="t('editor.sidebar.update.in_tessera_why')">

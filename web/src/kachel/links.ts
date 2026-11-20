@@ -3,3 +3,5 @@
 export const DONATE = "https://www.paypal.com/donate/?hosted_button_id=SLNW2MCC268SG";
 /** The Kachel Manager's manual: the add-on's Documentation page, as Home Assistant shows it (Sidebar.vue). */
 export const MANUAL = "https://github.com/theoldphilip/kachel-manager/blob/main/screen_manager/DOCS.md";
+/** How a tablet joins: the manual's section "Ein Tablet verbinden" (the overview's New device, HomeView.vue). */
+export const JOIN = `${MANUAL}#ein-tablet-verbinden`;

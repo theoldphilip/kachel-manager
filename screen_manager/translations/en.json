@@ -1898,11 +1898,14 @@
       }
     },
     "home": {
-      "title": "Your screens",
+      "title": "Your Kachel devices",
       "summary": "{online} of {count} online",
       "open": "Open {name}",
       "no_layout": "No layout yet",
-      "in_tessera": "Update in Tessera first"
+      "in_tessera": "Update in Tessera first",
+      "kachel_version": "Kachel {version}",
+      "kachel_join": "New device",
+      "kachel_join_hint": "How a tablet joins Home Assistant"
     },
     "broken": {
       "screens": "1 screen | {n} screens",

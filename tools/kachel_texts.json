@@ -22,7 +22,8 @@
     "editor.report.facts.addon": "Kachel Manager",
     "editor.donate.title": "Support the Kachel Manager",
     "editor.donate.body": "The Kachel Manager is free and stays free. If it is useful to you, I'm glad of a donation.",
-    "editor.donate.monthly": "Donate with PayPal"
+    "editor.donate.monthly": "Donate with PayPal",
+    "editor.home.title": "Your Kachel devices"
   },
   "de": {
     "addon.screen.identify.subtitle": "Identifizieren im Kachel Manager",
@@ -47,7 +48,8 @@
     "editor.report.facts.addon": "Kachel Manager",
     "editor.donate.title": "Kachel Manager unterstützen",
     "editor.donate.body": "Der Kachel Manager ist kostenlos und bleibt es. Wenn er dir nützt, freue ich mich über eine Spende.",
-    "editor.donate.monthly": "Mit PayPal spenden"
+    "editor.donate.monthly": "Mit PayPal spenden",
+    "editor.home.title": "Deine Kachel-Geräte"
   },
   "keep": [
     "screen.status.",

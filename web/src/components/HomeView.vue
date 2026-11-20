@@ -20,6 +20,7 @@ import Icon from "./ui/Icon.vue";
 import ProgressRing from "./ui/ProgressRing.vue";
 import BuildIndicator from "./BuildIndicator.vue";
 import BrokenNotice from "./BrokenNotice.vue";
+import { JOIN } from "../kachel/links";
 import { useUiStore } from "../stores/ui";
 import { useBuildsStore } from "../stores/builds";
 import { useBrokenStore } from "../stores/broken";
@@ -55,7 +56,8 @@ const scale = (style: Record<string, string>, shape: { width: number; height: nu
 // A build on its way (queued or running): its ring stands where the light is, and its step is the line under the name.
 const building = (screen: Screen) => Boolean(builds.buildOf(screen) || builds.isBuilding(screen));
 // Kachel Manager: a Kachel device is named as the device it is (kachel_board.py), not by an ESP32 board.
-const place = (screen: Screen) => [screen.area, screen.kachel ? screen.kachel.device || "" : screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : ""].filter(Boolean).join(" · ");
+const place = (screen: Screen) => [screen.area, screen.kachel ? screen.kachel.device || "" : screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : "",
+  screen.kachel?.version ? t("editor.home.kachel_version", { version: screen.kachel.version }) : ""].filter(Boolean).join(" · ");
 onMounted(entities.loadOverview);
 </script>
 
@@ -69,7 +71,7 @@ onMounted(entities.loadOverview);
         <UiMenuItem icon="magnify" @select="ui.palette = true">{{ t("editor.sidebar.search") }}</UiMenuItem>
         <UiMenuItem icon="gesture-double-tap" @select="ui.go('#events')">{{ t("editor.nav.events") }}</UiMenuItem>
         <UiMenuItem icon="cog-outline" @select="ui.go('#settings')">{{ t("editor.nav.settings") }}</UiMenuItem>
-        <UiMenuItem icon="plus" @select="ui.go('#new-screen')">{{ t("editor.nav.new_screen") }}</UiMenuItem>
+        <UiMenuItem v-if="inv.espScreens" icon="plus" @select="ui.go('#new-screen')">{{ t("editor.nav.new_screen") }}</UiMenuItem>
         <UiMenuSeparator />
         <UiMenuItem icon="monitor-dashboard" @select="ui.setFullEditor(true)">{{ t("editor.phone.full_editor") }}</UiMenuItem>
       </UiMenu>
@@ -119,7 +121,11 @@ onMounted(entities.loadOverview);
           <Icon name="chevron-right" class="home-go" />
         </span>
       </div>
-      <button type="button" class="home-new" @click="ui.go('#new-screen')"><Icon name="plus" class="home-plus" />{{ t("editor.nav.new_screen") }}</button>
+      <button v-if="inv.espScreens" type="button" class="home-new" @click="ui.go('#new-screen')"><Icon name="plus" class="home-plus" />{{ t("editor.nav.new_screen") }}</button>
+      <!-- Kachel Manager: a tablet joins through Home Assistant, not by flashing here; the card says how (the manual). -->
+      <a v-else class="home-new kachel-join" :href="JOIN" target="_blank" rel="noopener">
+        <Icon name="plus" class="home-plus" /><span><b>{{ t("editor.home.kachel_join") }}</b><small>{{ t("editor.home.kachel_join_hint") }}</small></span>
+      </a>
     </div>
     <!-- Kachel Manager: Tessera's funding request (FundingCard.vue, a mail to Max) is not shown; the support card is ours. -->
     <DonateCard />
@@ -170,4 +176,7 @@ onMounted(entities.loadOverview);
   .home { padding: 18px 14px 32px; }
   .home-grid { grid-template-columns: minmax(0, 1fr); }
 }
+.kachel-join { text-decoration: none; color: var(--muted); }
+.kachel-join span { display: grid; text-align: left; }
+.kachel-join b { color: var(--ink); }
 </style>

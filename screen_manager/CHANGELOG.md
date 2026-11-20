@@ -1,3 +1,12 @@
+## Kachel Manager 0.1.5 (based on Tessera 0.4.98)
+
+- **A new look: Kachel, not Tessera.** The editor wears the Kachel design the tablets wear: the turquoise of the Kachel mark as its one accent, calm surfaces in the dark and in the light, cards with round corners and keys with round ends, and "Kachel Manager" beside the mark. Nothing changes in what the keys do.
+- **The overview names each tablet as the device it is**, with its room and its Kachel version, and its last card says how a tablet joins Home Assistant. In the sidebar a tablet shows its Kachel version and its device instead of Tessera's firmware number and an ESP32 board; ESPHome profiles waiting to be flashed and Tessera's firmware update are no longer shown.
+- **Each tablet has its tabs: Pages · Device · Functions · Log.** The Device tab is a menu of cards as the tablet's own settings are (screen, pages, updates, battery), each with how it stands now; a tap opens it.
+- **Functions.** Set up what the tablet does: presence sensors that turn its screen off when the room is empty, the ways to turn pages, the voice assistant, and the notices it shows (doorbell, post, parcels, waste collection, weather warnings, missed notices). The tablet shows a setting only when its function is set up here; it gets them whenever it connects and at every change, and the presence at every change and at least every minute.
+- **A search in the library looks through everything**, whatever room or kind is chosen; a calendar without a room was not found while a room stayed chosen.
+- **Kachel integration 0.3.0:** the tablet's speaker in Home Assistant, with its volume, announcements and playback.
+
 ## Kachel Manager 0.1.4 (based on Tessera 0.4.98)
 
 - **A device keeps its pages when it leaves Home Assistant and comes back.** Removing a Kachel device (in the editor, or when it asks to leave at its factory reset) used to forget its pages, so a device moved from ESPHome to the Kachel integration came back as a new screen without tiles. The app now keeps the pages by the device's MAC address and gives them back once, when the same device comes back without pages of its own, under ESPHome or the Kachel integration.

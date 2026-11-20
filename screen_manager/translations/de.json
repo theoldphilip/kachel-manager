@@ -5075,13 +5075,29 @@
         "tap_clock": "Tippen auf die Uhr",
         "wake_word": "Weckwort"
       },
-      "none": "Keine",
       "remove": "Entfernen",
       "save": "Speichern",
       "saved": "Gespeichert. Das Tablet bekommt es sofort.",
       "unsaved": "Noch nicht gespeichert",
       "delivered": "Das Tablet hat es",
-      "waiting": "Das Tablet bekommt es, sobald es verbunden ist"
+      "waiting": "Das Tablet bekommt es, sobald es verbunden ist",
+      "yes": "Ja",
+      "no": "Nein",
+      "choose": "Auswählen …",
+      "nothing_fits": "In Home Assistant passt nichts dazu. Gib der Entität einen passenden Namen, dann erscheint sie hier.",
+      "ask": {
+        "doorbell": "Hast du eine Türklingel?",
+        "post": "Meldet dir etwas, wenn Post da ist?",
+        "parcels": "Verfolgst du Pakete?",
+        "waste": "Hast du einen Müllkalender?",
+        "weather": "Möchtest du Wetterwarnungen?"
+      }
+    },
+    "kachel_confirm": {
+      "label": "Vor dem Schalten nachfragen",
+      "hint": "Ein Tippen fragt zuerst, ein zweites schaltet. Für Rollläden, das Garagentor oder alles, was nicht aus Versehen schalten soll.",
+      "no": "Nein",
+      "yes": "Ja"
     }
   }
 }

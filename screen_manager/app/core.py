@@ -2053,9 +2053,10 @@ def validate_layout(data, stored=False, grid=DEFAULT_GRID):
                 raise ValueError(t('addon.errors.layout.invalid_setting', setting='size'))
             # A lock's tile (firmware 0.5.0+) unlocks after a second tap or only locks; no other tile has the choice.
             if 'guard' in options:
-                if domain != 'lock' or options['guard'] not in LOCK_GUARDS:
+                # Kachel Manager: any switchable tile may ask before it switches (kachel.guard_allowed).
+                if not kachel.guard_allowed(domain, options['guard']) and (domain != 'lock' or options['guard'] not in LOCK_GUARDS):
                     raise ValueError(t('addon.errors.layout.invalid_setting', setting='guard'))
-                if options['guard'] == 'confirm':
+                if domain == 'lock' and options['guard'] == 'confirm':
                     options = {k: v for k, v in options.items() if k != 'guard'}
             # A cover's slats: open at 100 (Home Assistant's rule, the default) or at 50; no other tile has the choice.
             if 'tilt_open' in options:

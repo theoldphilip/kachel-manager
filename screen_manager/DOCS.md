@@ -60,6 +60,11 @@ dass jemand da ist), **Blättern** (Wischen, Lautstärketasten, Fernbedienung), 
 (Klingel, Post, Pakete, Müllabfuhr, Wetterwarnungen, verpasste Meldungen). Das Tablet zeigt eine Einstellung nur, wenn
 ihre Funktion hier eingerichtet ist. Was nicht eingerichtet ist, ist aus.
 
+## Vor dem Schalten nachfragen
+
+Bei Kacheln für Rollläden, Schalter, Licht, Lüfter oder Ventile kannst du in den Einstellungen der Kachel **Vor dem Schalten
+nachfragen** einschalten: Ein Tippen fragt zuerst, ein zweites schaltet.
+
 ## Automationen
 
 Die Ereignisse des Kachel Managers beginnen mit `kachel_` (etwa `kachel_show_alert`), damit sie sich nicht mit

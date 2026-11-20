@@ -5075,13 +5075,29 @@
         "tap_clock": "Tap the clock",
         "wake_word": "Wake word"
       },
-      "none": "None",
       "remove": "Remove",
       "save": "Save",
       "saved": "Saved. The tablet gets it at once.",
       "unsaved": "Not saved yet",
       "delivered": "The tablet has it",
-      "waiting": "The tablet gets it when it connects"
+      "waiting": "The tablet gets it when it connects",
+      "yes": "Yes",
+      "no": "No",
+      "choose": "Choose…",
+      "nothing_fits": "Nothing in Home Assistant looks like it. Give the entity a fitting name, then it shows here.",
+      "ask": {
+        "doorbell": "Do you have a doorbell?",
+        "post": "Do you get a notice when post arrives?",
+        "parcels": "Do you track parcels?",
+        "waste": "Do you have a waste collection calendar?",
+        "weather": "Do you want weather warnings?"
+      }
+    },
+    "kachel_confirm": {
+      "label": "Ask before switching",
+      "hint": "A tap asks first; a second tap switches. For blinds, a garage door or anything that should not switch by accident.",
+      "no": "No",
+      "yes": "Yes"
     }
   }
 }

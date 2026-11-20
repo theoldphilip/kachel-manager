@@ -181,3 +181,13 @@ class Names(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class Confirm(unittest.TestCase):
+    """Kachel Manager: a switchable tile may ask before it switches (kachel.guard_allowed, core.validate_layout)."""
+
+    def test_switchable_kinds_take_the_confirm_guard(self):
+        self.assertTrue(kachel.guard_allowed('cover', 'confirm'))
+        self.assertTrue(kachel.guard_allowed('switch', 'confirm'))
+        self.assertFalse(kachel.guard_allowed('sensor', 'confirm'))
+        self.assertFalse(kachel.guard_allowed('cover', 'lock_only'))

@@ -127,6 +127,11 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   Sync-Schleife schickt `{"op":"functions",…}` in der Sitzung einmal je Hello und bei Änderung, nur bei Hello-Wort
   `functions`; `{"op":"presence","present"}` nach dem Hello, bei Änderung und spätestens alle 60 s. Präsenz-Sensoren
   wecken die Schleife (`watched_entities`). Tests `tests/test_kachel_functions.py`, `web/tests/kachel-functions.spec.ts`.
+- **Vor dem Schalten nachfragen** (20.11., Philip): je Kachel Tesseras `guard: "confirm"` (sonst nur Schloss) für
+  `kachel.CONFIRM_DOMAINS` (Server `core.validate_layout`, Editor `web/src/kachel/confirm.ts`, Zeile im Kachel-Dialog).
+- **Redesign Runde 2** (20.11.): Seiten einzeln mit Reitern, Bibliothek rechts (`.kachel-work`), dunkle Vorschau nach „Theme
+  mode“ des Tablets (`kachel_board.info` → `theme`), Kachel-Zeichen statt Tessera-Logo (`TesseraMark.vue`), „Geräte“ statt
+  „Bildschirme“ (`tools/kachel_texts.json`; doppelte Texte setzt `kachel_names.py` per Pfad).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

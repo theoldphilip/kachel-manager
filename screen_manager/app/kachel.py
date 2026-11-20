@@ -175,3 +175,12 @@ def refuse_esp():
             return web.json_response({'error': SITE_REFUSED}, status=404)
         return await handler(request)
     return refuse
+
+# A tile that asks before it switches (Philip, 2026-11-20, test 0.0.9-dev7): chosen per tile in the editor when a tile of a
+# switchable entity is set up, in place of the tablet's own switch "Confirm blinds". It is Tessera's lock option
+# `guard: "confirm"` (a second tap), here for every switchable kind; a lock keeps its own choices (core.LOCK_GUARDS).
+CONFIRM_DOMAINS = ('cover', 'switch', 'light', 'fan', 'input_boolean', 'valve', 'humidifier', 'siren')
+
+def guard_allowed(domain, guard):
+    """Whether a tile of this domain may carry this `guard` (core.validate_layout); a lock's are Tessera's own."""
+    return domain in CONFIRM_DOMAINS and guard == 'confirm'

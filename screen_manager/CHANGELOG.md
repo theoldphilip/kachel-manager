@@ -1,3 +1,10 @@
+## Kachel Manager 0.1.6 (based on Tessera 0.4.98)
+
+- **Pages look as in the design.** A Kachel device's pages stand one at a time, as large as fits, with its pages as tabs above them and a tab to add one; the library is a column at the right. A tablet in its dark theme gets a dark page in the editor, as it shows it, and the page's header shows the Kachel mark instead of Tessera's.
+- **Devices, not screens.** The sidebar lists the devices with a dot that says whether each is online and its device under its name; the overview names each with its Kachel version, its pages and its battery; the editor says "devices" where it said "screens". Tessera's Claude card and its hints about firmware updates are gone.
+- **Ask before switching, per tile.** A tile of a blind, a switch, a light, a fan or a valve can ask first and switch on a second tap (in its settings), instead of the tablet's one switch for all blinds.
+- **Functions open at once and offer what fits.** Presence offers motion, occupancy and presence sensors, people and trackers; a person or tracker at home counts as someone near. Each kind of notice asks first ("Do you have a doorbell?") and then offers only what fits it.
+
 ## Kachel Manager 0.1.5 (based on Tessera 0.4.98)
 
 - **A new look: Kachel, not Tessera.** The editor wears the Kachel design the tablets wear: the turquoise of the Kachel mark as its one accent, calm surfaces in the dark and in the light, cards with round corners and keys with round ends, and "Kachel Manager" beside the mark. Nothing changes in what the keys do.

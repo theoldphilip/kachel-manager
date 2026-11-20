@@ -43,13 +43,37 @@ async function load() {
 watch(() => scr.currentScreen?.id, load, { immediate: true });
 
 const changed = computed(() => JSON.stringify(draft.value) !== JSON.stringify(view.value?.functions || {}));
-const entitiesOf = (domains: readonly string[]) => inv.inventory.entities
-  .filter((e) => domains.includes(e.id.split(".")[0]))
-  .map((e) => [e.id, `${e.name}${e.area ? ` · ${e.area}` : ""}`] as [string, string]);
+// The lists offered, worked out once per inventory (Philip, test 0.0.9-dev7: the tab took up to 30 s, every list of all of
+// Home Assistant's entities): only what fits each function, by its domain and what Home Assistant calls it (its words,
+// the device class among them) or its name.
+type Pick = [string, string];
+const label = (e: { id: string; name: string; area?: string }) => [e.id, `${e.name}${e.area ? ` · ${e.area}` : ""}`] as Pick;
+const PRESENCE_WORDS = /motion|occupancy|presence|bewegung|anwesen|präsenz|belegung/i;
+const FITS: Record<Notice, { domains: string[]; words: RegExp }> = {
+  doorbell: { domains: ["event", "binary_sensor"], words: /doorbell|klingel|türklingel|ring/i },
+  post: { domains: ["sensor", "binary_sensor", "calendar"], words: /post|brief|mail|letter/i },
+  parcels: { domains: ["sensor", "calendar"], words: /paket|parcel|zustell|deliver|sendung|dhl|dpd|ups|hermes|gls|amazon/i },
+  waste: { domains: ["calendar", "sensor"], words: /müll|abfall|waste|tonne|garbage|recycl|gwa|abfuhr/i },
+  weather: { domains: ["weather"], words: /./ },
+};
+const lists = computed(() => {
+  const entities = inv.inventory.entities;
+  const text = (e: { name: string; words?: string; id: string }) => `${e.id} ${e.name} ${e.words || ""}`;
+  const presence = entities.filter((e) => {
+    const domain = e.id.split(".")[0];
+    return domain === "person" || domain === "device_tracker" || (domain === "binary_sensor" && PRESENCE_WORDS.test(text(e)));
+  }).map(label);
+  const notices = {} as Record<Notice, Pick[]>;
+  for (const kind of Object.keys(FITS) as Notice[]) {
+    const { domains, words } = FITS[kind];
+    notices[kind] = entities.filter((e) => domains.includes(e.id.split(".")[0]) && words.test(text(e))).slice(0, 200).map(label);
+  }
+  return { presence, notices };
+});
 
 // Presence: the sensors whose "on" means someone is near.
 const presence = computed(() => draft.value.presence?.entities || []);
-const sensors = computed(() => entitiesOf(["binary_sensor"]).filter(([id]) => !presence.value.includes(id)));
+const sensors = computed(() => lists.value.presence.filter(([id]) => !presence.value.includes(id)));
 function addSensor(id: string) { draft.value.presence = { entities: [...presence.value, id].slice(0, 4) }; }
 function dropSensor(id: string) {
   const left = presence.value.filter((e) => e !== id);
@@ -68,6 +92,19 @@ const assistOn = computed(() => Boolean(draft.value.assist));
 function setAssist(on: boolean) { if (on) draft.value.assist = { ways: ["tap_clock"] }; else delete draft.value.assist; }
 
 function notice(kind: Notice) { return String(draft.value.notices?.[kind] || ""); }
+// A question answered yes before an entity is chosen: open here, nothing stored until one is.
+const open = ref(new Set<Notice>());
+watch(() => scr.currentScreen?.id, () => { open.value = new Set(); });
+const asked = (kind: Notice) => open.value.has(kind) || Boolean(notice(kind));
+function answer(kind: Notice, yes: boolean) {
+  const next = new Set(open.value);
+  if (yes) next.add(kind); else { next.delete(kind); setNotice(kind, ""); }
+  open.value = next;
+}
+const questions = computed<Record<Notice, string>>(() => ({
+  doorbell: t("editor.kachel_functions.ask.doorbell"), post: t("editor.kachel_functions.ask.post"), parcels: t("editor.kachel_functions.ask.parcels"),
+  waste: t("editor.kachel_functions.ask.waste"), weather: t("editor.kachel_functions.ask.weather"),
+}));
 function setNotice(kind: Notice | "missed", value: string | boolean) {
   const notices = { ...(draft.value.notices || {}) };
   if (value === "" || value === false) delete notices[kind]; else notices[kind] = value;
@@ -137,11 +174,22 @@ async function save() {
     <section class="set-card" data-function="notices">
       <h4><span class="kachel-circle amber"><span class="mdi">{{ glyph("F009A") }}</span></span>{{ t("editor.kachel_functions.notices.title") }}</h4>
       <p class="hint">{{ t("editor.kachel_functions.notices.hint") }}</p>
-      <div v-for="(domains, kind) in NOTICES" :key="kind" class="srow" :data-notice="kind">
-        <span class="s-label">{{ noticeLabels[kind] }}</span>
-        <div class="s-control">
-          <UiSelect :id="`kachel-notice-${kind}`" :model-value="notice(kind)" :options="[['', t('editor.kachel_functions.none')], ...entitiesOf(domains)]"
-            @update:model-value="(id: string) => setNotice(kind, id)" />
+      <!-- One question per kind of notice; a yes offers only what fits it (Philip, test 0.0.9-dev7). -->
+      <div v-for="kind in (Object.keys(NOTICES) as Notice[])" :key="kind" class="kachel-notice" :data-notice="kind">
+        <div class="srow">
+          <span class="s-label">{{ questions[kind] }}</span>
+          <div class="s-control seg" role="group">
+            <button type="button" :aria-pressed="!asked(kind) ? 'true' : 'false'" @click="answer(kind, false)">{{ t("editor.kachel_functions.no") }}</button>
+            <button type="button" :aria-pressed="asked(kind) ? 'true' : 'false'" @click="answer(kind, true)">{{ t("editor.kachel_functions.yes") }}</button>
+          </div>
+        </div>
+        <div v-if="asked(kind)" class="srow kachel-notice-pick">
+          <span class="s-label">{{ noticeLabels[kind] }}</span>
+          <div class="s-control">
+            <UiSelect v-if="lists.notices[kind].length" :id="`kachel-notice-${kind}`" :model-value="notice(kind)" :options="lists.notices[kind]"
+              :placeholder="t('editor.kachel_functions.choose')" @update:model-value="(id: string) => setNotice(kind, id)" />
+            <small v-else class="hint">{{ t("editor.kachel_functions.nothing_fits") }}</small>
+          </div>
         </div>
       </div>
       <div class="srow" data-notice="missed">
@@ -170,5 +218,7 @@ async function save() {
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
 .chip-x { margin-left: 4px; color: var(--muted); font-size: 14px; }
 .kachel-pipeline { margin-top: 10px; max-width: 360px; }
+.kachel-notice + .kachel-notice { border-top: 1px solid var(--line); }
+.kachel-notice-pick { padding-left: 16px; }
 .kachel-functions-bar { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
 </style>

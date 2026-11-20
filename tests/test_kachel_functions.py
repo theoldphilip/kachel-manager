@@ -29,6 +29,8 @@ class Clean(unittest.TestCase):
         self.assertEqual(kf.clean({'presence': None, 'notices': {'weather': ''}}), {})
 
     def test_what_is_refused(self):
+        self.assertEqual(kf.clean({'presence': {'entities': ['person.philip', 'device_tracker.handy']}})['presence']['entities'],
+                         ['person.philip', 'device_tracker.handy'])
         for bad in ({'presence': {'entities': ['light.x']}}, {'page_turn': {'ways': ['shake']}}, {'assist': {'ways': ['clap']}},
                     {'notices': {'doorbell': 'light.x'}}, {'notices': {'alarm': 'event.x'}}, [],
                     {'presence': {'entities': [f'binary_sensor.p{i}' for i in range(5)]}}):
@@ -95,6 +97,11 @@ class Sync(unittest.TestCase):
         asyncio.run(kf.sync(manager, 'text.fire'))
         self.assertEqual(sender.sent, [{'op': 'functions'}])
         self.assertEqual(manager.kachel_functions.watched(), set())
+
+    def test_people_and_trackers_at_home(self):
+        functions = {'presence': {'entities': ['person.philip', 'device_tracker.handy']}}
+        self.assertTrue(kf.present(functions, {'person.philip': {'state': 'home'}, 'device_tracker.handy': {'state': 'not_home'}}))
+        self.assertFalse(kf.present(functions, {'person.philip': {'state': 'Arbeit'}, 'device_tracker.handy': {'state': 'not_home'}}))
 
     def test_presence_unknown_is_not_sent(self):
         self.assertIsNone(kf.present({'presence': {'entities': ['binary_sensor.gone']}}, {}))

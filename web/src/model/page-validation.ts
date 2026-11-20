@@ -1,6 +1,8 @@
 /** Canonical card and object checks. Choices are generated from Python's tables;
  * shared conformance fixtures keep the two document boundaries aligned.
  */
+// Kachel Manager: the confirm guard on every switchable tile, added to the catalogue before any check (src/kachel/confirm.ts).
+import "../kachel/confirm";
 import { t } from '../i18n';
 import { isWideSize } from './sizes';
 import { TILE, ofType, taps as catalogueTaps } from './catalogue';

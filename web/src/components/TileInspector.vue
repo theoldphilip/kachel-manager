@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { asksBefore } from "../kachel/confirm";
 // One tile's settings. Every change applies live, so the card on the mockup shows the result while you pick. What each
 // field offers and what it says of a choice is model/tile-options.ts, from the tile, what Home Assistant says the entity
 // can do and the screen's firmware; a map's and a favourite's own settings are sections of their own (inspector/). The
@@ -168,6 +169,7 @@ function pickTap(value: string) {
 const tapNote = computed(() => tapHint(props.tile, panel.value, tap.value));
 // A lock's tile (firmware 0.5.0+): unlock after a second tap on it, or never unlock from this screen.
 const guard = computed(() => current("guard", "confirm") as string);
+const confirmChoices = computed(() => [["none", t("editor.kachel_confirm.no")], ["confirm", t("editor.kachel_confirm.yes")]] as [string, string][]);
 const guards = computed(() => offer("guard", ["confirm", "lock_only"].map((key) => [key, t(`editor.tile.guard.${key}`)] as [string, string]), guard.value));
 // A cover's slats: open at 100 as Home Assistant's rule has it, or at 50 for a blind closed at 0 and at 100. Offered where
 // the cover has slats (or the choice is stored already).
@@ -366,6 +368,11 @@ const backgroundName = computed(() => inv.inventory.backgrounds?.[props.tile.opt
       <ActionPicker v-if="domain !== 'screen' && !goesTo && tap === 'action'" :tile="tile" />
       <PropRow v-if="domain === 'lock'" :label="t('editor.tile.guard.label')" icon="check-circle" :hint="t(guard === 'lock_only' ? 'editor.tile.guard.lock_only_hint' : 'editor.tile.guard.confirm_hint')">
         <ChoiceField :choices="guards" :value="guard" :aria-label="t('editor.tile.guard.label')" @pick="(v) => setTileOption(tile, 'guard', v)" />
+      </PropRow>
+      <!-- Kachel Manager: a switchable tile may ask before it switches (src/kachel/confirm.ts). -->
+      <PropRow v-if="asksBefore(domain) && !goesTo" :label="t('editor.kachel_confirm.label')" icon="check-circle" :hint="t('editor.kachel_confirm.hint')">
+        <ChoiceField :choices="confirmChoices" :value="tile.options?.guard === 'confirm' ? 'confirm' : 'none'" :aria-label="t('editor.kachel_confirm.label')"
+          @pick="(v) => setTileOption(tile, 'guard', v === 'confirm' ? 'confirm' : undefined)" />
       </PropRow>
       <PropRow v-if="hasSlats && !goesTo" :label="t('editor.tile.tilt_open.label')" icon="sort-variant" :hint="t(tiltOpen === '50' ? 'editor.tile.tilt_open.50_hint' : 'editor.tile.tilt_open.100_hint')">
         <ChoiceField :choices="tiltOpens" :value="tiltOpen" :aria-label="t('editor.tile.tilt_open.label')" @pick="(v) => setTileOption(tile, 'tilt_open', v)" />

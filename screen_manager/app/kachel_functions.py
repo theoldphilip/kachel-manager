@@ -34,6 +34,9 @@ ASSIST_WAYS = ('tap_clock', 'wake_word')
 NOTICES = {'doorbell': ('event', 'binary_sensor'), 'post': ('sensor', 'binary_sensor', 'calendar'),
            'parcels': ('sensor', 'calendar'), 'waste': ('calendar', 'sensor'), 'weather': ('weather',)}
 MAX_PRESENCE = 4
+# What may say someone is near (Philip, test 0.0.9-dev7): motion, occupancy and presence sensors, people, trackers.
+PRESENCE_DOMAINS = ('binary_sensor', 'person', 'device_tracker')
+NEAR, AWAY = ('on', 'home'), ('off', 'not_home')
 
 
 def _entity(value, domains):
@@ -50,7 +53,7 @@ def clean(data):
     if presence:
         entities = presence.get('entities') if isinstance(presence, dict) else None
         if not isinstance(entities, list) or not entities or len(entities) > MAX_PRESENCE \
-                or not all(_entity(e, ('binary_sensor',)) for e in entities):
+                or not all(_entity(e, PRESENCE_DOMAINS) for e in entities):
             raise ValueError(refused)
         out['presence'] = {'entities': list(dict.fromkeys(entities))}
     turn = data.get('page_turn')
@@ -123,10 +126,15 @@ class Functions:
 
 
 def present(functions, states):
-    """Whether someone is near: any of the screen's presence sensors on; None while none of them says."""
-    seen = [(states.get(e) or {}).get('state') for e in (functions.get('presence') or {}).get('entities', ())]
-    known = [state for state in seen if state in ('on', 'off')]
-    return any(state == 'on' for state in known) if known else None
+    """Whether someone is near: a sensor on or a person or tracker at home; None while none of them says."""
+    states_now = []
+    for entity in (functions.get('presence') or {}).get('entities', ()):
+        state = (states.get(entity) or {}).get('state')
+        if state in NEAR or state in AWAY:
+            states_now.append(state in NEAR)
+        elif entity.split('.', 1)[0] in ('person', 'device_tracker') and isinstance(state, str) and state not in ('unknown', 'unavailable', ''):
+            states_now.append(False)   # in another zone: not here
+    return any(states_now) if states_now else None
 
 
 async def sync(manager, inbox):

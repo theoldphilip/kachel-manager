@@ -1,7 +1,7 @@
 # This app is a fork of Tessera 0.4.98 (MaxGramser/homeassistant_espscreen) for the Kachel screens: Alpine Linux
 # and echod on tablets. Real ESP32 screens stay with Tessera, which may run beside it (screen_manager/app/kachel.py).
 name: Kachel Manager
-version: "0.1.5"
+version: "0.1.6"
 slug: kachel_manager
 description: "Pages of tiles for the Kachel screens (Alpine Linux and echod on tablets). Based on Tessera."
 url: https://github.com/theoldphilip/kachel-manager

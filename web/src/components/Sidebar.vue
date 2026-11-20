@@ -148,7 +148,7 @@ const lastLog = () => {
       <button type="button" class="brand" :aria-label="t('editor.sidebar.home')" :title="sidebar.folded ? undefined : t('editor.sidebar.home')"
         v-tooltip="tip('brand', t('editor.sidebar.home'))" :aria-current="!scr.selected && ui.route === '' ? 'page' : undefined" @click="session.goHome">
         <KachelMark class="mark" />
-        <span class="txt">Kachel</span>
+        <span class="txt">Kachel <span class="kachel-word">Manager</span></span>
         <!-- The dev app (added from the #dev URL) says so beside the name, so nobody mistakes it for the stable one. -->
         <span v-if="builds.devChannel" class="chip channel-chip" id="dev-chip" :title="t('editor.sidebar.dev_chip')">dev</span>
       </button>

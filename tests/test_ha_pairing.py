@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'screen_manager/app'))
 import ha_pairing  # noqa: E402
 from ha_pairing import Pairing, discovered_node, usable_key  # noqa: E402
+from kachel_esp import esp_on  # noqa: E402   # Kachel Manager
 
 HAS_AIOHTTP = importlib.util.find_spec('aiohttp') is not None
 if HAS_AIOHTTP:
@@ -314,6 +315,7 @@ class AScreenHomeAssistantHas(Looking):
         self.assertEqual(len(self.ha.calls), calls)
 
 
+@esp_on   # Kachel Manager: Tessera's ESP32 part, off in the Kachel Manager (tests/kachel_esp.py)
 @unittest.skipUnless(HAS_AIOHTTP, 'Run using .venv-portal/bin/python for server tests')
 class ThroughTheApp(unittest.IsolatedAsyncioTestCase):
     def manager(self, tmp):

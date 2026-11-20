@@ -1,0 +1,79 @@
+/* Kachel Manager: the Kachel look over Tessera's styles (Philip, 2026-11-20: "es soll nicht mehr nach Tessera aussehen,
+   sich aber gut bedienen lassen"). It follows the Kachel design the tablets wear (kachel-zentrale design/kachel-design.md):
+   one accent, the turquoise of the Kachel mark (#2BB3A3); calm near-black surfaces in the dark and soft grey ones in the
+   light; cards with round corners; keys with fully round ends. Loaded after styles/app.css (main.ts), so Tessera's files
+   stay as they are and a merge from Tessera keeps this look. Only colours, corners and spacing change here, never what
+   is shown or where it does something. */
+
+:root {
+  --ground: #f3f5f5;
+  --surface: #ffffff;
+  --surface-2: #f0f3f3;
+  --line: #e1e6e6;
+  --line-strong: #d0d7d7;
+  --ink: #15191b;
+  --ink-2: #4a5458;
+  --muted: #6c777c;
+  --accent: #23998b;
+  --accent-ink: #ffffff;
+  --accent-soft: #dff3f0;
+  --seg: #eaeeee;
+  --kind-page: #23998b;
+  --bot-a: #23998b;
+  --bot-b: #2b7fb3;
+  --bot-c: #5fd3c4;
+  --kachel-teal: #2bb3a3;
+  --kachel-radius: 16px;
+  --shadow: 0 12px 36px rgba(15, 30, 30, 0.12), 0 1px 2px rgba(15, 30, 30, 0.06);
+  --pop-shadow: 0 14px 38px rgba(15, 30, 30, 0.16), 0 2px 6px rgba(15, 30, 30, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #0f1112;
+    --surface: #1b1e20;
+    --surface-2: #23272a;
+    --line: #2c3134;
+    --line-strong: #394044;
+    --ink: #eceeef;
+    --ink-2: #c1c8cb;
+    --muted: #8f999e;
+    --accent: #2bb3a3;
+    --accent-ink: #ffffff;
+    --accent-soft: #163631;
+    --seg: #23272a;
+    --kind-page: #2bb3a3;
+    --bot-a: #2bb3a3;
+    --bot-b: #3b8fc4;
+    --bot-c: #6fe0d2;
+  }
+}
+
+/* The sidebar: the Kachel mark and name, roomy rows, the chosen one tinted in the accent. */
+.side { padding: 18px 12px; gap: 3px; }
+.brand .kachel-word { color: var(--kachel-teal); }
+.brand { height: 40px; font-size: 15px; font-weight: 700; letter-spacing: 0.1px; }
+.nav-item { height: 38px; padding: 0 10px; border-radius: 12px; font-size: 13.5px; gap: 11px; }
+.nav-item .mdi, .nav-item .ui-icon { font-size: 18px; }
+.nav-item[aria-current="true"] { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+.nav-item[aria-current="true"] .mdi, .nav-item[aria-current="true"] .ui-icon { color: var(--accent); }
+.side .label { font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; padding: 18px 10px 6px; }
+.screen-item { border-radius: 12px; }
+
+/* Keys: fully round ends; the one that leads on in the accent, the second one on the track. */
+.btn { border-radius: 999px; padding: 7px 15px; font-weight: 600; font-size: 13px; }
+.btn.mini { border-radius: 999px; padding: 5px 11px; }
+.btn.quiet { border-color: transparent; background: var(--surface-2); color: var(--ink); }
+.btn.quiet:hover:not(:disabled) { background: var(--line); }
+.seg { border-radius: 999px; padding: 3px; }
+.seg button { border-radius: 999px; padding: 6px 13px; }
+.seg button[aria-pressed="true"] { box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18); }
+.chip { border-radius: 999px; }
+
+/* Cards: round corners and a soft shadow, as the tablet's own cards. */
+.card, .set-card { border-radius: var(--kachel-radius); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06); }
+@media (prefers-color-scheme: dark) {
+  .card, .set-card { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28); }
+}
+.set-card { padding: 8px 18px 12px; }
+.set-card h4 .mdi { color: var(--accent); }
+input, select, textarea { border-radius: 10px; }

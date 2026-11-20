@@ -4953,7 +4953,8 @@ def create_app(manager, development=False):
                                  or (bool(status) and getattr(status, 'key', None) == 'addon.status.sent'
                                      and shown(screen.get('status')) == 'Synced'))
             screen['status'] = status_text(screen.get('status'))
-            screen['update'] = manager.updates.state_for(screen, profiles)
+            # Kachel Manager: a tablet updates itself (its Device page), never through an ESPHome profile here.
+            screen['update'] = manager.updates.state_for(screen, profiles) if kachel.ESP_SCREENS else None
             # The API key its YAML carries (app 0.2.132), so it can be copied again after pairing: Home Assistant asks
             # for it again when the integration is removed and re-added, or the screen is paired with another HA.
             profile, _ = manager.updates.resolve(screen, profiles)
@@ -5043,7 +5044,8 @@ def create_app(manager, development=False):
             screen['plugin_ask'] = manager.plugins.ask_card(screen) if editor_features['plugins'] and kachel.TESSERA_SITE else None
         return {'csrf': csrf, 'connected': manager.ha.online, 'screens': screens,
                 'editor_features': editor_features,
-                'pending': manager.pending_profiles(screens, profiles),
+                # Kachel Manager: no ESP32 screen waits to be flashed here (kachel.ESP_SCREENS).
+                'pending': manager.pending_profiles(screens, profiles) if kachel.ESP_SCREENS else [],
                 'updates': manager.updates.summary(screens, profiles),
                 # The app's build line (docs/BUILDS.md): every build that runs, waits or ended last, and per screen the one
                 # on its way (Manager.builds), from one look at the line, so the editor has one source for every build.

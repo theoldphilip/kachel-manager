@@ -16,7 +16,7 @@ describe("the Kachel Manager's sidebar", () => {
     await flushPromises();
     expect(sidebar.find(".brand .kachel-mark").exists()).toBe(true);
     expect(sidebar.find(".brand .tessera-mark").exists()).toBe(false);
-    expect(sidebar.find(".brand .txt").text()).toBe("Kachel");
+    expect(sidebar.find(".brand .txt").text()).toBe("Kachel Manager");
     expect(sidebar.find("#open-manual").attributes("href")).toBe(MANUAL);
     sidebar.unmount();
   });

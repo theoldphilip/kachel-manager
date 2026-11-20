@@ -3,6 +3,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./styles/tokens.css";
 import "./styles/app.css";
+// Kachel Manager: the Kachel look over Tessera's styles (src/kachel/kachel-theme.css).
+import "./kachel/kachel-theme.css";
 import { i18n, setEditorLanguage } from "./i18n";
 import { boot } from "./boot";
 import { restoreKeptRoute, router } from "./router";

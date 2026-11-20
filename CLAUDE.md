@@ -114,6 +114,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   (Seitenleiste, Übersicht) `screen['kachel']` = Kachel-Version und Gerät aus echods Sensoren „Kachel version“/„Kachel
   board“ (`kachel_board.py`, `DEVICES`: fire8, a12s, gta3xl). Tests `tests/test_kachel_board.py`,
   `web/tests/kachel-board.spec.ts`.
+- **Redesign** (20.11., Philip „perfekt!“ zum Entwurf): Kachel-Aussehen nach `design/` der Zentrale in
+  `web/src/kachel/kachel-theme.css` (nach `app.css` geladen, nur Farben/Ecken/Abstände; Türkis `#2BB3A3`, runde Tasten,
+  Karten). Tesseras Dateien bleiben möglichst unverändert. Ohne `ESP_SCREENS` kein ESPHome-Update und keine wartenden
+  Profile im Inventar (`server.py`). Weitere Schritte: Übersicht, Reiter je Gerät, Gerät als Kartenmenü, Suche über alles.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

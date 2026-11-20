@@ -1814,7 +1814,9 @@
         "firmware": "Firmware",
         "board": "Board",
         "show": "Details von {name} anzeigen",
-        "hide": "Details von {name} ausblenden"
+        "hide": "Details von {name} ausblenden",
+        "kachel_version": "Kachel-Version",
+        "kachel_device": "Gerät"
       },
       "rename": {
         "button": "Umbenennen",

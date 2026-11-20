@@ -1814,7 +1814,9 @@
         "firmware": "Firmware",
         "board": "Board",
         "show": "Show details of {name}",
-        "hide": "Hide details of {name}"
+        "hide": "Hide details of {name}",
+        "kachel_version": "Kachel version",
+        "kachel_device": "Device"
       },
       "rename": {
         "button": "Rename",

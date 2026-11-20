@@ -54,7 +54,8 @@ const scale = (style: Record<string, string>, shape: { width: number; height: nu
 };
 // A build on its way (queued or running): its ring stands where the light is, and its step is the line under the name.
 const building = (screen: Screen) => Boolean(builds.buildOf(screen) || builds.isBuilding(screen));
-const place = (screen: Screen) => [screen.area, screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : ""].filter(Boolean).join(" · ");
+// Kachel Manager: a Kachel device is named as the device it is (kachel_board.py), not by an ESP32 board.
+const place = (screen: Screen) => [screen.area, screen.kachel ? screen.kachel.device || "" : screen.board && screen.shape?.catalog?.name ? boardTitle(screen.shape.catalog) : ""].filter(Boolean).join(" · ");
 onMounted(entities.loadOverview);
 </script>
 

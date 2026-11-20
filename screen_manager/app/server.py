@@ -21,6 +21,7 @@ import kachel_device
 import kachel_log
 import kachel_integration
 import kachel_keep
+import kachel_board
 import calendar_feed
 import todo_feed
 import doorbell
@@ -4964,6 +4965,8 @@ def create_app(manager, development=False):
             screen['package'] = manager.package_of(screen, profiles)
             # The board too: a screen that says nothing about itself is known by the YAML its profile builds from.
             screen['board'] = board_of(screen)
+            # Kachel Manager: the Kachel version and the device, which the editor shows in place of the two above.
+            screen['kachel'] = kachel_board.info(manager, screen)
             # A screen with 4 MB of flash that still has ESPHome's partition table (app 0.4.82): the editor says to update
             # it in Tessera, which moves the table; ESPHome Device Builder's update does not fit its slot.
             screen['update_in_tessera'] = update_in_tessera(screen)

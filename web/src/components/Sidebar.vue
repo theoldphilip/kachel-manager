@@ -213,9 +213,17 @@ const lastLog = () => {
         <div v-else-if="isOpen(screen)" class="screen-details">
           <dl class="facts">
             <template v-if="screen.area"><dt>{{ t("editor.sidebar.details.room") }}</dt><dd>{{ screen.area }}</dd></template>
+            <!-- Kachel Manager: a Kachel device shows its Kachel version and what device it is (kachel_board.py), not
+                 Tessera's firmware number and ESP32 board. -->
+            <template v-if="screen.kachel">
+              <dt>{{ t("editor.sidebar.details.kachel_version") }}</dt><dd>{{ screen.kachel.version || t("editor.common.unknown") }}</dd>
+              <template v-if="screen.kachel.device"><dt>{{ t("editor.sidebar.details.kachel_device") }}</dt><dd>{{ screen.kachel.device }}</dd></template>
+            </template>
+            <template v-else>
             <dt>{{ t("editor.sidebar.details.firmware") }}</dt>
             <dd>{{ screen.firmware || t("editor.common.unknown") }}<template v-if="scr.updateState(screen)?.kind === 'available' && !languageOnly(screen)"> → {{ screen.update?.target }}</template></dd>
             <template v-if="boardName(screen)"><dt>{{ t("editor.sidebar.details.board") }}</dt><dd>{{ boardName(screen) }}</dd></template>
+            </template>
           </dl>
           <!-- A screen with 4 MB of flash on ESPHome's partition table (app 0.4.82): update it here, which moves the table. -->
           <details v-if="screen.update_in_tessera" class="whatsnew in-tessera">

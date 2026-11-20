@@ -110,6 +110,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 - **Seiten bleiben** (20.11., Fire-Test): `Manager.remove_screen` hebt vor `forget_inbox` die Seiten eines Kachel-Geräts
   nach MAC auf (`kachel_keep.keep`, Datei `/data/kachel_kept_pages.json`, höchstens 20); die Sync-Schleife gibt sie einem
   Bildschirm ohne Seiten mit derselben MAC einmal zurück (`kachel_keep.restore`). Test `tests/test_kachel_keep.py`.
+- **Kachel-Version und Gerät** (20.11., Philip): Statt Tesseras Firmware-Nummer und ESP32-Board zeigt der Editor
+  (Seitenleiste, Übersicht) `screen['kachel']` = Kachel-Version und Gerät aus echods Sensoren „Kachel version“/„Kachel
+  board“ (`kachel_board.py`, `DEVICES`: fire8, a12s, gta3xl). Tests `tests/test_kachel_board.py`,
+  `web/tests/kachel-board.spec.ts`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

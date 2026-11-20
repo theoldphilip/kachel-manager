@@ -3168,6 +3168,10 @@
         "running": "Version {version} running",
         "written": "The Kachel integration is in place. Restart Home Assistant to load it.",
         "writes": "Writes {path}"
+      },
+      "kachel_log": {
+        "title": "Device log",
+        "text": "What a tablet wrote down, fetched through Home Assistant: open the device, its card Log is under Screen settings."
       }
     },
     "firmware": {

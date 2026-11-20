@@ -25,6 +25,13 @@ sein Postfach als Text „Kachel inbox“, und der Kachel Manager zeigt es in de
 
 Beim Umstellen bleibt das bisherige Layout auf dem Tablet stehen, bis der Kachel Manager ein neues schickt.
 
+Entfernst du ein Kachel-Gerät (im Editor oder bei den Werkseinstellungen des Tablets), hebt der Kachel Manager seine
+Seiten auf. Kommt dasselbe Gerät wieder (erkannt an seiner MAC-Adresse), unter ESPHome oder unter der Kachel-Integration,
+bekommt es seine Seiten zurück, sofern es noch keine eigenen hat.
+
+Das **Protokoll** eines Geräts steht unter **Bildschirmeinstellungen → Protokoll**; unter **Einstellungen → Protokoll
+eines Geräts** führt je ein Knopf dorthin.
+
 ## Layout
 
 Im Tab **Layout** stehen die Seiten des Tablets mit ihren Kacheln. Eine Entität aus Home Assistant wird zur Kachel,

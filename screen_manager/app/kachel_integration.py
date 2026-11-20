@@ -26,7 +26,7 @@ LOG = logging.getLogger('screen_manager')
 DOMAIN = 'kachel'
 SOURCE = Path(__file__).parent / 'ha_integration' / DOMAIN
 # The commit of theoldphilip/kachel-verbindung the copy in SOURCE was taken from.
-SOURCE_COMMIT = 'ba7b479'
+SOURCE_COMMIT = 'ac7fb28'
 
 
 def target(config=None):
@@ -99,10 +99,18 @@ def install(directory):
 
 
 async def loaded_version(ha):
-    """The version of `kachel` Home Assistant runs, or None (not installed, or not restarted since)."""
+    """The version of `kachel` Home Assistant runs, or None when it runs none.
+
+    Whether it runs one says Home Assistant's list of loaded components (get_config); manifest/get alone is no proof,
+    since it reads a custom integration's folder even before Home Assistant ever loaded it, so a fresh install looked as
+    if it ran already and the editor never asked for the restart (Fire test, 2026-11-20). Once loaded, Home Assistant
+    keeps the manifest it loaded, so after an update on disk this still gives the running version until the restart."""
     try:
+        config = await ha.request('get_config')
+        if not isinstance(config, dict) or DOMAIN not in (config.get('components') or ()):
+            return None
         manifest = await ha.request('manifest/get', integration=DOMAIN)
-    except Exception:  # noqa: BLE001 - not loaded
+    except Exception:  # noqa: BLE001 - Home Assistant away: nothing is known to run
         return None
     return manifest.get('version') if isinstance(manifest, dict) else None
 

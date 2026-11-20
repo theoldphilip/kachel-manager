@@ -1,3 +1,10 @@
+## Kachel Manager 0.1.4 (based on Tessera 0.4.98)
+
+- **A device keeps its pages when it leaves Home Assistant and comes back.** Removing a Kachel device (in the editor, or when it asks to leave at its factory reset) used to forget its pages, so a device moved from ESPHome to the Kachel integration came back as a new screen without tiles. The app now keeps the pages by the device's MAC address and gives them back once, when the same device comes back without pages of its own, under ESPHome or the Kachel integration.
+- **After installing the Kachel integration the app asks for the restart.** It went by the version in the integration's folder, which Home Assistant reads even before a restart, and so said the integration ran already. It now goes by what Home Assistant has loaded.
+- **The way to a device's log.** Settings has a card Device log with a button per device that opens its log under Screen settings.
+- **Kachel integration 0.2.3.** Devices show Kachel as their maker, and Home Assistant shows the Kachel mark for the integration and its discovered devices.
+
 ## Kachel Manager 0.1.3 (based on Tessera 0.4.98)
 
 - **The Kachel integration comes with the app.** Settings → Kachel integration writes Home Assistant's integration `kachel` (version 0.2.2) into `/homeassistant/custom_components/kachel` when you press Install, and only then; an older copy there is replaced whole. Restart Home Assistant yourself afterwards, then add a device under Settings → Devices & services. The app adds no entry and changes nothing in ESPHome. The integration finds the Fire and the treadmill display, gives each device its own key when it is added, and keeps that key in Home Assistant, so a device is never left open on the network.

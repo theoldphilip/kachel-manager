@@ -3619,6 +3619,10 @@
         "running": "Version {version} läuft",
         "written": "Die Kachel-Integration liegt bereit. Starte Home Assistant neu, damit sie geladen wird.",
         "writes": "Schreibt {path}"
+      },
+      "kachel_log": {
+        "title": "Protokoll eines Geräts",
+        "text": "Was ein Tablet aufgeschrieben hat, geholt über Home Assistant: Gerät öffnen, die Karte „Protokoll“ steht unter den Bildschirm-Einstellungen."
       }
     },
     "firmware": {

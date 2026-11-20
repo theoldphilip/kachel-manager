@@ -227,7 +227,7 @@ class KachelManager:
             config_entry_id=self.entry.entry_id,
             identifiers={(DOMAIN, mac)},
             connections={(dr.CONNECTION_NETWORK_MAC, mac)},
-            manufacturer=device_info.manufacturer or MANUFACTURER,
+            manufacturer=MANUFACTURER,
             model=device_info.model or None,
             name=device_info.friendly_name or device_info.name,
             sw_version=device_info.project_version or device_info.esphome_version or None,
@@ -236,7 +236,7 @@ class KachelManager:
             registry.async_get_or_create(
                 config_entry_id=self.entry.entry_id,
                 identifiers={(DOMAIN, f"{mac}_{sub.device_id}")},
-                manufacturer=device_info.manufacturer or MANUFACTURER,
+                manufacturer=MANUFACTURER,
                 name=sub.name or None,
                 via_device_id=main.id,
             )

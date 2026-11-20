@@ -107,6 +107,9 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   Kachel-Integration schreibt den Ordner auf Knopfdruck ganz neu nach `/homeassistant/custom_components/kachel`, nur wenn
   er anders ist; Neustart nur anzeigen, nie selbst; kein Config-Entry. Tests `tests/test_kachel_integration.py`,
   `web/tests/kachel-integration.spec.ts`.
+- **Seiten bleiben** (20.11., Fire-Test): `Manager.remove_screen` hebt vor `forget_inbox` die Seiten eines Kachel-Geräts
+  nach MAC auf (`kachel_keep.keep`, Datei `/data/kachel_kept_pages.json`, höchstens 20); die Sync-Schleife gibt sie einem
+  Bildschirm ohne Seiten mit derselben MAC einmal zurück (`kachel_keep.restore`). Test `tests/test_kachel_keep.py`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

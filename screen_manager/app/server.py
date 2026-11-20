@@ -20,6 +20,7 @@ import kachel
 import kachel_device
 import kachel_log
 import kachel_integration
+import kachel_keep
 import calendar_feed
 import todo_feed
 import doorbell
@@ -1878,6 +1879,8 @@ class Manager:
         for sensor in self.layout_sensors(screen):
             with contextlib.suppress(ClientError, ConnectionError, TimeoutError, OSError):
                 await self.ha.remove_state(sensor)
+        # Kachel Manager: its pages wait for the device to come back, under ESPHome or Kachel (kachel_keep.py).
+        kachel_keep.keep(self, screen, inbox)
         self.forget_inbox(inbox)
         self.plugins.forget_screen(inbox)
         self.icons.forget_screen(inbox)
@@ -3672,6 +3675,10 @@ class Manager:
                     except Exception as error:  # noqa: BLE001 - the device shows its hint to remove it by hand
                         LOG.warning('%s asked to leave Home Assistant, but it could not be removed (%s)', screen.get('name') or inbox, error)
                     continue
+                # Kachel Manager: a device that comes back without pages gets the ones it had (kachel_keep.py).
+                if kachel_keep.restore(self, screen):
+                    changed = True
+                    self.ha.changed.set()
                 if not screen['online']:
                     self.sent.pop(inbox, None)
                     if inbox in self.page_senders: self.page_senders[inbox].disconnected()

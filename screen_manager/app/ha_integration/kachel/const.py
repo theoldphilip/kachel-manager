@@ -19,6 +19,8 @@ SUPPORTED_BOARDS: Final = frozenset({"fire8", "a12s"})
 
 CLIENT_INFO: Final = "Home Assistant Kachel"
 
+# Shown as the manufacturer of every Kachel device (echod itself reports "TECHO5", its origin; Philip wants
+# "Kachel" in HA, 2026-11-20).
 MANUFACTURER: Final = "Kachel"
 
 # May the device perform Home Assistant actions? The ESPHome integration's option name (the Kachel

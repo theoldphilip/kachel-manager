@@ -175,10 +175,12 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
     # --- helpers -----------------------------------------------------------------------------
 
     def _held_by_esphome(self, mac: str) -> bool:
-        """Whether the ESPHome integration still has this device."""
+        """Whether the ESPHome integration still has this device (an "ignore" entry there does not count)."""
         return any(
             entry.unique_id == mac
-            for entry in self.hass.config_entries.async_entries(ESPHOME_DOMAIN)
+            for entry in self.hass.config_entries.async_entries(
+                ESPHOME_DOMAIN, include_ignore=False
+            )
         )
 
     async def _async_connect_first(self) -> ConfigFlowResult:

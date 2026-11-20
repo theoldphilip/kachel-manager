@@ -17,9 +17,10 @@ class HA:
         self.loaded = loaded
 
     async def request(self, kind, **data):
-        if self.loaded is None:
-            raise RuntimeError('Integration not found')
-        return {'domain': 'kachel', 'version': self.loaded}
+        if kind == 'get_config':
+            return {'components': ['esphome'] + (['kachel'] if self.loaded else [])}
+        # manifest/get reads the folder whether or not Home Assistant loaded it.
+        return {'domain': 'kachel', 'version': self.loaded or '0.2.2'}
 
 
 class Shipped(unittest.TestCase):

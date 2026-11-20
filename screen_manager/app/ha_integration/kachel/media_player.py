@@ -7,6 +7,8 @@ ffmpeg proxy (ffmpeg_proxy.py) in the format the device asks for: echod plays pl
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+import logging
 from typing import Any
 from urllib.parse import urlparse
 
@@ -44,6 +46,31 @@ from .entity import KachelEntity, async_setup_platform
 from .ffmpeg_proxy import async_create_proxy_url
 
 PARALLEL_UPDATES = 0
+
+_LOGGER = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class NowPlaying:
+    """What is playing, as far as Home Assistant knows it when it hands the device a URL.
+
+    The device only gets the converted stream (ffmpeg proxy) and so cannot name it itself. Also the content of
+    echod's "media" message (fire-app, 2026-11-20); "picture" only an address fetchable without a login.
+    """
+
+    station: str | None = None
+    title: str | None = None
+    artist: str | None = None
+    album: str | None = None
+    picture: str | None = None
+
+
+def _public_url(url: Any) -> str | None:
+    """A picture address the device can fetch on its own (no Home Assistant paths, no tokens)."""
+    if isinstance(url, str) and url.startswith(("http://", "https://")) and "token=" not in url:
+        return url
+    return None
+
 
 ATTR_BYPASS_PROXY = "bypass_proxy"
 
@@ -94,7 +121,9 @@ class KachelMediaPlayer(KachelEntity, MediaPlayerEntity):
     """The speaker of a Kachel device."""
 
     _attr_device_class = MediaPlayerDeviceClass.SPEAKER
+    _attr_media_image_remotely_accessible = True
     _formats: list[MediaPlayerSupportedFormat]
+    now_playing: NowPlaying | None = None
 
     def _on_info(self, info: MediaPlayerInfo) -> None:
         api_version = self._data.client.api_version
@@ -141,12 +170,19 @@ class KachelMediaPlayer(KachelEntity, MediaPlayerEntity):
                 translation_key="enqueue_mode_not_supported",
                 translation_placeholders={"enqueue": str(enqueue)},
             )
+        announcement = kwargs.get(ATTR_MEDIA_ANNOUNCE)
+        if not announcement:
+            self.now_playing = await self._describe(media_id, kwargs.get(ATTR_MEDIA_EXTRA) or {})
+            self._data.last_media = (media_id, str(media_type))
+            self.async_write_ha_state()
+            if self._data.media_flow is not None:
+                # Before the stream starts: the device names the stream that starts next.
+                await self._data.media_flow.async_send_media(self.now_playing)
         if media_source.is_media_source_id(media_id):
             media_id = (
                 await media_source.async_resolve_media(self.hass, media_id, self.entity_id)
             ).url
         media_id = async_process_play_media_url(self.hass, media_id)
-        announcement = kwargs.get(ATTR_MEDIA_ANNOUNCE)
         bypass = (kwargs.get(ATTR_MEDIA_EXTRA) or {}).get(ATTR_BYPASS_PROXY)
         if (
             not bypass
@@ -160,6 +196,64 @@ class KachelMediaPlayer(KachelEntity, MediaPlayerEntity):
             media_url=media_id,
             announcement=announcement,
         )
+
+    async def _describe(self, media_id: str, extra: dict[str, Any]) -> NowPlaying:
+        """Name what is about to play: from the caller's extra (title, thumb), else from the media source."""
+        title = extra.get("title")
+        picture = _public_url(extra.get("thumb") or extra.get("image"))
+        station = None
+        if media_source.is_media_source_id(media_id):
+            try:
+                item = await media_source.async_browse_media(self.hass, media_id)
+            except Exception as err:
+                _LOGGER.debug("Kachel: no name for %s: %s", media_id, err)
+            else:
+                title = title or item.title
+                picture = picture or _public_url(item.thumbnail)
+            if media_id.startswith("media-source://radio_browser"):
+                # A station: its name is the station, the song comes from the stream (the device asks TuneIn).
+                station, title = title, None
+        return NowPlaying(
+            station=station or None,
+            title=title or None,
+            artist=extra.get("artist") or None,
+            album=extra.get("album") or None,
+            picture=picture,
+        )
+
+    @property
+    def _showing(self) -> NowPlaying | None:
+        """What is playing, while something is."""
+        if self.state in (MediaPlayerState.PLAYING, MediaPlayerState.PAUSED):
+            return self.now_playing
+        return None
+
+    @property
+    def media_title(self) -> str | None:
+        """The song, else the station."""
+        if (n := self._showing) is None:
+            return None
+        return n.title or n.station
+
+    @property
+    def media_artist(self) -> str | None:
+        """The artist, if known."""
+        return None if (n := self._showing) is None else n.artist
+
+    @property
+    def media_album_name(self) -> str | None:
+        """The album, if known."""
+        return None if (n := self._showing) is None else n.album
+
+    @property
+    def media_channel(self) -> str | None:
+        """The radio station, if one plays."""
+        return None if (n := self._showing) is None else n.station
+
+    @property
+    def media_image_url(self) -> str | None:
+        """The cover or the station's logo."""
+        return None if (n := self._showing) is None else n.picture
 
     def _proxy_url(self, url: str, announcement: bool) -> str | None:
         """A one-time URL on Home Assistant that converts `url` to the device's format."""

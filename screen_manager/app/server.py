@@ -5104,6 +5104,8 @@ def create_app(manager, development=False):
         payload['backgrounds'] = backgrounds()
         payload['controls'] = controls_catalogue()
         payload['icons'] = tile_icons.editor()
+        # Kachel Manager: the Kachel tablet's music tile draws mdi:music (its icon is the tablet's, not in Tessera's fonts).
+        payload['icons'].setdefault('builtin', {})['screen.music'] = 'F075A'
         payload['alerts'] = alert_reference()
         # The doorbell's event, and the doorbells this Home Assistant has, for the wizard to offer first (docs/DOORBELL.md).
         payload['doorbell'] = {**doorbell.reference(), 'suggestions': doorbell.suggestions(manager.ha.states, manager.registry_index(), manager.device_entries)}

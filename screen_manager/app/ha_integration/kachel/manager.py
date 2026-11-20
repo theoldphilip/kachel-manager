@@ -52,8 +52,19 @@ async def async_zeroconf(hass: HomeAssistant) -> Any:
     return await zeroconf.async_get_instance(hass)
 
 
-def create_client(host: str, port: int, noise_psk: str | None, zeroconf_instance: Any) -> APIClient:
-    """A client for one device (a function, so tests can replace it)."""
+def create_client(
+    host: str,
+    port: int,
+    noise_psk: str | None,
+    zeroconf_instance: Any,
+    timezone: str | None = None,
+) -> APIClient:
+    """A client for one device (a function, so tests can replace it).
+
+    `timezone` is Home Assistant's (as the ESPHome integration passes it): the device asks for the time when
+    it subscribes, and gets this zone with it. Without it the library would send the zone of the machine
+    Home Assistant runs on, which in a container is often UTC.
+    """
     return APIClient(
         host,
         port,
@@ -61,6 +72,7 @@ def create_client(host: str, port: int, noise_psk: str | None, zeroconf_instance
         client_info=CLIENT_INFO,
         zeroconf_instance=zeroconf_instance,
         noise_psk=noise_psk,
+        timezone=timezone,
     )
 
 
@@ -92,6 +104,10 @@ class KachelData:
     # Called after every connect, once the device is registered and its states are followed: what
     # needs the connection itself (the voice assistant subscribes to the device's audio here).
     connect_listeners: list[Callable[[], None]] = field(default_factory=list)
+    # What the speaker was last told to play (media id, type), for "Play on …" (media_flow.py).
+    last_media: tuple[str, str] | None = None
+    # The music page's side (media_flow.MediaFlow), set at setup.
+    media_flow: Any = None
 
     @property
     def voice_features(self) -> int:
@@ -276,11 +292,14 @@ class KachelManager:
         _LOGGER.debug("Kachel device registered: %s", main.id)
 
 
-def client_from_entry(entry: ConfigEntry, zeroconf_instance: Any) -> APIClient:
+def client_from_entry(
+    entry: ConfigEntry, zeroconf_instance: Any, timezone: str | None = None
+) -> APIClient:
     """The client for a config entry."""
     return create_client(
         entry.data[CONF_HOST],
         entry.data[CONF_PORT],
         entry.data.get(CONF_NOISE_PSK) or None,
         zeroconf_instance,
+        timezone,
     )

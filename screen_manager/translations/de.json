@@ -1570,7 +1570,8 @@
         "map": "Karte",
         "energy": "Energie",
         "text": "Template",
-        "call": "Anrufen"
+        "call": "Anrufen",
+        "music": "Musik"
       },
       "identify": {
         "title": "Das ist {name}",

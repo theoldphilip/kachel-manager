@@ -1,6 +1,6 @@
 /** The cards built into a screen, with no Home Assistant entity of their own (core.py BUILTIN, the page tiles aside). */
-export type BuiltinName = "clock" | "nightstand" | "settings" | "map" | "energy" | "text";
-export const BUILTIN_CARDS: string[] = ["screen.clock", "screen.nightstand", "screen.settings", "screen.map", "screen.energy", "screen.text", "screen.call"];
+export type BuiltinName = "clock" | "nightstand" | "settings" | "map" | "energy" | "text" | "music";
+export const BUILTIN_CARDS: string[] = ["screen.clock", "screen.nightstand", "screen.settings", "screen.map", "screen.energy", "screen.text", "screen.call", "screen.music"];
 // A plugin tile's option as it is kept (plugin API 0.12): a text, number or toggle; a pick of a list found by searching,
 // {value, label} with the words the person saw; or a list of texts or picks (the add-on's core.plugin_options).
 // A light's preset as the tile keeps it: a brightness, a white shade in kelvin or a colour (hue, saturation), an effect

@@ -137,6 +137,16 @@ def present(functions, states):
     return any(states_now) if states_now else None
 
 
+def with_names(functions, states):
+    """The functions as they go to the tablet: the presence sensors with their names as Home Assistant shows them
+    (`presence.names`, in the order of `entities`), so the tablet says which sensor steers (fire-app, test 0.0.9-dev9)."""
+    presence = functions.get('presence')
+    if not presence:
+        return functions
+    names = [str(((states.get(e) or {}).get('attributes') or {}).get('friendly_name') or e) for e in presence.get('entities', ())]
+    return {**functions, 'presence': {**presence, 'names': names}}
+
+
 async def sync(manager, inbox):
     """Hand a screen its functions and its presence in its session: True when something went out."""
     sender = manager.page_senders.get(inbox)
@@ -144,10 +154,11 @@ async def sync(manager, inbox):
     if keeper is None or sender is None or not sender.session or not sender.confirmed or FEATURE not in (sender.features or ()):
         return False
     functions = keeper.get(inbox)
-    body = json.dumps(functions, sort_keys=True)
+    outgoing = with_names(functions, getattr(manager.ha, 'states', {}) or {})
+    body = json.dumps(outgoing, sort_keys=True)
     went = False
     if keeper.told.get(inbox) != (sender.session, body):
-        if await sender.auxiliary({'op': 'functions', **functions}, session=sender.session, revision=sender.confirmed):
+        if await sender.auxiliary({'op': 'functions', **outgoing}, session=sender.session, revision=sender.confirmed):
             keeper.told[inbox] = (sender.session, body)
             LOG.info('%s: functions set up: %s', sender.name or inbox, ', '.join(sorted(functions)) or 'none')
             went = True
@@ -183,7 +194,7 @@ def view(manager, inbox):
     sender = manager.page_senders.get(inbox)
     can = FEATURE in (getattr(sender, 'features', None) or ())
     told = manager.kachel_functions.told.get(inbox)
-    current = json.dumps(manager.kachel_functions.get(inbox), sort_keys=True)
+    current = json.dumps(with_names(manager.kachel_functions.get(inbox), getattr(manager.ha, 'states', {}) or {}), sort_keys=True)
     return {'functions': manager.kachel_functions.get(inbox), 'supported': can,
             'delivered': bool(told and told[1] == current and sender and told[0] == sender.session),
             'assistant': assistant_of(manager, screen)}

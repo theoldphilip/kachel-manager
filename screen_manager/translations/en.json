@@ -1570,7 +1570,8 @@
         "map": "Map",
         "energy": "Energy",
         "text": "Template",
-        "call": "Call"
+        "call": "Call",
+        "music": "Music"
       },
       "identify": {
         "title": "This is {name}",

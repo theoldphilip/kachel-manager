@@ -191,3 +191,13 @@ class Confirm(unittest.TestCase):
         self.assertTrue(kachel.guard_allowed('switch', 'confirm'))
         self.assertFalse(kachel.guard_allowed('sensor', 'confirm'))
         self.assertFalse(kachel.guard_allowed('cover', 'lock_only'))
+
+
+class MusicTile(unittest.TestCase):
+    """Kachel Manager: the Kachel tablet's own tile "Music" (fire-app, 2026-11-20), a built-in card like Settings."""
+
+    def test_built_in(self):
+        import core
+        self.assertIn('screen.music', core.BUILTIN)
+        self.assertTrue(core.entity_id('screen.music'))
+        self.assertEqual(core.builtin_name('screen.music', lambda key, **_: key), 'addon.screen.builtin.music')

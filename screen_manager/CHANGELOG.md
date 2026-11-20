@@ -1,3 +1,9 @@
+## Kachel Manager 0.1.8 (based on Tessera 0.4.98)
+
+- **The Music tile.** A Kachel tablet's own tile "Music" is in the library with the screen's cards: it shows what plays, and a tap opens the tablet's music page.
+- **The tablet names its presence sensors.** Under Functions, the sensors that say someone is near go to the tablet with their names as Home Assistant shows them, so its setting says which sensor steers the screen.
+- **Kachel integration 0.5.0:** the tablet's music page gets what plays and the players it can hand the music to ("Play on …"), the tablet takes Home Assistant's time zone, and its speaker shows in Home Assistant what plays.
+
 ## Kachel Manager 0.1.7 (based on Tessera 0.4.98)
 
 - **Kachel integration 0.4.0: the voice assistant.** Once Assist is set up for a tablet under Functions, it takes part in Home Assistant's Assist as a satellite, with your own wake words. Which assistant answers is chosen under Functions too (the integration's own "Assistant" choice). Also in it: a tablet reset and added again gets fresh entity ids after its current name.

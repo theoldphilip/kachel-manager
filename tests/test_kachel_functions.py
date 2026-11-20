@@ -50,7 +50,7 @@ class Sender:
 
 class HA:
     def __init__(self):
-        self.states = {'binary_sensor.p': {'state': 'off'}}
+        self.states = {'binary_sensor.p': {'state': 'off', 'attributes': {'friendly_name': 'Flur Bewegung'}}}
 
 
 class Manager:
@@ -72,9 +72,10 @@ class Sync(unittest.TestCase):
         manager = Manager(self.tmp.name, sender)
         manager.kachel_functions.put('text.fire', kf.clean({'presence': {'entities': ['binary_sensor.p']}}))
         self.assertTrue(asyncio.run(kf.sync(manager, 'text.fire')))
-        self.assertEqual(sender.sent, [{'op': 'functions', 'presence': {'entities': ['binary_sensor.p']}}, {'op': 'presence', 'present': False}])
+        self.assertEqual(sender.sent, [{'op': 'functions', 'presence': {'entities': ['binary_sensor.p'], 'names': ['Flur Bewegung']}},
+                                       {'op': 'presence', 'present': False}])
         self.assertFalse(asyncio.run(kf.sync(manager, 'text.fire')), 'nothing new')
-        manager.ha.states['binary_sensor.p'] = {'state': 'on'}
+        manager.ha.states['binary_sensor.p'] = {'state': 'on', 'attributes': {'friendly_name': 'Flur Bewegung'}}
         asyncio.run(kf.sync(manager, 'text.fire'))
         self.assertEqual(sender.sent[-1], {'op': 'presence', 'present': True})
         sender.session = 'b' * 16   # a new hello: everything again

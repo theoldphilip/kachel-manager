@@ -8,6 +8,14 @@ name: Kachel check
 on:
   push:
     branches: ['**']
+    # Text and pictures no test reads (zentrale, 2026-11-20: GitHub checks leaner): a push of only these runs nothing.
+    # The README, AGENTS.md, docs/ and the CHANGELOG stay checked, since tests read them.
+    paths-ignore:
+      - 'CLAUDE.md'
+      - 'screen_manager/DOCS.md'
+      - 'screen_manager/README.md'
+      - 'screen_manager/icon.png'
+      - 'screen_manager/logo.png'
   workflow_dispatch:
 
 permissions:

@@ -43,6 +43,10 @@ Der gemeinsame Stand aller Kachel-Projekte liegt in der Kachel-Zentrale (`~/kach
   (`tools/gitk`), „Kachel check“ läuft bei jedem Push, Ergebnis mit
   `~/kachel-zentrale/tools/ghk checks kachel-manager <branch>`. Erst bei ganz grün per Fast-Forward auf `main` pushen,
   danach den Hilfsbranch löschen. Ist sie rot: nicht mergen.
+- **Schlanke Prüfung** (zentrale, 20.11.): Ein neuer Push bricht den alten Lauf desselben Branches ab (`concurrency`).
+  Ändert ein Push nur `CLAUDE.md`, `screen_manager/DOCS.md`, `screen_manager/README.md` oder Icon/Logo des Stores, läuft
+  keine Prüfung (`paths-ignore`); so ein Branch darf nach grünen lokalen Tests auf `main`. **Vor jedem Push von Code die
+  Tests lokal laufen lassen** (REGELN §5), rot wird nicht gepusht.
 - **Eigene Versionsreihe** ab 0.1.0 in `screen_manager/config.yaml`. Eine neue Nummer nur nach Philips Okay. Unsere
   Abschnitte stehen oben im CHANGELOG als `## Kachel Manager x.y.z (...)` (ohne Firmware-Nummer, damit Tesseras
   Werkzeuge sie nicht als ihre lesen). Die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.

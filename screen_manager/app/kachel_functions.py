@@ -161,6 +161,21 @@ async def sync(manager, inbox):
     return went
 
 
+def assistant_of(manager, screen):
+    """The Kachel integration's choice of assistant for this tablet (kachel-verbindung 0.4.0, `select.<device>_assistant`,
+    translation key `pipeline`): {entity, value, options}, or None before the tablet offers the voice assistant."""
+    import kachel_device
+    ids = kachel_device.devices_of(manager, screen)
+    states = getattr(manager.ha, 'states', {}) or {}
+    for item in getattr(manager.ha, 'registry', None) or []:
+        if (isinstance(item, dict) and item.get('device_id') in ids and item.get('platform') == 'kachel'
+                and str(item.get('entity_id', '')).startswith('select.') and item.get('translation_key') == 'pipeline'):
+            state = states.get(item['entity_id']) or {}
+            options = [o for o in (state.get('attributes') or {}).get('options') or [] if isinstance(o, str)]
+            return {'entity': item['entity_id'], 'value': state.get('state'), 'options': options[:50]}
+    return None
+
+
 def view(manager, inbox):
     screen = manager.screen(inbox)
     if screen is None:
@@ -170,7 +185,8 @@ def view(manager, inbox):
     told = manager.kachel_functions.told.get(inbox)
     current = json.dumps(manager.kachel_functions.get(inbox), sort_keys=True)
     return {'functions': manager.kachel_functions.get(inbox), 'supported': can,
-            'delivered': bool(told and told[1] == current and sender and told[0] == sender.session)}
+            'delivered': bool(told and told[1] == current and sender and told[0] == sender.session),
+            'assistant': assistant_of(manager, screen)}
 
 
 def routes(app, manager):
@@ -181,7 +197,16 @@ def routes(app, manager):
         inbox = request.match_info['inbox']
         if manager.screen(inbox) is None:
             raise ValueError(t('addon.errors.not_paired'))
-        manager.kachel_functions.put(inbox, clean(await request.json()))
+        data = await request.json()
+        chosen = data.pop('assistant', None) if isinstance(data, dict) else None
+        manager.kachel_functions.put(inbox, clean(data))
+        # The assistant is the integration's own select (assistant_of): set there, as its own row in Home Assistant does.
+        if isinstance(chosen, str) and chosen:
+            select = assistant_of(manager, manager.screen(inbox))
+            if not select or chosen not in select['options']:
+                raise ValueError(t('addon.errors.kachel_functions.request'))
+            if chosen != select['value']:
+                await manager.ha.call_service('select', 'select_option', {'entity_id': select['entity'], 'option': chosen})
         manager.ha.changed.set()
         return web.json_response(view(manager, inbox))
 

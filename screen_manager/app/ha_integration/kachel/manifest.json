@@ -8,8 +8,10 @@
   "codeowners": [],
   "config_flow": true,
   "dependencies": [
+    "assist_pipeline",
     "ffmpeg",
-    "http"
+    "http",
+    "intent"
   ],
   "documentation": "https://github.com/theoldphilip/kachel-verbindung",
   "integration_type": "device",
@@ -22,7 +24,7 @@
   "requirements": [
     "aioesphomeapi>=46.25.0"
   ],
-  "version": "0.3.0",
+  "version": "0.4.0",
   "zeroconf": [
     {
       "type": "_esphomelib._tcp.local.",
@@ -32,6 +34,18 @@
     },
     {
       "type": "_esphomelib._tcp.local.",
+      "properties": {
+        "board": "a12s"
+      }
+    },
+    {
+      "type": "_kachel._tcp.local.",
+      "properties": {
+        "board": "fire8"
+      }
+    },
+    {
+      "type": "_kachel._tcp.local.",
       "properties": {
         "board": "a12s"
       }

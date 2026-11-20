@@ -5056,7 +5056,9 @@
       "assist": {
         "title": "Voice assistant",
         "hint": "The tablet takes part in Home Assistant's Assist. Turning it on or off restarts the tablet's app.",
-        "pipeline": "Assistant (optional)"
+        "pipeline": "Assistant",
+        "preferred": "Preferred",
+        "pipeline_later": "Which assistant answers can be chosen here once the tablet takes part in Assist (after saving and its restart)."
       },
       "notices": {
         "title": "Notices",

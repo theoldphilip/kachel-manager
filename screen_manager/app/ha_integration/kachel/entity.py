@@ -31,15 +31,16 @@ _CATEGORIES = {
 }
 
 
-def unique_id_for(mac: str, platform: str, info: EntityInfo) -> str:
-    """The entity's unique id: the device's MAC, the sub-device, the platform and the object id.
+def unique_id_for(mac: str, platform: str, info: EntityInfo, adoption_id: str = "") -> str:
+    """The entity's unique id: the device's MAC, the adoption, the sub-device, the platform and the object id.
 
     Its own scheme (not ESPHome's), so an entity of this integration is never taken for one of
-    the ESPHome integration's.
+    the ESPHome integration's. The adoption id (const.CONF_ADOPTION_ID) is new with every adoption.
     """
+    base = f"{mac}-{adoption_id}" if adoption_id else mac
     if info.device_id:
-        return f"{mac}-{info.device_id}-{platform}-{info.object_id}"
-    return f"{mac}-{platform}-{info.object_id}"
+        return f"{base}-{info.device_id}-{platform}-{info.object_id}"
+    return f"{base}-{platform}-{info.object_id}"
 
 
 def enum_or_none[T](enum_type: Callable[[str], T], value: str) -> T | None:
@@ -65,7 +66,7 @@ class KachelEntity(Entity):
         """Set up from the device's description of the entity."""
         self._data = data
         mac = data.mac
-        self._attr_unique_id = unique_id_for(mac, platform, info)
+        self._attr_unique_id = unique_id_for(mac, platform, info, data.adoption_id)
         identifier = f"{mac}_{info.device_id}" if info.device_id else mac
         self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, identifier)})
         self._attr_name = info.name or None
@@ -142,7 +143,7 @@ def async_setup_platform(
     def add_infos(infos: list[EntityInfo]) -> None:
         new: list[KachelEntity] = []
         for info in infos:
-            uid = unique_id_for(data.mac, platform, info)
+            uid = unique_id_for(data.mac, platform, info, data.adoption_id)
             if (entity := known.get(uid)) is not None:
                 entity.async_set_info(info)
                 if entity.hass is not None and entity.entity_id is not None:

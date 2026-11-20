@@ -20,6 +20,8 @@ from aioesphomeapi import (
     EntityInfo,
     EntityState,
     InvalidEncryptionKeyAPIError,
+    MediaPlayerInfo,
+    MediaPlayerSupportedFormat,
     ReconnectLogic,
     RequiresEncryptionAPIError,
     UserService,
@@ -72,6 +74,8 @@ class KachelData:
     """What the integration keeps for one connected device."""
 
     client: APIClient
+    # This adoption's id (const.CONF_ADOPTION_ID); empty for entries made before 0.3.1.
+    adoption_id: str = ""
     available: bool = False
     device_info: DeviceInfo | None = None
     infos: dict[type[EntityInfo], list[EntityInfo]] = field(default_factory=dict)
@@ -85,6 +89,32 @@ class KachelData:
     main_device_id: str | None = None
     # Undone when the connection ends (state forwarding).
     disconnect_callbacks: list[Callable[[], None]] = field(default_factory=list)
+    # Called after every connect, once the device is registered and its states are followed: what
+    # needs the connection itself (the voice assistant subscribes to the device's audio here).
+    connect_listeners: list[Callable[[], None]] = field(default_factory=list)
+
+    @property
+    def voice_features(self) -> int:
+        """The device's voice assistant features (0: none; on the Fire only once Assist is set up)."""
+        if self.device_info is None:
+            return 0
+        api_version = self.client.api_version
+        if api_version is None:
+            return self.device_info.voice_assistant_feature_flags
+        return self.device_info.voice_assistant_feature_flags_compat(api_version)
+
+    @property
+    def media_formats(self) -> list[MediaPlayerSupportedFormat]:
+        """The formats the device's speaker asks for (for announcements of the voice assistant)."""
+        return [f for info in self.infos.get(MediaPlayerInfo, []) for f in info.supported_formats]
+
+    @callback
+    def async_add_connect_listener(self, listener: Callable[[], None]) -> Callable[[], None]:
+        """Call `listener` after every connect (and now, if connected); returns the remover."""
+        self.connect_listeners.append(listener)
+        if self.available:
+            listener()
+        return lambda: self.connect_listeners.remove(listener)
 
     @property
     def name(self) -> str:
@@ -198,6 +228,8 @@ class KachelManager:
             on_state_request=self.states.async_on_request,
         )
         self.data.async_set_available(True)
+        for listener in list(self.data.connect_listeners):
+            listener()
         _LOGGER.info(
             "Kachel %s connected (%s, %s entities)",
             self.entry.title,

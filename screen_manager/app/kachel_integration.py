@@ -26,7 +26,7 @@ LOG = logging.getLogger('screen_manager')
 DOMAIN = 'kachel'
 SOURCE = Path(__file__).parent / 'ha_integration' / DOMAIN
 # The commit of theoldphilip/kachel-verbindung the copy in SOURCE was taken from.
-SOURCE_COMMIT = '0c03be6'
+SOURCE_COMMIT = 'bc231fa'
 
 
 def target(config=None):

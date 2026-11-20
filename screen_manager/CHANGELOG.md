@@ -1,3 +1,8 @@
+## Kachel Manager 0.1.7 (based on Tessera 0.4.98)
+
+- **Kachel integration 0.4.0: the voice assistant.** Once Assist is set up for a tablet under Functions, it takes part in Home Assistant's Assist as a satellite, with your own wake words. Which assistant answers is chosen under Functions too (the integration's own "Assistant" choice). Also in it: a tablet reset and added again gets fresh entity ids after its current name.
+- Everything of 0.1.6, for those who update from 0.1.5: the pages as in the design, devices instead of screens, ask before switching per tile, and Functions that open at once and offer what fits.
+
 ## Kachel Manager 0.1.6 (based on Tessera 0.4.98)
 
 - **Pages look as in the design.** A Kachel device's pages stand one at a time, as large as fits, with its pages as tabs above them and a tab to add one; the library is a column at the right. A tablet in its dark theme gets a dark page in the editor, as it shows it, and the page's header shows the Kachel mark instead of Tessera's.

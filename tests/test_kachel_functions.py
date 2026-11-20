@@ -111,3 +111,20 @@ class Sync(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class Assistant(unittest.TestCase):
+    """The Kachel integration's choice of assistant (kachel-verbindung 0.4.0), found by its translation key on the tablet."""
+
+    def test_found_on_the_tablet(self):
+        class HA:
+            devices = [{'id': 'fire'}, {'id': 'seiten', 'via_device_id': 'fire'}]
+            registry = [{'entity_id': 'select.neufire_assistant', 'platform': 'kachel', 'device_id': 'fire', 'translation_key': 'pipeline'},
+                        {'entity_id': 'select.other_assistant', 'platform': 'kachel', 'device_id': 'other', 'translation_key': 'pipeline'}]
+            states = {'select.neufire_assistant': {'state': 'preferred', 'attributes': {'options': ['preferred', 'Home Assistant']}}}
+
+        class M:
+            ha = HA()
+        self.assertEqual(kf.assistant_of(M(), {'device_id': 'seiten'}),
+                         {'entity': 'select.neufire_assistant', 'value': 'preferred', 'options': ['preferred', 'Home Assistant']})
+        self.assertIsNone(kf.assistant_of(M(), {'device_id': 'nothing'}))

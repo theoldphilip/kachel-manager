@@ -5056,7 +5056,9 @@
       "assist": {
         "title": "Sprachassistent",
         "hint": "Das Tablet macht bei Assist von Home Assistant mit. Ein- oder Ausschalten startet die App des Tablets neu.",
-        "pipeline": "Assistent (optional)"
+        "pipeline": "Assistent",
+        "preferred": "Bevorzugt",
+        "pipeline_later": "Welcher Assistent antwortet, lässt sich hier wählen, sobald das Tablet bei Assist mitmacht (nach dem Speichern und seinem Neustart)."
       },
       "notices": {
         "title": "Meldungen",

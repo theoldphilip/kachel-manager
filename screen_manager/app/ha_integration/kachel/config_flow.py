@@ -39,6 +39,7 @@ from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 import voluptuous as vol
 
 from .const import (
+    CONF_ADOPTION_ID,
     CONF_ALLOW_SERVICE_CALLS,
     CONF_BOARD,
     CONF_DEVICE_NAME,
@@ -292,7 +293,10 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
             CONF_BOARD: self._board or "",
         }
         if self.source == SOURCE_REAUTH:
+            # A new key, not a new adoption: the entities keep their unique ids.
+            data[CONF_ADOPTION_ID] = self._get_reauth_entry().data.get(CONF_ADOPTION_ID, "")
             return self.async_update_reload_and_abort(self._get_reauth_entry(), data=data)
+        data[CONF_ADOPTION_ID] = secrets.token_hex(3)
         return self.async_create_entry(title=info.friendly_name or info.name, data=data)
 
 

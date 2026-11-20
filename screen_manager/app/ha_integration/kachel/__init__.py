@@ -13,12 +13,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
-from . import ffmpeg_proxy
-from .const import DOMAIN
+from . import assist_satellite, ffmpeg_proxy
+from .const import CONF_ADOPTION_ID, DOMAIN
 from .manager import KachelData, KachelManager, async_zeroconf, client_from_entry
 from .services import async_remove_device_actions
 
 PLATFORMS: list[Platform] = [
+    Platform.ASSIST_SATELLITE,
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
     Platform.LIGHT,
@@ -37,15 +38,19 @@ CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Once for all devices: the ffmpeg proxy that converts what the speakers play."""
+    """Once for all devices: the ffmpeg proxy (speakers) and the wake word models (voice assistants)."""
     ffmpeg_proxy.async_setup(hass)
+    await assist_satellite.async_setup(hass)
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: KachelConfigEntry) -> bool:
     """Set up one Kachel device: platforms first, then the connection (in the background)."""
     zeroconf_instance = await async_zeroconf(hass)
-    data = KachelData(client=client_from_entry(entry, zeroconf_instance))
+    data = KachelData(
+        client=client_from_entry(entry, zeroconf_instance),
+        adoption_id=entry.data.get(CONF_ADOPTION_ID, ""),
+    )
     entry.runtime_data = data
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     manager = KachelManager(hass, entry, data, zeroconf_instance)

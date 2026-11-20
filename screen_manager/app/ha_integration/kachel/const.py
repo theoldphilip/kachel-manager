@@ -27,3 +27,9 @@ MANUFACTURER: Final = "Kachel"
 # Manager reads it); default on for the Kachel devices (Philip, 2026-11-19), off at ESPHome.
 CONF_ALLOW_SERVICE_CALLS: Final = "allow_service_calls"
 DEFAULT_ALLOW_SERVICE_CALLS: Final = True
+
+# A short random id given to each new adoption and kept in its config entry, part of every entity's
+# unique id. After a factory reset and a new adoption the unique ids are new, so Home Assistant does not
+# restore the old entity ids (it keeps deleted entities by unique id) and the ids follow the device's
+# current name (Philip, 2026-11-20). Entries made before 0.3.1 have none and keep their unique ids.
+CONF_ADOPTION_ID: Final = "adoption_id"

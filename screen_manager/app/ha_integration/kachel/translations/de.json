@@ -74,5 +74,23 @@
     "repeat_mode_not_supported": {
       "message": "Das Gerät kann nicht mit Modus {repeat_mode} wiederholen"
     }
+  },
+  "entity": {
+    "select": {
+      "pipeline": {
+        "name": "Assistent",
+        "state": {
+          "preferred": "Bevorzugt"
+        }
+      },
+      "vad_sensitivity": {
+        "name": "Erkennung Sprechende",
+        "state": {
+          "default": "Standard",
+          "aggressive": "Schnell",
+          "relaxed": "Entspannt"
+        }
+      }
+    }
   }
 }

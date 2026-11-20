@@ -72,3 +72,18 @@ describe("what the Functions tab offers", () => {
     expect((vm.lists.notices.doorbell as [string, string][]).map(([id]) => id)).toEqual(["event.haustuer_klingel"]);
   });
 });
+
+describe("the assistant", () => {
+  it("is chosen from the Kachel integration's list and saved with the rest", async () => {
+    const wrapper = await panel({ functions: { assist: { ways: ["tap_clock"] } }, supported: true, delivered: true,
+      assistant: { entity: "select.neufire_assistant", value: "preferred", options: ["preferred", "Home Assistant"] } });
+    expect(wrapper.find("[data-assistant]").exists()).toBe(true);
+    (wrapper.vm as any).assistant = "Home Assistant";
+    await wrapper.vm.$nextTick();
+    vi.mocked(send).mockResolvedValue({ functions: { assist: { ways: ["tap_clock"] } }, supported: true, delivered: true,
+      assistant: { entity: "select.neufire_assistant", value: "Home Assistant", options: ["preferred", "Home Assistant"] } });
+    await wrapper.find("#kachel-functions-save").trigger("click");
+    await flushPromises();
+    expect(send).toHaveBeenCalledWith("screens/text.fire_kachel_inbox/kachel/functions", "PUT", { assist: { ways: ["tap_clock"] }, assistant: "Home Assistant" });
+  });
+});

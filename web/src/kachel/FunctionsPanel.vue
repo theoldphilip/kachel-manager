@@ -17,7 +17,8 @@ type Functions = {
   assist?: { ways: string[]; pipeline?: string };
   notices?: Record<string, string | boolean>;
 };
-type View = { functions: Functions; supported: boolean; delivered: boolean };
+type Assistant = { entity: string; value: string | null; options: string[] };
+type View = { functions: Functions; supported: boolean; delivered: boolean; assistant?: Assistant | null };
 
 const inv = useInventoryStore();
 const scr = useScreenStore();
@@ -38,11 +39,18 @@ async function load() {
   try {
     view.value = await getJson<View>(route());
     draft.value = JSON.parse(JSON.stringify(view.value.functions || {}));
+    assistant.value = view.value.assistant?.value || "";
   } catch (error: any) { ui.toast(error.message); }
 }
 watch(() => scr.currentScreen?.id, load, { immediate: true });
 
-const changed = computed(() => JSON.stringify(draft.value) !== JSON.stringify(view.value?.functions || {}));
+// The assistant is the Kachel integration's own choice (select.<device>_assistant, kachel-verbindung 0.4.0): there once
+// the tablet offers the voice assistant, set through the add-on with the rest.
+const assistant = ref("");
+const assistantChoices = computed(() => (view.value?.assistant?.options || []).map((option) =>
+  [option, option === "preferred" ? t("editor.kachel_functions.assist.preferred") : option] as [string, string]));
+const changed = computed(() => JSON.stringify(draft.value) !== JSON.stringify(view.value?.functions || {})
+  || (Boolean(view.value?.assistant) && assistant.value !== (view.value?.assistant?.value || "")));
 // The lists offered, worked out once per inventory (Philip, test 0.0.9-dev7: the tab took up to 30 s, every list of all of
 // Home Assistant's entities): only what fits each function, by its domain and what Home Assistant calls it (its words,
 // the device class among them) or its name.
@@ -123,8 +131,11 @@ const wayLabels = computed<Record<string, string>>(() => ({
 async function save() {
   busy.value = true;
   try {
-    view.value = await send<View>(route(), "PUT", draft.value);
+    const body = view.value?.assistant && assistant.value && assistant.value !== view.value.assistant.value
+      ? { ...draft.value, assistant: assistant.value } : draft.value;
+    view.value = await send<View>(route(), "PUT", body);
     draft.value = JSON.parse(JSON.stringify(view.value!.functions || {}));
+    assistant.value = view.value!.assistant?.value || assistant.value;
     ui.toast(t("editor.kachel_functions.saved"));
   } catch (error: any) { ui.toast(error.message); }
   finally { busy.value = false; }
@@ -166,8 +177,11 @@ async function save() {
           <button v-for="way in ASSIST_WAYS" :key="way" type="button" :data-way="way" :aria-pressed="(draft.assist?.ways || []).includes(way) ? 'true' : 'false'"
             @click="toggleWay('assist', way)">{{ wayLabels[way] }}</button>
         </div>
-        <input type="text" class="kachel-pipeline" :value="draft.assist?.pipeline || ''" :placeholder="t('editor.kachel_functions.assist.pipeline')"
-          @input="draft.assist = { ...(draft.assist || { ways: [] }), pipeline: ($event.target as HTMLInputElement).value }" />
+        <div v-if="view.assistant" class="srow kachel-assistant" data-assistant>
+          <span class="s-label">{{ t("editor.kachel_functions.assist.pipeline") }}</span>
+          <div class="s-control"><UiSelect id="kachel-assistant" :model-value="assistant" :options="assistantChoices" @update:model-value="(v: string) => assistant = v" /></div>
+        </div>
+        <small v-else class="hint">{{ t("editor.kachel_functions.assist.pipeline_later") }}</small>
       </template>
     </section>
 
@@ -217,7 +231,7 @@ async function save() {
 .amber { color: #d8941c; background: rgba(224, 160, 58, 0.16); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
 .chip-x { margin-left: 4px; color: var(--muted); font-size: 14px; }
-.kachel-pipeline { margin-top: 10px; max-width: 360px; }
+.kachel-assistant { margin-top: 8px; }
 .kachel-notice + .kachel-notice { border-top: 1px solid var(--line); }
 .kachel-notice-pick { padding-left: 16px; }
 .kachel-functions-bar { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }

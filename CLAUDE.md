@@ -132,6 +132,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 - **Redesign Runde 2** (20.11.): Seiten einzeln mit Reitern, Bibliothek rechts (`.kachel-work`), dunkle Vorschau nach „Theme
   mode“ des Tablets (`kachel_board.info` → `theme`), Kachel-Zeichen statt Tessera-Logo (`TesseraMark.vue`), „Geräte“ statt
   „Bildschirme“ (`tools/kachel_texts.json`; doppelte Texte setzt `kachel_names.py` per Pfad).
+- **Entfernen über Ereignis** (23.11., Laufband-Befund): `kachel_remove.py` – ein Gerät fragt per Inbox `remove` **oder** per
+  Ereignis `esphome.screen_remove`/`kachel.screen_remove` (Daten: `device_id` von HA, `mac` vom Gerät); entfernt werden alle
+  Einträge seiner MAC (ESPHome, Kachel, Bluetooth-Rest), Seiten vorher aufgehoben. `kachel_removing` vergisst die Inbox, sobald
+  sie nicht mehr `remove` sagt. Test `tests/test_kachel_remove.py`.
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

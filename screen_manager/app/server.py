@@ -23,6 +23,7 @@ import kachel_integration
 import kachel_keep
 import kachel_board
 import kachel_functions
+import kachel_remove
 import calendar_feed
 import todo_feed
 import doorbell
@@ -272,6 +273,8 @@ class HomeAssistant:
         # report of a ring (esphome.screen_doorbell, docs/DOORBELL.md), for Manager.doorbell_loop.
         self.doorbell_events = asyncio.Queue()
         self.call_events = asyncio.Queue()  # esphome.screen_call, for Manager.call_loop
+        # Kachel Manager: a device's request to leave Home Assistant (esphome/kachel.screen_remove, kachel_remove.loop).
+        self.kachel_removals = asyncio.Queue()
         # ESPHome actions that can answer (`esphome.<node>_screen_message` of firmware 0.2.49+), from Home
         # Assistant's own list; refreshed when a device registers its actions again.
         self.responses = set()
@@ -398,6 +401,8 @@ class HomeAssistant:
                     self.doorbell_events.put_nowait((event['event_type'], body))
                 elif event.get('event_type') == CALL_EVENT:
                     self.call_events.put_nowait(body)
+                elif event.get('event_type') == kachel_remove.EVENT:   # Kachel Manager
+                    self.kachel_removals.put_nowait(body)
         raise ConnectionError('Home Assistant connection lost.')
 
     async def subscribe_template(self, template, callback):
@@ -686,6 +691,7 @@ class HomeAssistant:
                     await self.request('subscribe_events', event_type='esphome.screen_history')
                     await self.request('subscribe_events', event_type='esphome.screen_camera')
                     await self.request('subscribe_events', event_type=CALL_EVENT)
+                    await self.request('subscribe_events', event_type=kachel_remove.EVENT)  # Kachel Manager
                     await self.request('subscribe_events', event_type=light_effects.OPTIONS_EVENT)
                     await self.request('subscribe_events', event_type=calendar_feed.EVENT)
                     await self.request('subscribe_events', event_type=todo_feed.EVENT)
@@ -3673,10 +3679,14 @@ class Manager:
                 before = self.status.get(inbox)
                 # Kachel Manager: a device that is reset to its factory settings asks to leave Home Assistant
                 # (kachel.wants_removal); it is removed as the editor's Remove does, once.
+                if not kachel.wants_removal(screen):
+                    self.kachel_removing.discard(inbox)   # asks again after a later reset of the same device
                 if kachel.wants_removal(screen) and inbox not in self.kachel_removing:
                     self.kachel_removing.add(inbox)
                     try:
-                        await self.remove_screen(inbox)
+                        # Everything of the device by its MAC (kachel_remove): ESPHome, Kachel and a Bluetooth leftover.
+                        if not await kachel_remove.remove_device(self, screen.get('device_id')):
+                            raise ValueError('nothing removed')
                         LOG.info('%s asked to leave Home Assistant (factory settings): removed', screen.get('name') or inbox)
                         changed = True
                     except Exception as error:  # noqa: BLE001 - the device shows its hint to remove it by hand
@@ -6468,7 +6478,7 @@ async def main():
             esp = [manager.updates.run(), manager.pairing_loop(), manager.video_loop()] if kachel.ESP_SCREENS else []
             await asyncio.gather(ha.run(), manager.run(), manager.history_loop(), *esp,
                                  manager.alert_loop(), manager.doorbell_loop(), manager.call_loop(), manager.tile_loop(), manager.card_history_loop(), manager.camera_loop(), manager.card_options_loop(), manager.calendar_loop(), manager.todo_loop(),
-                                 manager.media_loop(), manager.photo_loop(),
+                                 manager.media_loop(), manager.photo_loop(), kachel_remove.loop(manager),
                                  *([manager.plugins.loop(), manager.plugin_loop()] if core.plugins_enabled() else []))
         finally:
             await cameras.cleanup()

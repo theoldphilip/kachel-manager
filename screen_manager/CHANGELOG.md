@@ -1,3 +1,7 @@
+## Kachel Manager 0.1.9 (based on Tessera 0.4.98)
+
+- **Every Kachel device leaves Home Assistant at its factory reset.** Besides its inbox, a device can now ask by the event `screen_remove`, so a Spezialanzeige without pages (the treadmill display) leaves too; before, its request never reached the app and its entry stayed. The app takes everything Home Assistant keeps for the device by its MAC address: its entry under ESPHome and under the Kachel integration, and a Bluetooth proxy's entry from its ESPHome days. A device reset a second time is removed again without restarting the app.
+
 ## Kachel Manager 0.1.8 (based on Tessera 0.4.98)
 
 - **The Music tile.** A Kachel tablet's own tile "Music" is in the library with the screen's cards: it shows what plays, and a tap opens the tablet's music page.

@@ -25,6 +25,10 @@ sein Postfach als Text „Kachel inbox“, und der Kachel Manager zeigt es in de
 
 Beim Umstellen bleibt das bisherige Layout auf dem Tablet stehen, bis der Kachel Manager ein neues schickt.
 
+Setzt du ein Kachel-Gerät auf Werkseinstellungen zurück (mit „Auch aus Home Assistant entfernen“), nimmt der Kachel Manager es
+ganz aus Home Assistant: unter ESPHome, unter Kachel und einen alten Bluetooth-Eintrag desselben Geräts – auch eine
+Spezialanzeige wie das Laufband.
+
 Entfernst du ein Kachel-Gerät (im Editor oder bei den Werkseinstellungen des Tablets), hebt der Kachel Manager seine
 Seiten auf. Kommt dasselbe Gerät wieder (erkannt an seiner MAC-Adresse), unter ESPHome oder unter der Kachel-Integration,
 bekommt es seine Seiten zurück, sofern es noch keine eigenen hat.

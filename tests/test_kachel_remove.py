@@ -54,5 +54,65 @@ class Removed(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(manager.layouts, {})
 
 
+
+import asyncio  # noqa: E402
+import kachel_remove  # noqa: E402
+
+
+class FakeHA:
+    """The Laufband after a reset: its Kachel entry (no inbox, no pages), a Bluetooth entry of the same MAC from its ESPHome
+    days, and someone else's device and Bluetooth entry that must stay."""
+    def __init__(self):
+        self.devices = [
+            {'id': 'lb', 'connections': [['mac', '3c:19:5e:fa:cd:25']], 'config_entries': ['k1', 'bt1']},
+            {'id': 'lb-play', 'via_device_id': 'lb', 'config_entries': ['k1']},
+            {'id': 'other', 'connections': [['mac', '11:22:33:44:55:66']], 'config_entries': ['e2']},
+        ]
+        self.deleted = []
+
+    async def esphome_entries(self):
+        return {'k1': {'entry_id': 'k1', 'domain': 'kachel'}, 'e2': {'entry_id': 'e2', 'domain': 'esphome'}}
+
+    async def request(self, kind, **data):
+        if kind == 'config_entries/get' and data.get('domain') == 'bluetooth':
+            return [{'entry_id': 'bt1', 'unique_id': '3C:19:5E:FA:CD:25'}, {'entry_id': 'bt2', 'unique_id': '11:22:33:44:55:66'}]
+        return []
+
+    async def delete_config_entry(self, entry):
+        self.deleted.append(entry)
+
+
+class FakeManager:
+    def __init__(self):
+        self.ha = FakeHA()
+
+    def screens(self):
+        return []
+
+
+class LeavesByEvent(unittest.TestCase):
+    """A Spezialanzeige without an inbox asks by the event screen_remove (kachel_remove), by its device or its MAC."""
+
+    def test_by_device_id_its_kachel_and_bluetooth_entries_go(self):
+        manager = FakeManager()
+        self.assertTrue(asyncio.run(kachel_remove.remove_device(manager, 'lb-play')))
+        self.assertEqual(sorted(manager.ha.deleted), ['bt1', 'k1'])
+
+    def test_by_mac_alone(self):
+        manager = FakeManager()
+        self.assertTrue(asyncio.run(kachel_remove.remove_device(manager, None, '3C-19-5E-FA-CD-25')))
+        self.assertEqual(sorted(manager.ha.deleted), ['bt1', 'k1'])
+
+    def test_nothing_known(self):
+        manager = FakeManager()
+        self.assertFalse(asyncio.run(kachel_remove.remove_device(manager, None, 'aa:bb:cc:dd:ee:ff')))
+        self.assertFalse(asyncio.run(kachel_remove.remove_device(manager, None, None)))
+        self.assertEqual(manager.ha.deleted, [])
+
+    def test_the_kachel_event_reads_as_its_esphome_twin(self):
+        self.assertIn('kachel.screen_remove', kachel.KACHEL_SCREEN_EVENTS)
+        self.assertEqual(kachel.as_esphome_event({'event_type': 'kachel.screen_remove', 'data': {}})['event_type'], kachel_remove.EVENT)
+
+
 if __name__ == '__main__':
     unittest.main()

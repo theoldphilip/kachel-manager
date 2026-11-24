@@ -80,7 +80,7 @@ def async_sync_scanner(
     features = proxy_features(data)
     source = scanner_source(device_info)
     if not features:
-        async_remove_scanner(hass, source.upper())
+        _async_remove(hass, source)
         return None
     if entry.data.get(CONF_BLUETOOTH_MAC_ADDRESS) != source:
         hass.config_entries.async_update_entry(
@@ -119,10 +119,23 @@ def async_sync_scanner(
 
 
 @callback
+def _async_remove(hass: HomeAssistant, source: str) -> None:
+    """Remove the scanner of `source` (its advertisement history and its Bluetooth entry).
+
+    Home Assistant finds the Bluetooth entry by the exact address the scanner was registered with.
+    kacheld reports its MAC in lower case (ESPHome devices in upper case, hence ESPHome's .upper()):
+    found in the Fire test 2026-11-24, the entry "kachel-223cb8cgggg (98:cc:f3:22:3c:b8)" stayed.
+    So the address as registered, and its other spellings for entries from elsewhere.
+    """
+    for spelling in dict.fromkeys((source, source.lower(), source.upper())):
+        async_remove_scanner(hass, spelling)
+
+
+@callback
 def async_remove_entry_scanner(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """The entry is deleted: its scanner (and the Bluetooth entry HA made for it) goes too."""
     if source := entry.data.get(CONF_BLUETOOTH_MAC_ADDRESS):
-        async_remove_scanner(hass, str(source).upper())
+        _async_remove(hass, str(source))
 
 
 def has_scanner(entry: ConfigEntry) -> bool:

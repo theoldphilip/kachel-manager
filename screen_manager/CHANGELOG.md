@@ -1,3 +1,7 @@
+## Kachel Manager 0.1.12 (based on Tessera 0.4.98)
+
+- **Kachel integration 0.6.1:** turning a device's Bluetooth proxy off removes its Bluetooth receiver from Home Assistant again; before, the entry stayed. Install it under Settings → Kachel integration and restart Home Assistant.
+
 ## Kachel Manager 0.1.11 (based on Tessera 0.4.98)
 
 - **Kachel integration 0.6.0: Bluetooth proxy.** A Kachel device with Bluetooth (the treadmill display, the Fire with a firmware that has it) becomes a Bluetooth receiver for Home Assistant, as an ESPHome Bluetooth proxy does. Install it under Settings → Kachel integration and restart Home Assistant.

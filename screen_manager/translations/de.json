@@ -1050,6 +1050,9 @@
       },
       "kachel_functions": {
         "request": "Diese Funktionen sind auf diesem Tablet nicht möglich."
+      },
+      "kachel_sources": {
+        "request": "Diese Quellen sind auf diesem Gerät nicht möglich."
       }
     },
     "status": {
@@ -5101,6 +5104,26 @@
       "hint": "Ein Tippen fragt zuerst, ein zweites schaltet. Für Rollläden, das Garagentor oder alles, was nicht aus Versehen schalten soll.",
       "no": "Nein",
       "yes": "Ja"
+    },
+    "kachel_sources": {
+      "title": "Quellen",
+      "intro": "Dieses Gerät zeigt eine eigene Anzeige für eine Aufgabe. Es sagt, was es dafür aus Home Assistant braucht; wähle hier für jedes eine Entität. Der Kachel Manager schickt dem Gerät die Werte und führt seine Knöpfe aus.",
+      "unsupported": "Dieses Gerät kann noch keine Quellen annehmen. Eine neuere Kachel-Version bringt es mit; was du hier speicherst, geht dann raus.",
+      "none": "Das Gerät hat noch nicht gesagt, welche Quellen es braucht. Sie erscheinen hier, sobald es verbunden war.",
+      "room": {
+        "title": "Raum",
+        "area": "Steht in der Kopfzeile des Geräts. Leer: der Bereich des Geräts in Home Assistant, {area}.",
+        "no_area": "Steht in der Kopfzeile des Geräts. Gib dem Gerät in Home Assistant einen Bereich oder trag hier einen Namen ein."
+      },
+      "required": "nötig",
+      "off": "Nicht eingerichtet",
+      "off_hint": "Eine Quelle, die nicht eingerichtet ist, ist aus: Das Gerät blendet ihren Knopf aus oder zeigt, dass sie fehlt.",
+      "nothing_fits": "In Home Assistant passt nichts zu dieser Quelle.",
+      "save": "Speichern",
+      "saved": "Gespeichert. Das Gerät bekommt es sofort.",
+      "unsaved": "Noch nicht gespeichert",
+      "delivered": "Das Gerät hat es",
+      "waiting": "Das Gerät bekommt es, sobald es verbunden ist"
     }
   }
 }

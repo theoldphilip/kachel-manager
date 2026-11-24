@@ -59,7 +59,7 @@ PLATFORMS = ('esphome', 'kachel')
 # The device's events the app listens to, under the Kachel integration's names; they are read as their ESPHome twins.
 KACHEL_SCREEN_EVENTS = tuple(f'kachel.screen_{name}' for name in (
     'alert', 'browse', 'calendar', 'call', 'camera', 'doorbell', 'history', 'options', 'play', 'plugin', 'setting',
-    'speaker', 'todo', 'remove'))
+    'speaker', 'todo', 'remove', 'source'))
 # Which platform the actions of a node go to (with_message_nodes keeps it): esphome unless its device is under kachel.
 NODE_DOMAINS = {}
 

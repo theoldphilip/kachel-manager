@@ -27,6 +27,7 @@ from aioesphomeapi import (
 )
 from homeassistant.config_entries import (
     SOURCE_REAUTH,
+    SOURCE_ZEROCONF,
     ConfigEntry,
     ConfigFlow,
     ConfigFlowResult,
@@ -55,6 +56,7 @@ from .manager import async_zeroconf, create_client
 _LOGGER = logging.getLogger(__name__)
 
 ESPHOME_DOMAIN = "esphome"
+_FOUND = "kachel_found"  # flow context: name@host:port of what a network find saw
 
 ERROR_INVALID_KEY = "invalid_psk"
 ERROR_CONNECT = "connection_error"
@@ -131,10 +133,14 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
         self._name = str(
             props.get("friendly_name") or discovery_info.hostname.removesuffix(".local.")
         )
-        await self.async_set_unique_id(mac)
+        await self.async_set_unique_id(mac, raise_on_progress=False)
         self._abort_if_unique_id_configured(updates={CONF_HOST: self._host, CONF_PORT: self._port})
         if self._held_by_esphome(mac):
             return self.async_abort(reason="held_by_esphome")
+        found = f"{self._name}@{self._host}:{self._port}"
+        if not self._replace_older_finds(mac, found):
+            return self.async_abort(reason="already_in_progress")
+        self.context[_FOUND] = found  # type: ignore[literal-required]
         self.context["title_placeholders"] = {"name": self._name}
         return await self.async_step_discovery_confirm()
 
@@ -183,6 +189,28 @@ class KachelFlowHandler(ConfigFlow, domain=DOMAIN):
                 ESPHOME_DOMAIN, include_ignore=False
             )
         )
+
+    def _replace_older_finds(self, mac: str, found: str) -> bool:
+        """One offer per device, with what it announces now (dev11: an old find kept the old name).
+
+        A find made before a factory reset stays in "Discovered" under the old name; Home Assistant
+        would drop every later find of the same MAC. Here the newer find wins: older network finds of
+        this device that saw something else (name, address) are withdrawn. False when an older find
+        saw the same, then that one stays and this one goes.
+        """
+        older = [
+            flow
+            for flow in self._async_in_progress(include_uninitialized=True)
+            if flow["flow_id"] != self.flow_id
+            and flow["context"].get("unique_id") == mac
+            and flow["context"].get("source") == SOURCE_ZEROCONF
+        ]
+        if any(flow["context"].get(_FOUND) == found for flow in older):
+            return False
+        for flow in older:
+            _LOGGER.debug("Kachel %s: newer find %s replaces an older one", mac, found)
+            self.hass.config_entries.flow.async_abort(flow["flow_id"])
+        return True
 
     async def _async_connect_first(self) -> ConfigFlowResult:
         """First contact: in the adoption window we set a key, otherwise we ask for it."""

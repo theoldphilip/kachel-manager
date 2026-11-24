@@ -1050,6 +1050,9 @@
       },
       "kachel_functions": {
         "request": "These functions are not possible on this tablet."
+      },
+      "kachel_sources": {
+        "request": "These sources are not possible on this device."
       }
     },
     "status": {
@@ -5101,6 +5104,26 @@
       "hint": "A tap asks first; a second tap switches. For blinds, a garage door or anything that should not switch by accident.",
       "no": "No",
       "yes": "Yes"
+    },
+    "kachel_sources": {
+      "title": "Sources",
+      "intro": "This device shows its own display for one task. It tells which things of Home Assistant that task needs; pick an entity for each here. The Kachel Manager sends the device their values and performs its buttons.",
+      "unsupported": "This device can't take sources yet. A newer Kachel version brings it; what you save here goes out then.",
+      "none": "The device has not said which sources it needs yet. They appear here once it has connected.",
+      "room": {
+        "title": "Room",
+        "area": "Shown in the device's header. Empty: the device's area in Home Assistant, {area}.",
+        "no_area": "Shown in the device's header. Give the device an area in Home Assistant, or type a name here."
+      },
+      "required": "needed",
+      "off": "Not set up",
+      "off_hint": "A source that is not set up is off: the device hides its button or shows that it is missing.",
+      "nothing_fits": "Nothing in Home Assistant fits this source.",
+      "save": "Save",
+      "saved": "Saved. The device gets it at once.",
+      "unsaved": "Not saved yet",
+      "delivered": "The device has it",
+      "waiting": "The device gets it as soon as it is connected"
     }
   }
 }

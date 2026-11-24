@@ -24,6 +24,7 @@ import kachel_keep
 import kachel_board
 import kachel_functions
 import kachel_remove
+import kachel_sources
 import calendar_feed
 import todo_feed
 import doorbell
@@ -275,6 +276,8 @@ class HomeAssistant:
         self.call_events = asyncio.Queue()  # esphome.screen_call, for Manager.call_loop
         # Kachel Manager: a device's request to leave Home Assistant (esphome/kachel.screen_remove, kachel_remove.loop).
         self.kachel_removals = asyncio.Queue()
+        # Kachel Manager: a Spezialanzeige's button of a source (esphome/kachel.screen_source, kachel_sources.loop).
+        self.kachel_source_events = asyncio.Queue()
         # ESPHome actions that can answer (`esphome.<node>_screen_message` of firmware 0.2.49+), from Home
         # Assistant's own list; refreshed when a device registers its actions again.
         self.responses = set()
@@ -403,6 +406,8 @@ class HomeAssistant:
                     self.call_events.put_nowait(body)
                 elif event.get('event_type') == kachel_remove.EVENT:   # Kachel Manager
                     self.kachel_removals.put_nowait(body)
+                elif event.get('event_type') == kachel_sources.EVENT:  # Kachel Manager
+                    self.kachel_source_events.put_nowait(body)
         raise ConnectionError('Home Assistant connection lost.')
 
     async def subscribe_template(self, template, callback):
@@ -692,6 +697,7 @@ class HomeAssistant:
                     await self.request('subscribe_events', event_type='esphome.screen_camera')
                     await self.request('subscribe_events', event_type=CALL_EVENT)
                     await self.request('subscribe_events', event_type=kachel_remove.EVENT)  # Kachel Manager
+                    await self.request('subscribe_events', event_type=kachel_sources.EVENT)  # Kachel Manager
                     await self.request('subscribe_events', event_type=light_effects.OPTIONS_EVENT)
                     await self.request('subscribe_events', event_type=calendar_feed.EVENT)
                     await self.request('subscribe_events', event_type=todo_feed.EVENT)
@@ -1092,6 +1098,8 @@ class Manager:
         self.page_senders = {}
         # Kachel Manager: what is set up for each Kachel device (kachel_functions.py).
         self.kachel_functions = kachel_functions.Functions(self.path.parent)
+        # Kachel Manager: the sources of each Spezialanzeige (kachel_sources.py).
+        self.kachel_sources = kachel_sources.Sources(self.path.parent)
         self.page_capabilities = CapabilityCache(self.path.parent / 'page-capabilities.json')
         self._compiled_records, self._compiled_layouts = None, {}
         self._compiled_store_stamp = object()
@@ -1677,6 +1685,7 @@ class Manager:
         self.page_values.pop(old, None)
         self.icons.renamed(old, new)
         if getattr(self, 'kachel_functions', None): self.kachel_functions.renamed(old, new)  # Kachel Manager
+        if getattr(self, 'kachel_sources', None): self.kachel_sources.renamed(old, new)  # Kachel Manager
         if self.updates.renamed(old, new):
             moved.append('update history')
         for store in (self.sent, self.status, self.last, self.pinged):
@@ -3187,7 +3196,8 @@ class Manager:
             self._watched_key, self._watched = key, watched
         # Kachel Manager: the presence sensors a device's functions name (kachel_functions.py).
         functions = getattr(self, 'kachel_functions', None)
-        return set(self._watched) | (functions.watched() if functions else set())
+        sources = getattr(self, 'kachel_sources', None)  # and the entities of a Spezialanzeige's sources
+        return set(self._watched) | (functions.watched() if functions else set()) | (sources.watched() if sources else set())
 
     def energy_prefs(self):
         """Home Assistant's Energy settings as last read (energy/get_prefs), {} before the first answer."""
@@ -3707,6 +3717,10 @@ class Manager:
                     await kachel_functions.sync(self, inbox)
                 except Exception as error:  # noqa: BLE001 - the next turn of the loop tries again
                     LOG.warning('%s: functions not delivered (%s)', screen.get('name') or inbox, error)
+                try:  # Kachel Manager: a Spezialanzeige's sources and their values (kachel_sources.py).
+                    await kachel_sources.sync(self, inbox)
+                except Exception as error:  # noqa: BLE001 - the next turn of the loop tries again
+                    LOG.warning('%s: sources not delivered (%s)', screen.get('name') or inbox, error)
                 try:
                     if inbox not in self.layouts:
                         sender = self.page_senders.get(inbox)
@@ -4989,6 +5003,8 @@ def create_app(manager, development=False):
             screen['board'] = board_of(screen)
             # Kachel Manager: the Kachel version and the device, which the editor shows in place of the two above.
             screen['kachel'] = kachel_board.info(manager, screen)
+            # Kachel Manager: "special" for a Spezialanzeige (its hello, kachel_sources), which has sources, not pages.
+            screen['kachel_kind'] = manager.kachel_sources.kind(screen['id'])
             # A screen with 4 MB of flash that still has ESPHome's partition table (app 0.4.82): the editor says to update
             # it in Tessera, which moves the table; ESPHome Device Builder's update does not fit its slot.
             screen['update_in_tessera'] = update_in_tessera(screen)
@@ -6372,6 +6388,7 @@ def create_app(manager, development=False):
     kachel_integration.routes(app, manager)
     # Kachel Manager: a device's functions (kachel_functions.py).
     kachel_functions.routes(app, manager)
+    kachel_sources.routes(app, manager)  # Kachel Manager: a Spezialanzeige's sources
     app.router.add_get('/', index)
     app.router.add_get('/api/inventory', inventory)
     app.router.add_get('/api/capabilities', capabilities)
@@ -6478,7 +6495,7 @@ async def main():
             esp = [manager.updates.run(), manager.pairing_loop(), manager.video_loop()] if kachel.ESP_SCREENS else []
             await asyncio.gather(ha.run(), manager.run(), manager.history_loop(), *esp,
                                  manager.alert_loop(), manager.doorbell_loop(), manager.call_loop(), manager.tile_loop(), manager.card_history_loop(), manager.camera_loop(), manager.card_options_loop(), manager.calendar_loop(), manager.todo_loop(),
-                                 manager.media_loop(), manager.photo_loop(), kachel_remove.loop(manager),
+                                 manager.media_loop(), manager.photo_loop(), kachel_remove.loop(manager), kachel_sources.loop(manager),
                                  *([manager.plugins.loop(), manager.plugin_loop()] if core.plugins_enabled() else []))
         finally:
             await cameras.cleanup()

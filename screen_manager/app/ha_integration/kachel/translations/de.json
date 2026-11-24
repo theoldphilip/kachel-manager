@@ -29,6 +29,7 @@
     },
     "abort": {
       "already_configured": "Dieses Gerät ist schon hinzugefügt.",
+      "already_in_progress": "Dieses Gerät wird schon hinzugefügt.",
       "reauth_successful": "Der Schlüssel wurde aktualisiert.",
       "not_kachel_board": "Dieses Gerät nimmt die Kachel-Integration nicht.",
       "no_mac": "Das Gerät hat seine MAC-Adresse nicht genannt.",

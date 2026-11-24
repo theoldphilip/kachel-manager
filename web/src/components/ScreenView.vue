@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // One screen: the head with its status, the Layout and Settings tabs, and the inspector in a column on the right.
 import { useEventListener, useFileDialog } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { t } from "../i18n";
 import { needsUpdate } from "../model/screen-status";
 import { isEditableTarget } from "../composables/isEditableTarget";
@@ -11,6 +11,7 @@ import LayoutView from "./LayoutView.vue";
 import SettingsTab from "./SettingsTab.vue";
 import KachelLogPanel from "../kachel/LogPanel.vue";
 import KachelFunctionsPanel from "../kachel/FunctionsPanel.vue";
+import KachelSourcesPanel from "../kachel/SourcesPanel.vue";
 import ScreenPluginsTab from "./ScreenPluginsTab.vue";
 import Drawer from "./Drawer.vue";
 import FeedbackPanel from "./FeedbackPanel.vue";
@@ -42,6 +43,12 @@ const doc = useDocumentStore();
 const insp = useInspectorStore();
 
 const screen = computed(() => scr.currentScreen!);
+// Kachel Manager: a Spezialanzeige has sources, not pages (src/kachel/SourcesPanel.vue): its tabs start at Sources.
+const special = computed(() => screen.value.kachel_kind === "special");
+watch([special, () => ui.tab], () => {
+  if (special.value && (ui.tab === "layout" || ui.tab === "plugins")) ui.tab = "sources";
+  else if (!special.value && ui.tab === "sources") ui.tab = "layout";
+}, { immediate: true });
 const statusText = computed(() => screen.value.virtual ? t("editor.preview.virtual") : screen.value.online
   ? `${screen.value.delivery} · ${screen.value.status}`
   : t("editor.screen_view.offline"));
@@ -157,13 +164,16 @@ useEventListener(document, "keydown", onKey);
       <p v-else class="phone-status" :class="{ dirty: doc.dirty }" :title="statusText"><span class="dot" :class="statusKind"></span>{{ phoneStatus }}</p>
     </div>
     <div v-if="!ui.phone" class="seg tabs" role="tablist" :aria-label="screen.name">
-      <button type="button" id="tab-layout" role="tab" :aria-pressed="ui.tab === 'layout' ? 'true' : 'false'" :aria-selected="ui.tab === 'layout'" @click="ui.tab = 'layout'">
+      <button v-if="special" type="button" id="tab-sources" role="tab" :aria-pressed="ui.tab === 'sources' ? 'true' : 'false'" :aria-selected="ui.tab === 'sources'" @click="ui.tab = 'sources'; insp.closeInspector()">
+        <Icon name="link-variant" />{{ t("editor.kachel_sources.title") }}
+      </button>
+      <button v-if="!special" type="button" id="tab-layout" role="tab" :aria-pressed="ui.tab === 'layout' ? 'true' : 'false'" :aria-selected="ui.tab === 'layout'" @click="ui.tab = 'layout'">
         <Icon name="view-dashboard-outline" />{{ t("editor.screen_view.tabs.layout") }}
       </button>
       <button v-if="!screen.virtual || doc.gridWay" type="button" id="tab-settings" role="tab" :aria-pressed="ui.tab === 'settings' ? 'true' : 'false'" :aria-selected="ui.tab === 'settings'" @click="ui.tab = 'settings'; insp.closeInspector()">
         <Icon name="cog-outline" />{{ inv.espScreens ? t("editor.screen_view.tabs.settings") : t("editor.screen_view.tabs.kachel_device") }}
       </button>
-      <button v-if="!screen.virtual && plugins.pluginsEnabled" type="button" id="tab-plugins" role="tab" :aria-pressed="ui.tab === 'plugins' ? 'true' : 'false'" :aria-selected="ui.tab === 'plugins'" @click="ui.tab = 'plugins'; insp.closeInspector()">
+      <button v-if="!screen.virtual && plugins.pluginsEnabled && !special" type="button" id="tab-plugins" role="tab" :aria-pressed="ui.tab === 'plugins' ? 'true' : 'false'" :aria-selected="ui.tab === 'plugins'" @click="ui.tab = 'plugins'; insp.closeInspector()">
         <Icon name="puzzle-outline" />{{ t("editor.screen_view.tabs.plugins") }}
         <span v-if="builds.buildOf(screen)?.by === 'plugins'" class="spin small" role="img" :aria-label="t('editor.build.plugins')"></span>
       </button>
@@ -239,6 +249,7 @@ useEventListener(document, "keydown", onKey);
       <SettingsTab v-else-if="ui.tab === 'settings'" />
       <div v-else-if="ui.tab === 'log'" class="settings kachel-log-tab"><KachelLogPanel /></div>
       <div v-else-if="ui.tab === 'functions'" class="settings kachel-functions-tab"><KachelFunctionsPanel /></div>
+      <div v-else-if="ui.tab === 'sources'" class="settings kachel-sources-tab"><KachelSourcesPanel /></div>
       <ScreenPluginsTab v-else />
     </div>
     <Drawer />

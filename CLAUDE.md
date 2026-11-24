@@ -136,6 +136,17 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   Ereignis `esphome.screen_remove`/`kachel.screen_remove` (Daten: `device_id` von HA, `mac` vom Gerät); entfernt werden alle
   Einträge seiner MAC (ESPHome, Kachel, Bluetooth-Rest), Seiten vorher aufgehoben. `kachel_removing` vergisst die Inbox, sobald
   sie nicht mehr `remove` sagt. Test `tests/test_kachel_remove.py`.
+- **Quellen der Spezialanzeige** (24.11., mit `fire-app`/`laufband-app`, SCHRITTE A1): `kachel_sources.py`. Das hello sagt
+  `kind` (`special`/`tiles`), Wort `sources`, Liste `sources` [{key, name{de,en}, domains, device_class, required}]
+  (`page_delivery.Sender.kachel`). Wahl je Inbox und nach MAC in `/data/kachel_sources.json`; die Sync-Schleife schickt
+  `{"op":"sources","sources","names","room"}` (`room` immer, leer `""`, sonst Bereich des Geräts) und
+  `{"op":"source_state","key","state","unit"}` (nach hello, bei Änderung, ≤60 s). Knöpfe: Ereignis `screen_source`
+  {key, action} → `ACTIONS` je Domain. Editor: Reiter „Quellen“ (`web/src/kachel/SourcesPanel.vue`) statt Seiten/Plugins bei
+  `screen.kachel_kind == 'special'`. `presence` trägt `battery_low` (Akku am Gerät des Präsenz-Sensors,
+  `kachel_functions.battery_low`). Tests `tests/test_kachel_sources.py`, `web/tests/kachel-sources.spec.ts`.
+- **Begriffe** (Zentrale, 24.11.): **Kachel OS** = Firmware + **kacheld** (früher echod). Neue Texte nutzen sie; alte nebenbei.
+- **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
+  darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit
   „Kachel Manager:“ kommentierten Haken in Tessera-Dateien, damit Merges vom Original leicht bleiben.
 

@@ -29,6 +29,7 @@
     },
     "abort": {
       "already_configured": "This device is already added.",
+      "already_in_progress": "This device is already being added.",
       "reauth_successful": "The key was updated.",
       "not_kachel_board": "This device is not a Kachel device this integration takes.",
       "no_mac": "The device did not say its MAC address.",

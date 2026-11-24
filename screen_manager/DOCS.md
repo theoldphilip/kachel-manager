@@ -64,6 +64,15 @@ dass jemand da ist), **Blättern** (Wischen, Lautstärketasten, Fernbedienung), 
 (Klingel, Post, Pakete, Müllabfuhr, Wetterwarnungen, verpasste Meldungen). Das Tablet zeigt eine Einstellung nur, wenn
 ihre Funktion hier eingerichtet ist. Was nicht eingerichtet ist, ist aus.
 
+## Quellen einer Spezialanzeige
+
+Eine **Spezialanzeige** ist ein Gerät mit eigener Anzeige für eine feste Aufgabe, etwa das Laufband-Display. Sie hat keine
+Seiten, sondern den Reiter **Quellen**: Das Gerät sagt selbst, was es aus Home Assistant braucht (zum Beispiel
+Raumtemperatur, Licht, Notfall, Leistungsmesser), und du wählst für jede Quelle eine passende Entität. Der **Raum** in der
+Kopfzeile ist der Bereich des Geräts in Home Assistant, außer du trägst einen Namen ein. Eine Quelle ohne Entität ist aus,
+ihr Knopf fehlt dann am Gerät. Der Kachel Manager schickt dem Gerät die Werte und schaltet, wenn du dort einen Knopf
+drückst. Meldet der Akku eines Präsenz-Sensors (Reiter Funktionen) „leer“, sagt er das dem Gerät mit.
+
 ## Vor dem Schalten nachfragen
 
 Bei Kacheln für Rollläden, Schalter, Licht, Lüfter oder Ventile kannst du in den Einstellungen der Kachel **Vor dem Schalten

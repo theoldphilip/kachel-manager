@@ -1,3 +1,9 @@
+## Kachel Manager 0.1.10 (based on Tessera 0.4.98)
+
+- **Sources of a Spezialanzeige.** A device with its own display for one task (the treadmill display) has the tab Sources instead of its pages and plugins. The device says in its hello which sources its task needs (room temperature, light, emergency, power meter …); here you pick an entity that fits each one, and the room's name (the device's area in Home Assistant unless you type one). The app sends the device the values of its sources and performs its buttons; a source left empty is off and its button is hidden. The choice outlasts a factory reset, kept by the device's MAC address.
+- **Low battery of a presence sensor.** When a battery on the same device as a presence sensor (Functions) runs low, the device is told with the presence.
+- **Kachel integration 0.5.1:** after a factory reset Home Assistant offers a device once, with its current name.
+
 ## Kachel Manager 0.1.9 (based on Tessera 0.4.98)
 
 - **Every Kachel device leaves Home Assistant at its factory reset.** Besides its inbox, a device can now ask by the event `screen_remove`, so a Spezialanzeige without pages (the treadmill display) leaves too; before, its request never reached the app and its entry stayed. The app takes everything Home Assistant keeps for the device by its MAC address: its entry under ESPHome and under the Kachel integration, and a Bluetooth proxy's entry from its ESPHome days. A device reset a second time is removed again without restarting the app.

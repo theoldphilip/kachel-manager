@@ -94,8 +94,9 @@ export const useUiStore = defineStore("ui", () => {
   }
 
   // ---- What is open: the open screen's tab, its menu, the search, and on a phone its sheets ----
-  // Kachel Manager: "log", the tablet's log, and "functions", what is set up for it, as tabs of their own (src/kachel/).
-  const tab = ref<"layout" | "settings" | "plugins" | "log" | "functions">("layout");
+  // Kachel Manager: "log", the tablet's log, "functions", what is set up for it, and "sources", a Spezialanzeige's, as tabs
+  // of their own (src/kachel/).
+  const tab = ref<"layout" | "settings" | "plugins" | "log" | "functions" | "sources">("layout");
   const menuOpen = ref(false);
   const palette = ref(false);
   const addSheet = ref(false);

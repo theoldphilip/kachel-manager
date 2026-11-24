@@ -137,6 +137,34 @@ def present(functions, states):
     return any(states_now) if states_now else None
 
 
+LOW_BATTERY = 15
+
+
+def battery_low(functions, registry, states):
+    """Whether a battery on the same Home Assistant device as one of the presence sensors runs low (fire-app and
+    laufband-app, 2026-11-24): a battery binary sensor that is on, or a battery level below LOW_BATTERY %. None when none
+    of their devices has a battery that says."""
+    entities = set((functions.get('presence') or {}).get('entities', ()))
+    items = [item for item in registry or () if isinstance(item, dict) and isinstance(item.get('entity_id'), str)]
+    devices = {item.get('device_id') for item in items if item['entity_id'] in entities and item.get('device_id')}
+    said = []
+    for item in items:
+        if item.get('device_id') not in devices:
+            continue
+        state = states.get(item['entity_id']) or {}
+        if (state.get('attributes') or {}).get('device_class') != 'battery':
+            continue
+        domain = item['entity_id'].split('.', 1)[0]
+        if domain == 'binary_sensor' and state.get('state') in ('on', 'off'):
+            said.append(state['state'] == 'on')
+        elif domain == 'sensor':
+            try:
+                said.append(float(state.get('state')) < LOW_BATTERY)
+            except (TypeError, ValueError):
+                pass
+    return any(said) if said else None
+
+
 def with_names(functions, states):
     """The functions as they go to the tablet: the presence sensors with their names as Home Assistant shows them
     (`presence.names`, in the order of `entities`), so the tablet says which sensor steers (fire-app, test 0.0.9-dev9)."""
@@ -163,11 +191,15 @@ async def sync(manager, inbox):
             LOG.info('%s: functions set up: %s', sender.name or inbox, ', '.join(sorted(functions)) or 'none')
             went = True
     if functions.get('presence'):
-        now = present(functions, getattr(manager.ha, 'states', {}) or {})
+        states = getattr(manager.ha, 'states', {}) or {}
+        now = present(functions, states)
+        # Kachel Manager: and whether the presence sensor's battery runs low (a Spezialanzeige warns).
+        low = battery_low(functions, getattr(manager.ha, 'registry', None), states)
         last = keeper.presence.get(inbox)
-        if now is not None and (last is None or last[0] != sender.session or last[1] != now or time.monotonic() - last[2] > KEEPALIVE):
-            if await sender.auxiliary({'op': 'presence', 'present': now}, session=sender.session, revision=sender.confirmed):
-                keeper.presence[inbox] = (sender.session, now, time.monotonic())
+        if now is not None and (last is None or last[0] != sender.session or last[1] != (now, low) or time.monotonic() - last[2] > KEEPALIVE):
+            body = {'op': 'presence', 'present': now, **({} if low is None else {'battery_low': low})}
+            if await sender.auxiliary(body, session=sender.session, revision=sender.confirmed):
+                keeper.presence[inbox] = (sender.session, (now, low), time.monotonic())
                 went = True
     return went
 

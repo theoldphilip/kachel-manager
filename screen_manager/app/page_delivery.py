@@ -359,6 +359,8 @@ class Sender:
         # editing while it is offline (page_capabilities keeps them across restarts of the app).
         self.grids = self.last_grids = None
         self.structure, self.appearance = None, None
+        # Kachel Manager: what a Kachel device said it is and the sources it asks for (kachel_sources.hello).
+        self.kachel = None
 
     def disconnected(self):
         self.session = self.confirmed = self.protocol = None
@@ -375,6 +377,7 @@ class Sender:
         self.max_tiles = self.max_pages = self.max_bar_items = self.memory = None
         self.grids = None
         self.structure, self.appearance = None, None
+        self.kachel = None  # Kachel Manager
         self.phase = "waiting"
         self.failed_revision = self.failure = None
 
@@ -411,6 +414,9 @@ class Sender:
             # and none of its own here. climate_range: a thermostat's range on its -/+. The older flags above stay.
             listed = answer.get("features")
             self.features = {name for name in listed if isinstance(name, str)} if isinstance(listed, list) else set()
+            # Kachel Manager: a Spezialanzeige and its sources (kachel_sources.py).
+            import kachel_sources
+            self.kachel = kachel_sources.hello(answer)
             # Its hardware's record (firmware hw.h): live video, speaker, microphone, echo cancellation, a camera of its
             # own, the live tiles it runs at once, its memory; from the features alone for an older firmware.
             caps = caps_of(answer)

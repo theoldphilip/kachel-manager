@@ -137,3 +137,52 @@ input, select, textarea { border-radius: 10px; }
 .kachel-work .page-pills button[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink) !important; }
 .kachel-work #auto-layout-offer { flex-wrap: wrap; border-radius: var(--kachel-radius); }
 .kachel-work #auto-layout-offer .notice-text { flex: 1 1 320px; white-space: normal; }
+
+/* The chosen tile under the library (redesign leftover, Philip's draft "Seiten bearbeiten"): in the Kachel layout the
+   inspector is no third column that squeezes the page, but the lower part of the library's column; the library keeps
+   the upper part. Tessera's drawer stays as it is everywhere else (ESP32 layout, phone). */
+.body:has(> .work.kachel-work) > .drawer {
+  position: absolute; right: 0; bottom: 0; width: 340px; height: 58%; z-index: 6;
+  border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: var(--kachel-radius) 0 0 0;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+}
+.body:has(> .work.kachel-work) > .drawer .drawer-inner { width: 100%; overflow-y: auto; }
+.body:has(> .work.kachel-work) > .drawer .drawer-resize { display: none; }
+.body:has(> .work.kachel-work) > .drawer-enter-active, .body:has(> .work.kachel-work) > .drawer-leave-active {
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.18s ease-out;
+}
+.body:has(> .work.kachel-work) > .drawer-enter-from, .body:has(> .work.kachel-work) > .drawer-leave-to {
+  width: 340px; opacity: 0; transform: translateY(24px);
+}
+.body:has(> .drawer.open) > .work.kachel-work > .library { align-self: start; height: 42% !important; min-height: 0; }
+
+/* The tiles of the page as the Kachel tablet draws them (redesign leftover, design/seiten-*.png of the hub): rounder cards
+   without a frame line in the dark look, a little more room inside, a bigger icon at the top, the chosen tile ringed in
+   the Kachel teal. Only in the Kachel layout; what a tile shows stays Tessera's (components/tile/). */
+.kachel-work .device .tile { border-radius: 14px; padding: 10px 12px; }
+.kachel-work .device.compact .tile { padding: 8px 10px; }
+.kachel-work .device .tile .ic { font-size: 22px; }
+.kachel-work .device.compact .tile .ic { font-size: 19px; }
+.kachel-work .device .tile .nm { font-size: 12.5px; }
+.kachel-work .device .tile.chosen { outline: 2px solid var(--kachel-teal); outline-offset: 2px; }
+.kachel-dark.kachel-work .device .tile:not(.bare):not(.placeholder) { border-color: transparent; }
+.kachel-dark.kachel-work .device .tile:not(.bare):not(.placeholder):hover { border-color: #3a4146; }
+/* A single tile as kacheld draws it (design/seiten-*.png, step "Kacheln"): its icon at the top left, name and state at the
+   bottom left. Tessera's glass centres them by inline positions (TileLine glass-head), so they are set here. */
+.kachel-work .device .tile.glass:not(.wide):not(.tall):not(.full) .glass-head .ic {
+  left: 0 !important; top: 0 !important; width: auto !important; height: auto !important; background: none !important;
+  font-size: 24px !important; color: var(--tile-icon, #d7a50f);
+}
+.kachel-work .device .tile.glass:not(.wide):not(.tall):not(.full) .glass-head .nm,
+.kachel-work .device .tile.glass:not(.wide):not(.tall):not(.full) .glass-head .st {
+  top: auto !important; text-align: left !important; font-size: 12.5px !important; line-height: 1.25 !important;
+}
+.kachel-work .device .tile.glass:not(.wide):not(.tall):not(.full) .glass-head .nm { bottom: 16px; font-weight: 600 !important; }
+.kachel-work .device .tile.glass:not(.wide):not(.tall):not(.full) .glass-head .st { bottom: 0; font-size: 11px !important; }
+/* Words on a dark tablet stay light (Tessera's glass writes them dark on its always-light mockup). */
+.kachel-dark .device .tile:not(.photo) .nm { color: #eceeef !important; }
+.kachel-dark .device .tile:not(.photo) .st { color: #9aa3a8 !important; }
+/* A tile that is on (a lamp lit) glows faintly in its colour, as on the tablet. */
+.kachel-dark.kachel-work .device .tile.glass:has(.ic.lit) { background: color-mix(in srgb, var(--tile-accent, #ffc107) 14%, #1d2124); }
+/* Unsaved changes: the Save button says so already; the chip beside it pushed onto the tabs on a narrower window. */
+@media (max-width: 1700px) { .main-head .head-right #dirty.chip.dirty { display: none; } }

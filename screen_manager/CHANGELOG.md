@@ -1,3 +1,11 @@
+## Kachel Manager 0.1.13 (based on Tessera 0.4.98)
+
+- **Tiles as the tablet draws them.** In the page editor a single tile shows its icon at the top left and its name and state at the bottom left, with rounder corners; a tile that is on glows faintly in its colour; names stay readable on a dark tablet.
+- **The chosen tile under the library.** Its settings open in the lower part of the right column instead of a third column that made the page smaller.
+- **More texts say "Gerät"** instead of "Bildschirm" (German): choosing, copying, removing and identifying a device, the first layout.
+- **Log: kacheld.** The log is asked for under kacheld's name; a device that still knows only its old name is asked for that.
+- The "unsaved changes" chip no longer covers the tabs on a narrower window.
+
 ## Kachel Manager 0.1.12 (based on Tessera 0.4.98)
 
 - **Kachel integration 0.6.1:** turning a device's Bluetooth proxy off removes its Bluetooth receiver from Home Assistant again; before, the entry stayed. Install it under Settings → Kachel integration and restart Home Assistant.

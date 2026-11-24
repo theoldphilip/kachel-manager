@@ -40,9 +40,9 @@ describe("the tablet's log", () => {
   });
 
   it("says when the device can't send its log", async () => {
-    vi.mocked(getJson).mockResolvedValue({ available: false, source: "echod" });
+    vi.mocked(getJson).mockResolvedValue({ available: false, source: "kacheld" });
     const wrapper = await panel();
-    await wrapper.find("[data-source=echod]").trigger("click");
+    await wrapper.find("[data-source=kacheld]").trigger("click");
     await flushPromises();
     expect(wrapper.find("[data-log=none]").exists()).toBe(true);
     expect(wrapper.find("[data-log=download]").exists()).toBe(false);

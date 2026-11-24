@@ -1769,8 +1769,8 @@
         "selected": "Color name is selected. Copy with Ctrl+C or Command+C."
       },
       "screen_name": {
-        "copied": "Screen name copied.",
-        "selected": "Screen name is selected. Copy with Ctrl+C or Command+C."
+        "copied": "Device name copied.",
+        "selected": "Device name is selected. Copy it with Ctrl+C or Cmd+C."
       },
       "log": {
         "copied": "Log copied.",
@@ -1831,7 +1831,7 @@
         "save": "Save"
       },
       "remove": {
-        "button": "Remove screen",
+        "button": "Remove device",
         "title": "Remove {name}?",
         "ha": "Out of Home Assistant: the device with its entities, wherever they are used.",
         "profile": "Out of the ESPHome folder: {file} and what it built.",
@@ -1848,7 +1848,7 @@
       "groups": {
         "screens": "Devices",
         "actions": "Actions",
-        "add": "Add to this screen"
+        "add": "Add to this device"
       },
       "alerts_detail": "Cheatsheet and a test alert",
       "settings_detail": "Updates, Claude",
@@ -1859,7 +1859,7 @@
       "export": "Export layout",
       "export_detail": "Download and copy as JSON",
       "placeholder": "Search devices, entities, actions…",
-      "empty": "Nothing matches. Type part of a screen, entity or action."
+      "empty": "Nothing found. Type part of a device, entity or action name."
     },
     "search": {
       "groups": {
@@ -1896,7 +1896,7 @@
     "empty": {
       "choose": {
         "title": "Choose a screen",
-        "text": "Pick one of your screens on the left to change its tiles, top bar and settings."
+        "text": "Choose one of your devices on the left to change its tiles, top bar and settings."
       },
       "start": {
         "title": "Start with a screen",
@@ -1943,7 +1943,7 @@
     },
     "screen_view": {
       "confirm": {
-        "switch": "You have unsaved changes. Open a different screen anyway?",
+        "switch": "You have unsaved changes. Open another device anyway?",
         "copy": "Replace the unsaved layout with a copy of the other screen's?",
         "import": "Replace the unsaved layout with the imported one?"
       },
@@ -1965,18 +1965,18 @@
       "more": "More",
       "menu": {
         "identify": "Identify",
-        "identify_hint": "blink the screen",
+        "identify_hint": "Make the device blink",
         "identify_needs": "Needs firmware 0.2.31 or newer",
         "copy": "Copy layout from…",
         "copy_screens": "{n} device | {n} devices",
-        "copy_none": "no other screen",
+        "copy_none": "no other device",
         "copy_tiles": "{n} tile | {n} tiles",
         "export": "Export layout",
         "import": "Import layout…",
         "override": "Override YAML",
         "override_none": "No ESPHome profile found for this screen",
         "update": "Update firmware",
-        "group_screen": "This screen",
+        "group_screen": "This device",
         "group_layout": "Layout",
         "group_advanced": "Advanced"
       },
@@ -1986,7 +1986,7 @@
       "removed": "{name} removed",
       "no_room": "There is no room for this tile on page {page}.",
       "no_free_page": "No page is free for a full-page tile. Free a page first.",
-      "page_taken": "This screen already has a tile that goes to page {page}.",
+      "page_taken": "This device already has a tile that goes to page {page}.",
       "copied": "Layout of {name} copied. Save & send when it looks right.",
       "imported": "Layout imported. Save & send when it looks right.",
       "not_json": "That isn't JSON. Export a layout first, or paste one from another Kachel Manager or from Tessera.",
@@ -1995,7 +1995,7 @@
       "page_removed": "Page {page} is gone.",
       "page_removed_tiles": "Page {page} and one tile are gone. | Page {page} and {n} tiles are gone.",
       "positions_hint": "Empty slots and fixed positions work from firmware 0.2.26. This screen (firmware {firmware}) shifts the tiles up to the first free slot until that update.",
-      "aria": "Screen layout",
+      "aria": "Page layout",
       "add_page": "Add page",
       "max_pages": "1 page is the most | {n} pages is the most",
       "help": {
@@ -3031,7 +3031,7 @@
         "loading": "Fetching the log…",
         "empty": "The log is empty.",
         "cut": "The end of {size}.",
-        "echod": "App",
+        "kacheld": "App",
         "boot": "Start"
       }
     },
@@ -4954,7 +4954,7 @@
       "button": "Auto layout",
       "button_title": "Make pages from your Home Assistant rooms and devices",
       "title": "Make a layout for you",
-      "intro": "The Kachel Manager looks at your Home Assistant areas and devices and makes pages for this screen: a page or section per room, the house's weather, alarm, people and cameras together, larger tiles where this screen has room for them. You can undo it and change anything afterwards.",
+      "intro": "The Kachel Manager looks at your Home Assistant areas and devices and makes pages for this device: a page or section per room, the house's weather, alarm, people and cameras together, larger tiles where the device has room for them. You can undo it and change anything afterwards.",
       "reading": "Reading your home…",
       "failed": "Your home could not be read: {error}",
       "nothing": "The Kachel Manager found nothing for this screen to show yet. Give your devices an area in Home Assistant, or add tiles from the library.",
@@ -4971,7 +4971,7 @@
       "make": "Make the layout",
       "made": "A layout of {pages} page is ready. Undo takes it back. | A layout of {pages} pages is ready. Undo takes it back.",
       "offer_title": "Shall I make a first layout for you?",
-      "offer_text": "The Kachel Manager can lay out this screen from your Home Assistant rooms and devices. You can change everything afterwards.",
+      "offer_text": "The Kachel Manager can lay out this device from your Home Assistant rooms and devices. You can change everything afterwards.",
       "offer_make": "Make a first layout",
       "offer_empty": "Start empty"
     },

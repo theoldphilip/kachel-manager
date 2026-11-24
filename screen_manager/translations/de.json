@@ -1769,8 +1769,8 @@
         "selected": "Farbname ist markiert. Kopiere ihn mit Ctrl+C oder Command+C."
       },
       "screen_name": {
-        "copied": "Bildschirmname kopiert.",
-        "selected": "Bildschirmname ist markiert. Kopiere mit Strg+C oder Befehl+C."
+        "copied": "Gerätename kopiert.",
+        "selected": "Gerätename ist markiert. Kopiere mit Strg+C oder Befehl+C."
       },
       "log": {
         "copied": "Protokoll kopiert.",
@@ -1831,7 +1831,7 @@
         "save": "Speichern"
       },
       "remove": {
-        "button": "Bildschirm entfernen",
+        "button": "Gerät entfernen",
         "title": "{name} entfernen?",
         "ha": "Aus Home Assistant: das Gerät mit seinen Entitäten, überall wo sie verwendet werden.",
         "profile": "Aus dem ESPHome-Ordner: {file} und alles, was damit gebaut wurde.",
@@ -1848,18 +1848,18 @@
       "groups": {
         "screens": "Geräte",
         "actions": "Aktionen",
-        "add": "Zu diesem Bildschirm hinzufügen"
+        "add": "Zu diesem Gerät hinzufügen"
       },
       "alerts_detail": "Spickzettel und eine Testmeldung",
       "settings_detail": "Updates, Claude",
       "nothing_to_save": "Nichts zu speichern",
-      "identify": "Diesen Bildschirm identifizieren",
+      "identify": "Dieses Gerät identifizieren",
       "identify_detail": "Lässt die Hintergrundbeleuchtung blinken und zeigt eine Karte",
       "identify_needs": "Braucht eine neuere Firmware",
       "export": "Layout exportieren",
       "export_detail": "Als JSON herunterladen und kopieren",
       "placeholder": "Geräte, Entitäten, Aktionen suchen…",
-      "empty": "Nichts gefunden. Gib einen Teil eines Bildschirm-, Entitäts- oder Aktionsnamens ein."
+      "empty": "Nichts gefunden. Gib einen Teil eines Geräte-, Entitäts- oder Aktionsnamens ein."
     },
     "search": {
       "groups": {
@@ -1895,8 +1895,8 @@
     },
     "empty": {
       "choose": {
-        "title": "Wähle einen Bildschirm",
-        "text": "Wähle links einen deiner Bildschirme, um seine Kacheln, Kopfleiste und Einstellungen zu ändern."
+        "title": "Wähle ein Gerät",
+        "text": "Wähle links eines deiner Geräte, um seine Kacheln, Kopfleiste und Einstellungen zu ändern."
       },
       "start": {
         "title": "Starte mit einem Bildschirm",
@@ -1943,12 +1943,12 @@
     },
     "screen_view": {
       "confirm": {
-        "switch": "Du hast nicht gespeicherte Änderungen. Trotzdem einen anderen Bildschirm öffnen?",
-        "copy": "Das nicht gespeicherte Layout durch eine Kopie vom anderen Bildschirm ersetzen?",
+        "switch": "Du hast nicht gespeicherte Änderungen. Trotzdem ein anderes Gerät öffnen?",
+        "copy": "Das nicht gespeicherte Layout durch eine Kopie vom anderen Gerät ersetzen?",
         "import": "Das nicht gespeicherte Layout durch das importierte ersetzen?"
       },
       "saved": {
-        "current": "Gespeichert. Dein Bildschirm wird aktualisiert.",
+        "current": "Gespeichert. Dein Gerät wird aktualisiert.",
         "other": "Gespeichert. {name} wird aktualisiert.",
         "newer_edit": "Gespeichert. Deine neueste Änderung ist noch nicht gesendet: Drücke noch einmal auf „Speichern & senden“."
       },
@@ -1965,18 +1965,18 @@
       "more": "Mehr",
       "menu": {
         "identify": "Identifizieren",
-        "identify_hint": "Bildschirm blinken lassen",
+        "identify_hint": "Gerät blinken lassen",
         "identify_needs": "Braucht Firmware 0.2.31 oder neuer",
         "copy": "Layout kopieren von…",
         "copy_screens": "{n} Gerät | {n} Geräte",
-        "copy_none": "kein anderer Bildschirm",
+        "copy_none": "kein anderes Gerät",
         "copy_tiles": "{n} Kachel | {n} Kacheln",
         "export": "Layout exportieren",
         "import": "Layout importieren…",
         "override": "YAML-Anpassung",
         "override_none": "Kein ESPHome-Profil für diesen Bildschirm gefunden",
         "update": "Firmware aktualisieren",
-        "group_screen": "Dieser Bildschirm",
+        "group_screen": "Dieses Gerät",
         "group_layout": "Layout",
         "group_advanced": "Erweitert"
       },
@@ -1986,7 +1986,7 @@
       "removed": "{name} entfernt",
       "no_room": "Auf Seite {page} ist kein Platz für diese Kachel.",
       "no_free_page": "Keine Seite ist frei für eine ganzseitige Kachel. Mach zuerst eine Seite frei.",
-      "page_taken": "Dieser Bildschirm hat schon eine Kachel, die zu Seite {page} führt.",
+      "page_taken": "Dieses Gerät hat schon eine Kachel, die zu Seite {page} führt.",
       "copied": "Layout von {name} kopiert. Drücke „Speichern & senden“, wenn alles passt.",
       "imported": "Layout importiert. Drücke „Speichern & senden“, wenn alles passt.",
       "not_json": "Das ist kein JSON. Exportiere zuerst ein Layout oder füge eines aus einem anderen Kachel Manager oder aus Tessera ein.",
@@ -1995,7 +1995,7 @@
       "page_removed": "Seite {page} ist weg.",
       "page_removed_tiles": "Seite {page} und eine Kachel sind weg. | Seite {page} und {n} Kacheln sind weg.",
       "positions_hint": "Freie Plätze und feste Positionen funktionieren ab Firmware 0.2.26. Bis zu diesem Update rückt dieser Bildschirm (Firmware {firmware}) die Kacheln auf den ersten freien Platz vor.",
-      "aria": "Bildschirm-Layout",
+      "aria": "Seiten-Layout",
       "add_page": "Seite hinzufügen",
       "max_pages": "Höchstens 1 Seite | Höchstens {n} Seiten",
       "help": {
@@ -2608,7 +2608,7 @@
       "full": "ganze Seite"
     },
     "tile": {
-      "name": "Name auf dem Bildschirm",
+      "name": "Name auf dem Gerät",
       "icon": {
         "auto_ha": "Automatisch (aus Home Assistant)",
         "auto_default": "Automatisch (Standard)",
@@ -3482,7 +3482,7 @@
         "loading": "Protokoll wird geholt…",
         "empty": "Das Protokoll ist leer.",
         "cut": "Das Ende von {size}.",
-        "echod": "App",
+        "kacheld": "App",
         "boot": "Start"
       }
     },
@@ -3893,7 +3893,7 @@
         "behaviour": "Verhalten",
         "events": "Ereignisse",
         "tips": "Tipps",
-        "one": "Ein Bildschirm",
+        "one": "Ein Gerät",
         "choice": "Zwei Tasten"
       },
       "try": {
@@ -4954,7 +4954,7 @@
       "button": "Automatisches Layout",
       "button_title": "Seiten aus deinen Home-Assistant-Bereichen und -Geräten erstellen",
       "title": "Ein Layout für dich erstellen",
-      "intro": "Der Kachel Manager sieht sich deine Bereiche und Geräte in Home Assistant an und erstellt Seiten für diesen Bildschirm: eine Seite oder einen Abschnitt pro Raum, Wetter, Alarm, Personen und Kameras des Hauses zusammen, größere Kacheln, wo dieser Bildschirm Platz dafür hat. Du kannst es rückgängig machen und danach alles ändern.",
+      "intro": "Der Kachel Manager sieht sich deine Bereiche und Geräte in Home Assistant an und erstellt Seiten für dieses Gerät: eine Seite oder einen Abschnitt pro Raum, Wetter, Alarm, Personen und Kameras des Hauses zusammen, größere Kacheln, wo das Gerät Platz dafür hat. Du kannst es rückgängig machen und danach alles ändern.",
       "reading": "Dein Zuhause wird gelesen…",
       "failed": "Dein Zuhause konnte nicht gelesen werden: {error}",
       "nothing": "Der Kachel Manager hat noch nichts für diesen Bildschirm gefunden. Gib deinen Geräten in Home Assistant einen Bereich oder füge Kacheln aus der Bibliothek hinzu.",
@@ -4971,7 +4971,7 @@
       "make": "Layout erstellen",
       "made": "Ein Layout mit {pages} Seite ist fertig. Rückgängig nimmt es zurück. | Ein Layout mit {pages} Seiten ist fertig. Rückgängig nimmt es zurück.",
       "offer_title": "Soll ich ein erstes Layout für dich erstellen?",
-      "offer_text": "Der Kachel Manager kann diesen Bildschirm aus deinen Home-Assistant-Bereichen und -Geräten einrichten. Danach kannst du alles ändern.",
+      "offer_text": "Der Kachel Manager kann dieses Gerät aus deinen Home-Assistant-Bereichen und -Geräten einrichten. Danach kannst du alles ändern.",
       "offer_make": "Erstes Layout erstellen",
       "offer_empty": "Leer beginnen"
     },

@@ -11,11 +11,11 @@ import { useUiStore } from "../stores/ui";
 import { useScreenStore } from "../stores/screen";
 
 type Tail = { available: boolean; source: string; text?: string; size?: number; cut?: boolean };
-type Source = "echod" | "boot";
+type Source = "kacheld" | "boot";
 
 const ui = useUiStore();
 const scr = useScreenStore();
-const source = ref<Source>("echod");
+const source = ref<Source>("kacheld");
 const tail = ref<Tail | null>(null);
 const busy = ref(false);
 const missing = ref(false);
@@ -72,7 +72,7 @@ async function download() {
     <p v-if="missing" class="hint warn" data-log="none">{{ t("editor.screen_settings.kachel_log.none") }}</p>
     <div v-else class="kachel-log-bar">
       <div class="seg" role="group" :aria-label="t('editor.screen_settings.kachel_log.title')">
-        <button v-for="one in (['echod', 'boot'] as Source[])" :key="one" type="button" :data-source="one"
+        <button v-for="one in (['kacheld', 'boot'] as Source[])" :key="one" type="button" :data-source="one"
           :aria-pressed="tail && source === one ? 'true' : 'false'" :disabled="busy" @click="show(one)">{{ t(`editor.screen_settings.kachel_log.${one}`) }}</button>
       </div>
       <button v-if="tail" type="button" class="btn quiet mini" data-log="refresh" :disabled="busy" @click="show()">{{ t("editor.screen_settings.kachel_log.refresh") }}</button>

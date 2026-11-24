@@ -1,14 +1,15 @@
 """Kachel Manager: a Kachel device's log, fetched through Home Assistant (no SSH on a device that is passed on).
 
 The device offers the action `<domain>.<node>_log` (fire-app, plan of 2026-11-19), which answers: it takes `source`
-(`echod` or `boot`), `offset` (bytes) and `max` (bytes, at most 64 KiB) and gives back `{"text", "next", "size"}`:
+(`kacheld` or `boot`; `echod`, kacheld's old name, on a device before fire-app @16c8a61), `offset` (bytes) and `max` (bytes, at most 64 KiB) and gives back `{"text", "next", "size"}`:
 the piece of the log from `offset`, where the next piece starts (None at the end) and how long the whole log is. The
 device blackens secrets (keys, passwords, tokens) itself. This module fetches in pieces: the end of a log for the
 editor to show, and a whole log (at most MAX_DOWNLOAD, its end) for the user to download. Nothing goes to the
 internet; the user sends the file on themselves, to a GitHub issue for instance.
 
-Routes: GET /api/screens/{inbox}/kachel/log?source=echod (the end, or {"available": false} for a device without the
-action) and GET /api/screens/{inbox}/kachel/log/download?source=echod|boot|all (a text file).
+Routes: GET /api/screens/{inbox}/kachel/log?source=kacheld (the end, or {"available": false} for a device without the
+action) and GET /api/screens/{inbox}/kachel/log/download?source=kacheld|boot|all (a text file). `echod` is still taken
+as kacheld's old name; a device that does not know `kacheld` yet is asked for `echod` instead (OLD_NAMES).
 """
 import asyncio
 import datetime
@@ -20,7 +21,12 @@ import kachel
 from i18n import t
 
 LOG_SUFFIX = '_log'
-SOURCES = ('echod', 'boot')
+SOURCES = ('kacheld', 'boot')
+# kacheld was called echod (Kachel OS, 2026-11-24): a device older than fire-app @16c8a61 knows only that name.
+OLD_NAMES = {'kacheld': 'echod'}
+ALIASES = {'echod': 'kacheld'}
+# The log actions that answered only to the old name: asked by it at once from then on.
+_old_only = set()
 CHUNK = 64 * 1024               # the most one answer carries
 TAIL = CHUNK                    # what the editor shows: the end of a log
 MAX_DOWNLOAD = 4 * 1024 * 1024  # the most of one log a download holds: its end
@@ -53,6 +59,21 @@ def _piece(answer):
 
 
 async def _call(manager, action, source, offset, most):
+    """One piece of a log; a device that does not know the new name of a log is asked again by its old one."""
+    old = OLD_NAMES.get(source)
+    if old and action in _old_only:
+        return await _ask(manager, action, old, offset, most)
+    try:
+        return await _ask(manager, action, source, offset, most)
+    except Exception:  # noqa: BLE001 - an older device refuses the new name; it still knows the old one
+        if not old:
+            raise
+    piece = await _ask(manager, action, old, offset, most)
+    _old_only.add(action)
+    return piece
+
+
+async def _ask(manager, action, source, offset, most):
     domain, service = action
     try:
         answer = await asyncio.wait_for(manager.ha.call_answer(domain, service, {'source': source, 'offset': offset,
@@ -93,6 +114,7 @@ def _screen(manager, inbox):
 
 
 def _source(value, allow_all=False):
+    value = ALIASES.get(value, value)
     if value in SOURCES or (allow_all and value == 'all'):
         return value
     raise ValueError(t('addon.errors.kachel_log.source'))
@@ -133,7 +155,7 @@ async def download(manager, inbox, source):
 
 def routes(app, manager):
     async def view(request):
-        return web.json_response(await tail(manager, request.match_info['inbox'], request.query.get('source', 'echod')))
+        return web.json_response(await tail(manager, request.match_info['inbox'], request.query.get('source', 'kacheld')))
 
     async def save(request):
         name, text = await download(manager, request.match_info['inbox'], request.query.get('source', 'all'))

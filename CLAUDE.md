@@ -145,6 +145,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   `screen.kachel_kind == 'special'`. `presence` trägt `battery_low` (Akku am Gerät des Präsenz-Sensors,
   `kachel_functions.battery_low`). Tests `tests/test_kachel_sources.py`, `web/tests/kachel-sources.spec.ts`.
 - **Begriffe** (Zentrale, 24.11.): **Kachel OS** = Firmware + **kacheld** (früher echod). Neue Texte nutzen sie; alte nebenbei.
+  Protokoll-Quelle heißt `kacheld` (`kachel_log.SOURCES`); ein Gerät vor fire-app @16c8a61 wird mit `echod` gefragt (`OLD_NAMES`).
+- **Feinschliff Redesign** (24.11., 0.1.13): Kachelform wie kacheld (Symbol oben links, Name/Zustand unten links, an = Schimmer),
+  Kachel-Dialog unten in der rechten Spalte (`.body:has(> .work.kachel-work) > .drawer`), alles in `kachel-theme.css`. Weitere
+  „Gerät“-Texte in `tools/kachel_texts.json`; Englisch bleibt, wo Tesseras Tests den Wortlaut prüfen.
 - **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
   darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit

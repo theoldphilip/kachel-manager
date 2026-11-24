@@ -55,25 +55,25 @@ class Action(unittest.TestCase):
             kachel.NODE_DOMAINS.pop('fire_test', None)
 
     def test_none_without_the_action(self):
-        manager = Manager(Device({'echod': 'x'}, {'esphome': {'fire_test_screen_message': {}}}))
+        manager = Manager(Device({'kacheld': 'x'}, {'esphome': {'fire_test_screen_message': {}}}))
         self.assertIsNone(kachel_log.action_of(manager, manager._screen))
-        self.assertEqual(run(kachel_log.tail(manager, 'text.fire_test_kachel_inbox', 'echod')),
-                         {'available': False, 'source': 'echod'})
+        self.assertEqual(run(kachel_log.tail(manager, 'text.fire_test_kachel_inbox', 'kacheld')),
+                         {'available': False, 'source': 'kacheld'})
         with self.assertRaises(ValueError):
             run(kachel_log.download(manager, 'text.fire_test_kachel_inbox', 'all'))
 
 
 class Tail(unittest.TestCase):
     def test_short_log_in_one_call(self):
-        device = Device({'echod': 'one\ntwo\n'})
-        out = run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'echod'))
-        self.assertEqual(out, {'available': True, 'source': 'echod', 'text': 'one\ntwo\n', 'size': 8, 'cut': False})
-        self.assertEqual(device.calls, [('esphome', 'fire_test_log', {'source': 'echod', 'offset': 0, 'max': kachel_log.CHUNK})])
+        device = Device({'kacheld': 'one\ntwo\n'})
+        out = run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'kacheld'))
+        self.assertEqual(out, {'available': True, 'source': 'kacheld', 'text': 'one\ntwo\n', 'size': 8, 'cut': False})
+        self.assertEqual(device.calls, [('esphome', 'fire_test_log', {'source': 'kacheld', 'offset': 0, 'max': kachel_log.CHUNK})])
 
     def test_long_log_gives_its_end_on_a_whole_line(self):
         lines = ''.join(f'line {i:06d}\n' for i in range(20000))   # 240 000 bytes
-        device = Device({'echod': lines})
-        out = run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'echod'))
+        device = Device({'kacheld': lines})
+        out = run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'kacheld'))
         self.assertTrue(out['cut'])
         self.assertEqual(out['size'], len(lines))
         self.assertTrue(out['text'].startswith('line '))
@@ -86,14 +86,14 @@ class Tail(unittest.TestCase):
         with self.assertRaises(ValueError):
             run(kachel_log.tail(manager, 'text.fire_test_kachel_inbox', '/etc/passwd'))
         with self.assertRaises(ValueError):
-            run(kachel_log.tail(manager, 'text.other', 'echod'))
+            run(kachel_log.tail(manager, 'text.other', 'kacheld'))
 
     def test_bad_answer(self):
         class Odd(Device):
             async def call_answer(self, domain, service, data):
                 return {'text': 5}
         with self.assertRaises(ValueError):
-            run(kachel_log.tail(Manager(Odd({})), 'text.fire_test_kachel_inbox', 'echod'))
+            run(kachel_log.tail(Manager(Odd({})), 'text.fire_test_kachel_inbox', 'kacheld'))
 
     def test_wrapped_answer(self):
         class Wrapped(Device):
@@ -106,23 +106,23 @@ class Tail(unittest.TestCase):
         class Stuck(Device):
             async def call_answer(self, domain, service, data):
                 return {'text': 'x' * 10, 'next': 5, 'size': 10 ** 9}
-        out = run(kachel_log.tail(Manager(Stuck({})), 'text.fire_test_kachel_inbox', 'echod'))
+        out = run(kachel_log.tail(Manager(Stuck({})), 'text.fire_test_kachel_inbox', 'kacheld'))
         self.assertEqual(out['text'], 'x' * 10)
 
 
 class Download(unittest.TestCase):
     def test_both_logs_in_one_file(self):
-        device = Device({'echod': 'app line\n', 'boot': 'boot line\n'})
+        device = Device({'kacheld': 'app line\n', 'boot': 'boot line\n'})
         name, text = run(kachel_log.download(Manager(device), 'text.fire_test_kachel_inbox', 'all'))
         self.assertRegex(name, r'^kachel-log-fire-test-\d{4}-\d\d-\d\d-\d{4}\.txt$')
-        self.assertIn('===== echod =====\napp line\n', text)
+        self.assertIn('===== kacheld =====\napp line\n', text)
         self.assertIn('===== boot =====\nboot line\n', text)
         self.assertTrue(text.startswith('Kachel log of Fire (fire-test)'))
 
     def test_whole_log_across_pieces(self):
         lines = ''.join(f'{i}\n' for i in range(60000))
-        _, text = run(kachel_log.download(Manager(Device({'echod': lines})), 'text.fire_test_kachel_inbox', 'echod'))
-        self.assertTrue(text.endswith('===== echod =====\n' + lines))
+        _, text = run(kachel_log.download(Manager(Device({'kacheld': lines})), 'text.fire_test_kachel_inbox', 'kacheld'))
+        self.assertTrue(text.endswith('===== kacheld =====\n' + lines))
 
     def test_file_name_is_safe(self):
         when = datetime.datetime(2026, 11, 19, 19, 5)
@@ -135,6 +135,27 @@ class Texts(unittest.TestCase):
             data = json.loads((ROOT / f'screen_manager/translations/{lang}.json').read_text())
             self.assertEqual(set(data['addon']['errors']['kachel_log']), {'none', 'no_answer', 'source'})
             self.assertIn('download', data['editor']['screen_settings']['kachel_log'])
+
+
+class OldName(unittest.TestCase):
+    def setUp(self):
+        kachel_log._old_only.clear()
+
+    def tearDown(self):
+        kachel_log._old_only.clear()
+
+    def test_a_device_that_knows_only_echod_is_asked_by_it(self):
+        class Old(Device):
+            async def call_answer(self, domain, service, data):
+                if data['source'] == 'kacheld':
+                    self.calls.append((domain, service, data))
+                    raise RuntimeError('unknown source')
+                return await super().call_answer(domain, service, data)
+        device = Old({'echod': 'old app\n'})
+        out = run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'kacheld'))
+        self.assertEqual(out['text'], 'old app\n')
+        run(kachel_log.tail(Manager(device), 'text.fire_test_kachel_inbox', 'echod'))
+        self.assertEqual([call[2]['source'] for call in device.calls].count('kacheld'), 1, 'asked by the old name from then on')
 
 
 if __name__ == '__main__':

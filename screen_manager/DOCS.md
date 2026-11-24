@@ -64,6 +64,12 @@ dass jemand da ist), **Blättern** (Wischen, Lautstärketasten, Fernbedienung), 
 (Klingel, Post, Pakete, Müllabfuhr, Wetterwarnungen, verpasste Meldungen). Das Tablet zeigt eine Einstellung nur, wenn
 ihre Funktion hier eingerichtet ist. Was nicht eingerichtet ist, ist aus.
 
+## Geräte ohne Postfach
+
+Meldet ein Kachel-Gerät Home Assistant noch keine „Kachel inbox“, zeigt der Kachel Manager es trotzdem, als Spezialanzeige
+ohne Seiten. **Gerät** und **Protokoll** gehen sofort. **Funktionen** und **Quellen** kannst du schon einrichten; sie
+erreichen das Gerät, sobald es seine Inbox meldet.
+
 ## Quellen einer Spezialanzeige
 
 Eine **Spezialanzeige** ist ein Gerät mit eigener Anzeige für eine feste Aufgabe, etwa das Laufband-Display. Sie hat keine

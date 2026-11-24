@@ -149,6 +149,10 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
 - **Feinschliff Redesign** (24.11., 0.1.13): Kachelform wie kacheld (Symbol oben links, Name/Zustand unten links, an = Schimmer),
   Kachel-Dialog unten in der rechten Spalte (`.body:has(> .work.kachel-work) > .drawer`), alles in `kachel-theme.css`. Weitere
   „Gerät“-Texte in `tools/kachel_texts.json`; Englisch bleibt, wo Tesseras Tests den Wortlaut prüfen.
+- **Geräte ohne Inbox** (25.11., Laufband-Test, Philip): `kachel_bare.py` – jedes Kachel-Gerät (Plattform `kachel`, oder
+  `esphome` mit Sensor „Kachel board“; nie ein ESP32) ohne Bildschirm dieser App erscheint als `kachel:<device_id>`
+  (`kachel_kind` special, `kachel_bare`) im Inventar; `Manager.screen` findet es für Gerät/Protokoll/Funktionen/Quellen, die
+  Sync-Schleife nie. Meldet es die Inbox, übernimmt `kachel_bare.adopt` Funktionen und Quellen. Test `tests/test_kachel_bare.py`.
 - **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
   darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit

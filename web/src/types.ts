@@ -303,6 +303,8 @@ export type Screen = {
   kachel?: { version: string | null; board: string | null; device: string | null; battery?: number | null; theme?: string | null } | null;
   // Kachel Manager: "special" for a Spezialanzeige (its hello), which has sources instead of pages.
   kachel_kind?: string;
+  // Kachel Manager: a Kachel device that reports no inbox yet (kachel_bare.py): Device and Log only, no session.
+  kachel_bare?: boolean;
   layout: Layout; update?: UpdateInfo; settings?: SettingsView; delivery?: string; status?: string;
   screensaver?: ScreensaverView;
   page_document?: PageDocument | PendingMigration | null;

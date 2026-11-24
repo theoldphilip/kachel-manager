@@ -145,7 +145,8 @@ async function save() {
 <template>
   <div v-if="view" class="kachel-functions" id="kachel-functions">
     <p class="hint">{{ t("editor.kachel_functions.intro") }}</p>
-    <p v-if="!view.supported" class="hint warn" data-functions="unsupported">{{ t("editor.kachel_functions.unsupported") }}</p>
+    <p v-if="scr.currentScreen?.kachel_bare" class="hint warn" data-functions="bare">{{ t("editor.kachel_bare.waiting") }}</p>
+    <p v-else-if="!view.supported" class="hint warn" data-functions="unsupported">{{ t("editor.kachel_functions.unsupported") }}</p>
 
     <section class="set-card" data-function="presence">
       <h4><span class="kachel-circle violet"><span class="mdi">{{ glyph("F0004") }}</span></span>{{ t("editor.kachel_functions.presence.title") }}</h4>

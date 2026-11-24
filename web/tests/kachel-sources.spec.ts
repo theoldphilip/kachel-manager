@@ -62,4 +62,14 @@ describe("a Spezialanzeige's sources", () => {
     expect(wrapper.find("[data-sources=none]").exists()).toBe(true);
     expect(wrapper.find("[data-sources=unsupported]").exists()).toBe(true);
   });
+
+  it("of a device without its inbox wait for it, and say so", async () => {
+    vi.mocked(getJson).mockResolvedValue({ ...VIEW, offered: [], choices: {}, sources: {}, supported: false });
+    openScreen({ ...SCREEN, id: "kachel:laufband", kachel_bare: true } as unknown as Screen);
+    const wrapper = mount(SourcesPanel);
+    await flushPromises();
+    expect(getJson).toHaveBeenCalledWith("screens/kachel%3Alaufband/kachel/sources");
+    expect(wrapper.find("[data-sources=bare]").exists()).toBe(true);
+    expect(wrapper.find("[data-sources=unsupported]").exists()).toBe(false);
+  });
 });

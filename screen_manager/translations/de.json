@@ -5124,6 +5124,9 @@
       "unsaved": "Noch nicht gespeichert",
       "delivered": "Das Gerät hat es",
       "waiting": "Das Gerät bekommt es, sobald es verbunden ist"
+    },
+    "kachel_bare": {
+      "waiting": "Dieses Gerät meldet Home Assistant noch keine „Kachel inbox“. Gerät und Protokoll gehen schon; Funktionen und Quellen erreichen es, sobald es sie meldet (eine neuere Kachel-OS-Version bringt sie mit)."
     }
   }
 }

@@ -21,6 +21,7 @@ import kachel_device
 import kachel_log
 import kachel_integration
 import kachel_keep
+import kachel_bare
 import kachel_board
 import kachel_functions
 import kachel_remove
@@ -1614,7 +1615,9 @@ class Manager:
     def screen(self, inbox):
         screens = self.screens()
         inbox = self.aliases.get(inbox, inbox)
-        return next((s for s in screens if s['id'] == inbox), None)
+        found = next((s for s in screens if s['id'] == inbox), None)
+        # Kachel Manager: a Kachel device without an inbox (kachel_bare), for its Device, Log, Functions and Sources tabs.
+        return found if found is not None else kachel_bare.screen(self, inbox)
 
     async def link_base(self, screen):
         """Where `screen` fetches this app's pictures: Home Assistant's address on the screen's own network (GitHub #276)."""
@@ -3712,6 +3715,9 @@ class Manager:
                     self.status[inbox] = english('addon.status.offline')
                     changed = changed or self.status[inbox] != before
                     continue
+                # Kachel Manager: what was saved for it before it reported its inbox (kachel_bare.adopt).
+                with contextlib.suppress(Exception):
+                    kachel_bare.adopt(self, screen)
                 # Kachel Manager: the device's functions and presence, in the session its pages opened (kachel_functions.py).
                 try:
                     await kachel_functions.sync(self, inbox)
@@ -5079,7 +5085,8 @@ def create_app(manager, development=False):
                 screen['feedback'] = None
             # How a plugin it runs works for you (docs/PLUGINS.md, "Likes, ratings and counting"): the stars card.
             screen['plugin_ask'] = manager.plugins.ask_card(screen) if editor_features['plugins'] and kachel.TESSERA_SITE else None
-        return {'csrf': csrf, 'connected': manager.ha.online, 'screens': screens,
+        # Kachel Manager: Kachel devices without an inbox listed too, as Spezialanzeigen without pages (kachel_bare).
+        return {'csrf': csrf, 'connected': manager.ha.online, 'screens': [*screens, *kachel_bare.inventory_entries(manager, screens)],
                 'editor_features': editor_features,
                 # Kachel Manager: no ESP32 screen waits to be flashed here (kachel.ESP_SCREENS).
                 'pending': manager.pending_profiles(screens, profiles) if kachel.ESP_SCREENS else [],

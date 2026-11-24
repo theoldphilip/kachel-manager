@@ -59,7 +59,8 @@ async function save() {
 <template>
   <div v-if="view" class="kachel-sources" id="kachel-sources">
     <p class="hint">{{ t("editor.kachel_sources.intro") }}</p>
-    <p v-if="!view.supported" class="hint warn" data-sources="unsupported">{{ t("editor.kachel_sources.unsupported") }}</p>
+    <p v-if="scr.currentScreen?.kachel_bare" class="hint warn" data-sources="bare">{{ t("editor.kachel_bare.waiting") }}</p>
+    <p v-else-if="!view.supported" class="hint warn" data-sources="unsupported">{{ t("editor.kachel_sources.unsupported") }}</p>
 
     <section class="set-card" data-source="room">
       <h4>{{ t("editor.kachel_sources.room.title") }}</h4>

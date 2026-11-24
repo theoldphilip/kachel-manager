@@ -45,10 +45,12 @@
       "init": {
         "title": "Optionen des Kachel-Geräts",
         "data": {
-          "allow_service_calls": "Gerät darf Home-Assistant-Aktionen ausführen"
+          "allow_service_calls": "Gerät darf Home-Assistant-Aktionen ausführen",
+          "bluetooth_scanning_mode": "Bluetooth-Suche"
         },
         "data_description": {
-          "allow_service_calls": "Das Gerät bittet Home Assistant, Aktionen auszuführen, zum Beispiel für Kalender oder To-do-Liste. Ausschalten, wenn du dem Gerät nicht traust."
+          "allow_service_calls": "Das Gerät bittet Home Assistant, Aktionen auszuführen, zum Beispiel für Kalender oder To-do-Liste. Ausschalten, wenn du dem Gerät nicht traust.",
+          "bluetooth_scanning_mode": "Wie der Bluetooth-Proxy zuhört. Automatisch: passiv, aktiv nur, wenn ein Gerät es braucht. Aktiv fragt Geräte nach mehr Daten (kostet deren Akku)."
         }
       }
     }
@@ -91,6 +93,15 @@
           "aggressive": "Schnell",
           "relaxed": "Entspannt"
         }
+      }
+    }
+  },
+  "selector": {
+    "bluetooth_scanning_mode": {
+      "options": {
+        "auto": "Automatisch",
+        "active": "Aktiv",
+        "passive": "Passiv"
       }
     }
   }

@@ -1,3 +1,8 @@
+## Kachel Manager 0.1.11 (based on Tessera 0.4.98)
+
+- **Kachel integration 0.6.0: Bluetooth proxy.** A Kachel device with Bluetooth (the treadmill display, the Fire with a firmware that has it) becomes a Bluetooth receiver for Home Assistant, as an ESPHome Bluetooth proxy does. Install it under Settings → Kachel integration and restart Home Assistant.
+- The app's description says Kachel OS instead of the old name of the tablets' program.
+
 ## Kachel Manager 0.1.10 (based on Tessera 0.4.98)
 
 - **Sources of a Spezialanzeige.** A device with its own display for one task (the treadmill display) has the tab Sources instead of its pages and plugins. The device says in its hello which sources its task needs (room temperature, light, emergency, power meter …); here you pick an entity that fits each one, and the room's name (the device's area in Home Assistant unless you type one). The app sends the device the values of its sources and performs its buttons; a source left empty is off and its button is hidden. The choice outlasts a factory reset, kept by the device's MAC address.

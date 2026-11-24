@@ -33,3 +33,9 @@ DEFAULT_ALLOW_SERVICE_CALLS: Final = True
 # restore the old entity ids (it keeps deleted entities by unique id) and the ids follow the device's
 # current name (Philip, 2026-11-20). Entries made before 0.3.1 have none and keep their unique ids.
 CONF_ADOPTION_ID: Final = "adoption_id"
+
+# Bluetooth proxy (bluetooth.py): the scanner's source, kept for removing it with the entry, and the
+# scanning mode chosen in the options (as in Home Assistant's ESPHome integration: auto by default).
+CONF_BLUETOOTH_MAC_ADDRESS = "bluetooth_mac_address"
+CONF_BLUETOOTH_SCANNING_MODE = "bluetooth_scanning_mode"
+DEFAULT_BLUETOOTH_SCANNING_MODE = "auto"

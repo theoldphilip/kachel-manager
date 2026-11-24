@@ -14,6 +14,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
 from . import assist_satellite, ffmpeg_proxy
+from .bluetooth import async_remove_entry_scanner
 from .const import CONF_ADOPTION_ID, DOMAIN
 from .manager import KachelData, KachelManager, async_zeroconf, client_from_entry
 from .media_flow import MediaFlow
@@ -68,3 +69,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: KachelConfigEntry) -> b
     if unloaded:
         async_remove_device_actions(hass, entry.runtime_data)
     return unloaded
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: KachelConfigEntry) -> None:
+    """A deleted device leaves nothing behind: its Bluetooth scanner goes with it."""
+    async_remove_entry_scanner(hass, entry)

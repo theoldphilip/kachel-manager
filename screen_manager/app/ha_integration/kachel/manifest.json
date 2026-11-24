@@ -9,6 +9,7 @@
   "config_flow": true,
   "dependencies": [
     "assist_pipeline",
+    "bluetooth",
     "ffmpeg",
     "http",
     "intent"
@@ -19,12 +20,14 @@
   "issue_tracker": "https://github.com/theoldphilip/kachel-verbindung/issues",
   "loggers": [
     "aioesphomeapi",
-    "noiseprotocol"
+    "noiseprotocol",
+    "bleak_esphome"
   ],
   "requirements": [
-    "aioesphomeapi>=46.25.0"
+    "aioesphomeapi>=46.25.0",
+    "bleak-esphome>=4.0.0"
   ],
-  "version": "0.5.1",
+  "version": "0.6.0",
   "zeroconf": [
     {
       "type": "_esphomelib._tcp.local.",

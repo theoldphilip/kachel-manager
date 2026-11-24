@@ -25,6 +25,7 @@ from aioesphomeapi import (
     RequiresEncryptionAPIError,
     ResolveAPIError,
 )
+from homeassistant.components.bluetooth import BluetoothScanningMode
 from homeassistant.config_entries import (
     SOURCE_REAUTH,
     SOURCE_ZEROCONF,
@@ -36,16 +37,24 @@ from homeassistant.config_entries import (
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import callback
 from homeassistant.helpers.device_registry import format_mac
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 import voluptuous as vol
 
+from .bluetooth import has_scanner
 from .const import (
     CONF_ADOPTION_ID,
     CONF_ALLOW_SERVICE_CALLS,
+    CONF_BLUETOOTH_SCANNING_MODE,
     CONF_BOARD,
     CONF_DEVICE_NAME,
     CONF_NOISE_PSK,
     DEFAULT_ALLOW_SERVICE_CALLS,
+    DEFAULT_BLUETOOTH_SCANNING_MODE,
     DEFAULT_PORT,
     DOMAIN,
     SUPPORTED_BOARDS,
@@ -335,10 +344,31 @@ class KachelOptionsFlow(OptionsFlowWithReload):
         """May the device perform Home Assistant actions? (Philip: default on.)"""
         if user_input is not None:
             return self.async_create_entry(data=user_input)
-        current = self.config_entry.options.get(
-            CONF_ALLOW_SERVICE_CALLS, DEFAULT_ALLOW_SERVICE_CALLS
-        )
-        return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema({vol.Required(CONF_ALLOW_SERVICE_CALLS, default=current): bool}),
-        )
+        options = self.config_entry.options
+        schema: dict[Any, Any] = {
+            vol.Required(
+                CONF_ALLOW_SERVICE_CALLS,
+                default=options.get(CONF_ALLOW_SERVICE_CALLS, DEFAULT_ALLOW_SERVICE_CALLS),
+            ): bool
+        }
+        if has_scanner(self.config_entry):
+            # The Bluetooth proxy's scanning mode, as with ESPHome (auto by default).
+            schema[
+                vol.Required(
+                    CONF_BLUETOOTH_SCANNING_MODE,
+                    default=options.get(
+                        CONF_BLUETOOTH_SCANNING_MODE, DEFAULT_BLUETOOTH_SCANNING_MODE
+                    ),
+                )
+            ] = SelectSelector(
+                SelectSelectorConfig(
+                    options=[
+                        BluetoothScanningMode.AUTO.value,
+                        BluetoothScanningMode.ACTIVE.value,
+                        BluetoothScanningMode.PASSIVE.value,
+                    ],
+                    translation_key="bluetooth_scanning_mode",
+                    mode=SelectSelectorMode.DROPDOWN,
+                )
+            )
+        return self.async_show_form(step_id="init", data_schema=vol.Schema(schema))

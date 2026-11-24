@@ -31,6 +31,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import format_mac
 
+from .bluetooth import async_sync_scanner
 from .const import CLIENT_INFO, CONF_DEVICE_NAME, CONF_NOISE_PSK, DOMAIN, MANUFACTURER
 from .services import DeviceCalls, StateForwarder, async_setup_device_actions
 
@@ -236,6 +237,8 @@ class KachelManager:
         self.data.async_set_infos(entity_infos)
         async_setup_device_actions(self.hass, self.data, services)
         self.calls.async_sync_issue()
+        if undo_scanner := async_sync_scanner(self.hass, self.entry, self.data):
+            self.data.disconnect_callbacks.append(undo_scanner)
         # States, the device's requests and the states it follows, in one request (as ESPHome does).
         cli.subscribe_home_assistant_states_and_services(
             on_state=self.data.async_on_state,

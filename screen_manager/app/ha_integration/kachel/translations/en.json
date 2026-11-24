@@ -45,10 +45,12 @@
       "init": {
         "title": "Kachel device options",
         "data": {
-          "allow_service_calls": "Allow the device to perform Home Assistant actions"
+          "allow_service_calls": "Allow the device to perform Home Assistant actions",
+          "bluetooth_scanning_mode": "Bluetooth scanning"
         },
         "data_description": {
-          "allow_service_calls": "The device asks Home Assistant to run actions, for example for the calendar or the to-do list. Turn off if you do not trust the device."
+          "allow_service_calls": "The device asks Home Assistant to run actions, for example for the calendar or the to-do list. Turn off if you do not trust the device.",
+          "bluetooth_scanning_mode": "How the Bluetooth proxy listens. Automatic: passive, active only when a device needs it. Active asks devices for more (uses more power on them)."
         }
       }
     }
@@ -91,6 +93,15 @@
           "aggressive": "Aggressive",
           "relaxed": "Relaxed"
         }
+      }
+    }
+  },
+  "selector": {
+    "bluetooth_scanning_mode": {
+      "options": {
+        "auto": "Automatic",
+        "active": "Active",
+        "passive": "Passive"
       }
     }
   }

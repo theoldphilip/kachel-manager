@@ -81,7 +81,7 @@ nachfragen** einschalten: Ein Tippen fragt zuerst, ein zweites schaltet.
 ## Automationen
 
 Die Ereignisse des Kachel Managers beginnen mit `kachel_` (etwa `kachel_show_alert`), damit sie sich nicht mit
-Tesseras mischen. Ob ein Tablet ein Ereignis schon anzeigt, hängt von seiner echod-Version ab. Das Layout jedes Tablets steht im Sensor `sensor.kachel_<gerät>`. Tesseras Ereignisse
+Tesseras mischen. Ob ein Tablet ein Ereignis schon anzeigt, hängt von seiner Kachel-OS-Version ab. Das Layout jedes Tablets steht im Sensor `sensor.kachel_<gerät>`. Tesseras Ereignisse
 (`esp_screens_*`) bleiben bei Tessera.
 
 ## Was nicht dabei ist

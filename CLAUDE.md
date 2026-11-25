@@ -48,8 +48,9 @@ Der gemeinsame Stand aller Kachel-Projekte liegt in der Kachel-Zentrale (`~/kach
   keine Prüfung (`paths-ignore`); so ein Branch darf nach grünen lokalen Tests auf `main`. **Vor jedem Push von Code die
   Tests lokal laufen lassen** (REGELN §5), rot wird nicht gepusht.
 - **Eigene Versionsreihe** ab 0.1.0 in `screen_manager/config.yaml`. Eine neue Nummer nur nach Philips Okay. Unsere
-  Abschnitte stehen oben im CHANGELOG als `## Kachel Manager x.y.z (...)` (ohne Firmware-Nummer, damit Tesseras
-  Werkzeuge sie nicht als ihre lesen). Die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.
+  Abschnitte stehen oben im CHANGELOG als `## Kachel Manager x.y.z` (ohne Firmware-Nummer, damit Tesseras Werkzeuge sie
+  nicht als ihre lesen). **Ab 0.1.17 auf Deutsch und ohne Verweis auf Tessera** in der Überschrift (Philip, 25.11.); ältere
+  Abschnitte bleiben, wie sie sind. Die Release-Werkzeuge (`tools/release.py` usw.) sind noch die von Tessera.
 - **Prüfen:** Python-Tests (`python -m unittest discover -s tests`) und der Editor (`cd web && npm test && npm run
   build`, dann `screen_manager/app/static` mit committen). Die Firmware-Teile (`components/`, `packages/`, C++-Tests,
   Firmware-Builds) gehören zu Tessera und werden hier nicht gebaut.

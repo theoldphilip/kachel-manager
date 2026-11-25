@@ -1,6 +1,7 @@
 """Kachel Manager: a Kachel device without a "Kachel inbox" is shown all the same (screen_manager/app/kachel_bare.py,
 Philip 2026-11-25): listed as a Spezialanzeige without pages, found by its id for its tabs, never an ESP32 screen, and
 what was saved for it moves to its inbox once it reports one."""
+import json
 import sys
 import tempfile
 import unittest
@@ -66,6 +67,14 @@ class Bare(unittest.TestCase):
         entry = kachel_bare.inventory_entries(Manager(), None)[0]
         self.assertEqual(entry['layout'], {'title': 'Laufband Display', 'tiles': []})
         self.assertIsNone(entry['page_document'])
+        # A grid all the same: without one the editor showed no tabs (Laufband with 0.1.14).
+        self.assertEqual(entry['source_grid'], {'columns': 4, 'rows': 2})
+
+    def test_the_editor_test_opens_what_the_app_sends(self):
+        # web/tests/kachel-bare.spec.ts opens this very entry: the two tests stay one.
+        sent = json.loads(json.dumps(kachel_bare.inventory_entries(Manager(), None)[0]))
+        shared = json.loads((ROOT / 'web/tests/kachel-bare-entry.json').read_text(encoding='utf8'))
+        self.assertEqual(sent, shared)
 
     def test_a_node_by_its_mac_when_the_name_differs(self):
         ha = HA()

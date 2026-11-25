@@ -1,0 +1,54 @@
+{
+  "area": "Test",
+  "bar_limit": 0,
+  "board": "unknown",
+  "delivery": "",
+  "device_id": "laufband",
+  "feedback": null,
+  "firmware": null,
+  "grids": null,
+  "hang": null,
+  "id": "kachel:laufband",
+  "in_sync": true,
+  "kachel": {
+    "battery": null,
+    "board": "a12s",
+    "device": "Samsung Galaxy A12",
+    "theme": null,
+    "version": null
+  },
+  "kachel_bare": true,
+  "kachel_kind": "special",
+  "layout": {
+    "tiles": [],
+    "title": "Laufband Display"
+  },
+  "memory": null,
+  "name": "Laufband Display",
+  "node": "laufband_display",
+  "online": true,
+  "package": null,
+  "page_capability": "offline",
+  "page_delivery": "waiting",
+  "page_document": null,
+  "page_last_capability": null,
+  "plugin_ask": null,
+  "screensaver": null,
+  "settings": null,
+  "shape": {
+    "columns": 4,
+    "height": 720,
+    "rows": 2,
+    "width": 1600
+  },
+  "source_grid": {
+    "columns": 4,
+    "rows": 2
+  },
+  "tile_sizes": [
+    "single",
+    "wide",
+    "full"
+  ],
+  "update": null
+}

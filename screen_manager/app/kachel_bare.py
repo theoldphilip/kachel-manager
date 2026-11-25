@@ -107,7 +107,9 @@ def inventory_entries(manager, screens):
     out = []
     for entry in bare(manager, screens):
         out.append({**entry, 'firmware': None, 'board': 'unknown', 'package': None,
-                    'shape': {'width': 1600, 'height': 720, 'columns': 4, 'rows': 2}, 'source_grid': None,
+                    # A grid, though no page goes to it: the editor opens a screen only with one (its document's
+                    # layout needs a grid), and without it showed the empty page instead of the tabs (Laufband, 0.1.14).
+                    'shape': {'width': 1600, 'height': 720, 'columns': 4, 'rows': 2}, 'source_grid': {'columns': 4, 'rows': 2},
                     'layout': {'title': entry['name'], 'tiles': []}, 'page_document': None,
                     'page_capability': 'offline', 'page_last_capability': None, 'page_delivery': 'waiting',
                     'delivery': '', 'in_sync': True, 'settings': None, 'screensaver': None, 'update': None,

@@ -153,6 +153,8 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   `esphome` mit Sensor „Kachel board“; nie ein ESP32) ohne Bildschirm dieser App erscheint als `kachel:<device_id>`
   (`kachel_kind` special, `kachel_bare`) im Inventar; `Manager.screen` findet es für Gerät/Protokoll/Funktionen/Quellen, die
   Sync-Schleife nie. Meldet es die Inbox, übernimmt `kachel_bare.adopt` Funktionen und Quellen. Test `tests/test_kachel_bare.py`.
+  Der Eintrag braucht ein `source_grid` (ohne zeigt der Editor keine Reiter, 0.1.14); `web/tests/kachel-bare.spec.ts` öffnet genau
+  den Eintrag aus `web/tests/kachel-bare-entry.json`, den `test_kachel_bare` gegen den Server prüft.
 - **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
   darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit

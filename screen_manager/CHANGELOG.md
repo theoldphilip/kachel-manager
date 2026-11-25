@@ -1,3 +1,7 @@
+## Kachel Manager 0.1.15 (based on Tessera 0.4.98)
+
+- **A Kachel device without an inbox opens with its tabs.** With 0.1.14 the treadmill display was listed but showed no tabs: its entry came without a grid, and the editor opens a device only with one. Now Sources, Device, Functions and Log are there.
+
 ## Kachel Manager 0.1.14 (based on Tessera 0.4.98)
 
 - **Kachel devices without an inbox are shown.** A Kachel device that does not report its "Kachel inbox" to Home Assistant (the treadmill display so far) was missing from the app. It is now listed as a Spezialanzeige with the tabs Sources, Device, Functions and Log. Device and Log work at once through Home Assistant; Functions and Sources say they wait for the device's inbox, and what is saved there goes to the device once it reports one.

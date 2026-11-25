@@ -144,6 +144,8 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   {key, action} → `ACTIONS` je Domain. Editor: Reiter „Quellen“ (`web/src/kachel/SourcesPanel.vue`) statt Seiten/Plugins bei
   `screen.kachel_kind == 'special'`. `presence` trägt `battery_low` (Akku am Gerät des Präsenz-Sensors,
   `kachel_functions.battery_low`). Tests `tests/test_kachel_sources.py`, `web/tests/kachel-sources.spec.ts`.
+  Alles in der Sitzung braucht eine bestätigte Seiten-Revision (`Sender.confirmed`): eine Spezialanzeige ohne Seiten bekommt darum
+  einmal ein leeres Seiten-Dokument (`kachel_sources.give_pages`, 0.1.16, Laufband-Test 25.11.).
 - **Begriffe** (Zentrale, 24.11.): **Kachel OS** = Firmware + **kacheld** (früher echod). Neue Texte nutzen sie; alte nebenbei.
   Protokoll-Quelle heißt `kacheld` (`kachel_log.SOURCES`); ein Gerät vor fire-app @16c8a61 wird mit `echod` gefragt (`OLD_NAMES`).
 - **Feinschliff Redesign** (24.11., 0.1.13): Kachelform wie kacheld (Symbol oben links, Name/Zustand unten links, an = Schimmer),

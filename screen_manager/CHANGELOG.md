@@ -1,3 +1,7 @@
+## Kachel Manager 0.1.16 (based on Tessera 0.4.98)
+
+- **Functions and sources reach a Spezialanzeige.** The app sends them in the device's session once the device has confirmed its pages; a Spezialanzeige has none, so nothing ever went out (treadmill display with its new inbox). A Spezialanzeige without pages now gets an empty page document once; its delivery confirms the session, and its functions, sources and their values follow.
+
 ## Kachel Manager 0.1.15 (based on Tessera 0.4.98)
 
 - **A Kachel device without an inbox opens with its tabs.** With 0.1.14 the treadmill display was listed but showed no tabs: its entry came without a grid, and the editor opens a device only with one. Now Sources, Device, Functions and Log are there.

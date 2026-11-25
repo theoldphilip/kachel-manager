@@ -16,6 +16,11 @@ The device has no Home Assistant token, so this app does the rest in the device'
 - a button of the device fires the event `screen_source` {key, action} (esphome.screen_source, or kachel.screen_source
   read as its twin), and this app performs the action that fits the entity: only for a source set up on that device.
 
+A Spezialanzeige draws no pages, but everything this app sends in a session goes under the revision of pages the
+device confirmed (page_delivery.Sender.confirmed): without pages there was none, and neither functions nor sources ever
+went out (Laufband test 0.3.20-k2, 2026-11-25). So a Spezialanzeige without pages is given an empty page document once
+(`give_pages`, fire-app: "leere Seiten passen"); its delivery confirms the session like any other.
+
 The choice is kept per inbox in FILE, together with what the device last offered, so the editor shows the tab while the
 device is away, and by the device's MAC address: a device that comes back under a new inbox (a factory reset, a move from
 ESPHome to the Kachel integration) gets its sources again, as its pages (kachel_keep). Routes: GET/PUT /api/screens/{inbox}/kachel/sources.
@@ -127,6 +132,8 @@ class Sources:
         self.by_mac = {k: v for k, v in (data.get('by_mac') or {}).items() if isinstance(v, dict)}
         # inbox: (session, json of the sources message) and inbox: {key: (session, state, unit, when)}.
         self.told, self.values = {}, {}
+        # The Spezialanzeigen given empty pages this run (give_pages).
+        self.paged = set()
 
     def save(self):
         atomic.write_text(self.path, json.dumps({'chosen': self.chosen, 'offered': self.offered, 'by_mac': self.by_mac}, ensure_ascii=False))
@@ -206,6 +213,25 @@ def value_of(entity, states):
     return str(state.get('state') or 'unavailable'), unit if isinstance(unit, str) else ''
 
 
+def give_pages(manager, inbox):
+    """An empty page document for a Spezialanzeige that has none, once per run of the app: its delivery confirms the
+    session the functions and sources go in. True when one was saved."""
+    keeper, store = getattr(manager, 'kachel_sources', None), getattr(manager, 'store', None)
+    if keeper is None or store is None or keeper.kind(inbox) != SPECIAL or inbox in keeper.paged:
+        return False
+    keeper.paged.add(inbox)
+    if store.get(inbox) is not None:
+        return False
+    screen = manager.screen(inbox) or {}
+    try:
+        manager.save(inbox, {'title': screen.get('name') or '', 'tiles': []})
+    except Exception as error:  # noqa: BLE001 - the device then stays without a session, and the log says why
+        LOG.warning('%s: no empty pages for the Spezialanzeige (%s)', screen.get('name') or inbox, error)
+        return False
+    LOG.info('%s: Spezialanzeige without pages, empty pages given so its session is confirmed', screen.get('name') or inbox)
+    return True
+
+
 async def sync(manager, inbox):
     """Hand a device its sources and their values in its session: True when something went out."""
     keeper = getattr(manager, 'kachel_sources', None)
@@ -214,6 +240,7 @@ async def sync(manager, inbox):
         return False
     keeper.heard(inbox, getattr(sender, 'kachel', None))
     keeper.restore(inbox, kachel_keep.mac_of(manager, manager.screen(inbox)))
+    give_pages(manager, inbox)
     if not sender.session or not sender.confirmed or FEATURE not in (sender.features or ()):
         return False
     outgoing = message(manager, inbox, manager.screen(inbox))

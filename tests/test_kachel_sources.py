@@ -196,5 +196,40 @@ class BatteryLow(unittest.TestCase):
         self.assertIsNone(kf.battery_low(functions, registry[:1], states), 'no battery: nothing said')
 
 
+class PagesForASpezialanzeige(unittest.TestCase):
+    """Laufband test 0.3.20-k2 (2026-11-25): with no pages the session was never confirmed, and no functions or sources
+    went out. A Spezialanzeige without pages gets an empty page document once, through the real Manager."""
+
+    def manager(self, folder):
+        import importlib
+        sys.path.insert(0, str(ROOT / 'tests'))
+        test_tile_events = importlib.import_module('test_tile_events')
+        from manager_fixtures import with_screen_grid
+        from server import Manager
+        return Manager(with_screen_grid(test_tile_events.fake_ha()), Path(folder) / 'screens.json')
+
+    def test_empty_pages_once_and_only_for_a_spezialanzeige(self):
+        with tempfile.TemporaryDirectory() as folder:
+            m = self.manager(folder)
+            inbox = 'text.d1_tiles'
+            self.assertIsNone(m.store.get(inbox))
+            self.assertFalse(ks.give_pages(m, inbox), 'a tablet with tiles gets none')
+            m.kachel_sources.offered[inbox] = {'kind': 'special', 'sources': []}
+            self.assertTrue(ks.give_pages(m, inbox))
+            self.assertIsNotNone(m.store.get(inbox))
+            self.assertEqual(m.layouts[inbox]['tiles'], [])
+            self.assertFalse(ks.give_pages(m, inbox), 'once')
+
+    def test_pages_it_has_stay(self):
+        with tempfile.TemporaryDirectory() as folder:
+            m = self.manager(folder)
+            inbox = 'text.d1_tiles'
+            m.save(inbox, {'title': 'Laufband', 'tiles': [{'entity': 'light.reading', 'slot': 0}]})
+            revision = m.store.get(inbox)['revision']
+            m.kachel_sources.offered[inbox] = {'kind': 'special', 'sources': []}
+            self.assertFalse(ks.give_pages(m, inbox))
+            self.assertEqual(m.store.get(inbox)['revision'], revision)
+
+
 if __name__ == '__main__':
     unittest.main()

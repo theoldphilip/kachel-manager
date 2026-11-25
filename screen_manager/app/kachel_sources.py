@@ -310,13 +310,29 @@ async def loop(manager):
             LOG.warning('A source button could not be performed (%s)', error)
 
 
+# What likely fits a source whose device asks for no device class (Home Assistant has none for a pulse): entities with one
+# of these units, or one of these words in their id or name, come first in the editor's list (laufband-app, 2026-11-25).
+LIKELY = {'heart_rate': ({'bpm', 'beats/min', 'schläge/min', '1/min'}, ('heart', 'puls', 'pulse', 'herz'))}
+
+
+def likely(source, entity, state):
+    """Whether an entity looks like what a source without a device class means (LIKELY)."""
+    units, words = LIKELY.get(source['key'], (set(), ()))
+    attributes = (state or {}).get('attributes') or {}
+    unit = str(attributes.get('unit_of_measurement') or '').strip().lower()
+    text = f"{entity} {attributes.get('friendly_name') or ''}".lower()
+    return unit in units or any(word in text for word in words)
+
+
 def choices(offered, states, limit=300):
-    """{key: [[entity, name], ...]} the entities that fit each source, by name: what the editor offers."""
+    """{key: [[entity, name], ...]} the entities that fit each source, by name, the likely ones first (LIKELY): what the
+    editor offers."""
     out = {}
     for source in offered:
-        found = [(e, str((s.get('attributes') or {}).get('friendly_name') or e)) for e, s in states.items()
-                 if isinstance(s, dict) and fits(source, e, states)]
-        out[source['key']] = [list(pair) for pair in sorted(found, key=lambda pair: pair[1].lower())[:limit]]
+        found = [(not likely(source, e, s), str((s.get('attributes') or {}).get('friendly_name') or e).lower(), e,
+                  str((s.get('attributes') or {}).get('friendly_name') or e))
+                 for e, s in states.items() if isinstance(s, dict) and fits(source, e, states)]
+        out[source['key']] = [[entity, name] for _, _, entity, name in sorted(found)[:limit]]
     return out
 
 

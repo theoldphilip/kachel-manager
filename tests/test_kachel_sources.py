@@ -60,6 +60,14 @@ class Clean(unittest.TestCase):
             with self.assertRaises(ValueError, msg=bad):
                 ks.clean(bad, offered, STATES)
 
+    def test_a_pulse_sensor_first(self):
+        offered = ks.hello({'sources': [{'key': 'heart_rate', 'name': {'de': 'Pulssensor'}, 'domains': ['sensor']}]})['sources']
+        states = {'sensor.aaa_temp': {'state': '21', 'attributes': {'friendly_name': 'Aaa Temperatur', 'unit_of_measurement': '°C'}},
+                  'sensor.watch_hr': {'state': '72', 'attributes': {'friendly_name': 'Uhr Herzfrequenz', 'unit_of_measurement': 'bpm'}},
+                  'sensor.zz_puls': {'state': '70', 'attributes': {'friendly_name': 'Zz Puls'}}}
+        self.assertEqual([entity for entity, _ in ks.choices(offered, states)['heart_rate']],
+                         ['sensor.watch_hr', 'sensor.zz_puls', 'sensor.aaa_temp'], 'the likely ones first, then the rest')
+
     def test_choices_by_device_class(self):
         offered = ks.hello(LAUFBAND)['sources']
         found = ks.choices(offered, STATES)

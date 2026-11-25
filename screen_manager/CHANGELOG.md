@@ -1,3 +1,8 @@
+## Kachel Manager 0.1.17
+
+- **Pulssensor zuerst.** Fragt eine Spezialanzeige nach einem Pulssensor (das Laufband), zeigt die Auswahl im Reiter Quellen zuerst die Sensoren, die nach Puls aussehen: Einheit `bpm` oder „Schläge/min“, oder „Puls“, „Herz“ bzw. „heart“ im Namen. Alle anderen Sensoren folgen darunter.
+- Die Release Notes des Kachel Managers sind ab jetzt auf Deutsch.
+
 ## Kachel Manager 0.1.16 (based on Tessera 0.4.98)
 
 - **Functions and sources reach a Spezialanzeige.** The app sends them in the device's session once the device has confirmed its pages; a Spezialanzeige has none, so nothing ever went out (treadmill display with its new inbox). A Spezialanzeige without pages now gets an empty page document once; its delivery confirms the session, and its functions, sources and their values follow.

@@ -213,6 +213,13 @@ def value_of(entity, states):
     return str(state.get('state') or 'unavailable'), unit if isinstance(unit, str) else ''
 
 
+def passing(error):
+    """Whether a failed delivery is one the next turn of the sync loop mends by itself: the device asked for a resend, its
+    acknowledgment did not match a session that just turned over, or the error says nothing (a dropped answer)."""
+    text = str(error or '')
+    return not text.strip() or 'Resend needed' in text or 'acknowledgment' in text
+
+
 def give_pages(manager, inbox):
     """An empty page document for a Spezialanzeige that has none, once per run of the app: its delivery confirms the
     session the functions and sources go in. True when one was saved."""
@@ -324,15 +331,37 @@ def likely(source, entity, state):
     return unit in units or any(word in text for word in words)
 
 
-def choices(offered, states, limit=300):
-    """{key: [[entity, name], ...]} the entities that fit each source, by name, the likely ones first (LIKELY): what the
-    editor offers."""
+def _words(source):
+    """The words a source is named by (its key and its names), lower case and at least four letters long: an entity with
+    one of them in its id or name likely fits (the Trainings-App's sources, 2026-11-26)."""
+    text = ' '.join([source['key'].replace('_', ' '), *source.get('name', {}).values()]).lower()
+    return {word for word in re.split(r'[^a-zäöüß0-9]+', text) if len(word) >= 4} - {'trainings', 'sensor', 'quelle'}
+
+
+def score(source, entity, state):
+    """How likely an entity is what a source means: LIKELY first, then one point for each word of the source's name."""
+    attributes = (state or {}).get('attributes') or {}
+    text = f"{entity} {attributes.get('friendly_name') or ''}".lower()
+    return (10 if likely(source, entity, state) else 0) + sum(word in text for word in _words(source))
+
+
+def choices(offered, states, limit=1000, chosen=None):
+    """{key: [[entity, name], ...]} the entities that fit each source, the likely ones first (`score`), then by name:
+    what the editor offers. An entity already chosen is always among them. Before 0.1.18 the list was cut at 300 by name
+    alone, and in a large Home Assistant the Trainings-App's "Gym …" sensors were never offered."""
     out = {}
     for source in offered:
-        found = [(not likely(source, e, s), str((s.get('attributes') or {}).get('friendly_name') or e).lower(), e,
-                  str((s.get('attributes') or {}).get('friendly_name') or e))
-                 for e, s in states.items() if isinstance(s, dict) and fits(source, e, states)]
-        out[source['key']] = [[entity, name] for _, _, entity, name in sorted(found)[:limit]]
+        found = []
+        for e, s in states.items():
+            if isinstance(s, dict) and fits(source, e, states):
+                name = str((s.get('attributes') or {}).get('friendly_name') or e)
+                found.append((-score(source, e, s), name.lower(), e, name))
+        found.sort()
+        picked = found[:limit]
+        mine = (chosen or {}).get(source['key'])
+        if mine and all(item[2] != mine for item in picked):
+            picked += [item for item in found if item[2] == mine]
+        out[source['key']] = [[entity, name] for _, _, entity, name in picked]
     return out
 
 
@@ -347,7 +376,10 @@ def view(manager, inbox):
     current = json.dumps(message(manager, inbox, screen), sort_keys=True, ensure_ascii=False)
     return {'kind': offered.get('kind'), 'offered': offered.get('sources') or [], **keeper.get(inbox),
             'area': area_name(manager, screen),
-            'choices': choices(offered.get('sources') or [], getattr(manager.ha, 'states', {}) or {}),
+            'choices': choices(offered.get('sources') or [], getattr(manager.ha, 'states', {}) or {},
+                               chosen=keeper.get(inbox)['sources']),
+            # Kachel Manager 0.1.18: a device that is only away is not one that cannot take sources (the editor's hint).
+            'online': bool(sender and sender.session),
             'supported': FEATURE in (getattr(sender, 'features', None) or ()),
             'delivered': bool(told and sender and told[0] == sender.session and told[1] == current)}
 

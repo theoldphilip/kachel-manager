@@ -18,7 +18,7 @@ type Functions = {
   notices?: Record<string, string | boolean>;
 };
 type Assistant = { entity: string; value: string | null; options: string[] };
-type View = { functions: Functions; supported: boolean; delivered: boolean; assistant?: Assistant | null };
+type View = { functions: Functions; supported: boolean; delivered: boolean; assistant?: Assistant | null; online?: boolean };
 
 const inv = useInventoryStore();
 const scr = useScreenStore();
@@ -146,6 +146,7 @@ async function save() {
   <div v-if="view" class="kachel-functions" id="kachel-functions">
     <p class="hint">{{ t("editor.kachel_functions.intro") }}</p>
     <p v-if="scr.currentScreen?.kachel_bare" class="hint warn" data-functions="bare">{{ t("editor.kachel_bare.waiting") }}</p>
+    <p v-else-if="view.online === false" class="hint" data-functions="away">{{ t("editor.kachel_bare.away") }}</p>
     <p v-else-if="!view.supported" class="hint warn" data-functions="unsupported">{{ t("editor.kachel_functions.unsupported") }}</p>
 
     <section class="set-card" data-function="presence">

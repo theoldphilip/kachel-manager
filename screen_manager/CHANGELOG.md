@@ -1,3 +1,9 @@
+## Kachel Manager 0.1.18
+
+- **Die passenden Sensoren lassen sich wieder wählen.** Die Auswahl einer Quelle zeigte nur die ersten 300 Sensoren nach dem Alphabet. In einem großen Home Assistant fehlten darum z. B. die „Gym …“-Sensoren für die Quellen der Trainings-App. Jetzt stehen oben die Sensoren, deren Name zur Quelle passt (etwa „Restzeit“, „Tempo“, „Satz“), danach die übrigen. Ein schon gewählter Sensor ist immer dabei.
+- **„Gerade nicht verbunden“ statt „neuere Version nötig“.** Ist ein Gerät kurz weg, etwa während eines Updates, sagen die Reiter Funktionen und Quellen das jetzt so. Vorher hieß es fälschlich, das Gerät könne das noch nicht.
+- **Ruhigeres Protokoll.** Kurze Zustellfehler, die sich im nächsten Durchgang von selbst erledigen, stehen nicht mehr als Warnung im Protokoll.
+
 ## Kachel Manager 0.1.17
 
 - **Pulssensor zuerst.** Fragt eine Spezialanzeige nach einem Pulssensor (das Laufband), zeigt die Auswahl im Reiter Quellen zuerst die Sensoren, die nach Puls aussehen: Einheit `bpm` oder „Schläge/min“, oder „Puls“, „Herz“ bzw. „heart“ im Namen. Alle anderen Sensoren folgen darunter.

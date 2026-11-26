@@ -72,4 +72,10 @@ describe("a Spezialanzeige's sources", () => {
     expect(wrapper.find("[data-sources=bare]").exists()).toBe(true);
     expect(wrapper.find("[data-sources=unsupported]").exists()).toBe(false);
   });
+
+  it("of a device that is only away say so, not that it needs a newer version", async () => {
+    const wrapper = await panel({ ...VIEW, supported: false, online: false });
+    expect(wrapper.find("[data-sources=away]").exists()).toBe(true);
+    expect(wrapper.find("[data-sources=unsupported]").exists()).toBe(false);
+  });
 });

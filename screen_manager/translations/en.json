@@ -5126,7 +5126,8 @@
       "waiting": "The device gets it as soon as it is connected"
     },
     "kachel_bare": {
-      "waiting": "This device does not report its “Kachel inbox” to Home Assistant yet. Device and Log work already; functions and sources reach it once it does (a newer Kachel OS brings it). What you save here waits until then."
+      "waiting": "This device does not report its “Kachel inbox” to Home Assistant yet. Device and Log work already; functions and sources reach it once it does (a newer Kachel OS brings it). What you save here waits until then.",
+      "away": "This device is not connected right now (an update or a restart, say). What you save here reaches it as soon as it is back."
     }
   }
 }

@@ -3722,11 +3722,13 @@ class Manager:
                 try:
                     await kachel_functions.sync(self, inbox)
                 except Exception as error:  # noqa: BLE001 - the next turn of the loop tries again
-                    LOG.warning('%s: functions not delivered (%s)', screen.get('name') or inbox, error)
+                    # A session that just turned over (Resend needed, no acknowledgment yet) sorts itself out on the next turn.
+                    (LOG.debug if kachel_sources.passing(error) else LOG.warning)('%s: functions not delivered (%s)', screen.get('name') or inbox, error)
                 try:  # Kachel Manager: a Spezialanzeige's sources and their values (kachel_sources.py).
                     await kachel_sources.sync(self, inbox)
                 except Exception as error:  # noqa: BLE001 - the next turn of the loop tries again
-                    LOG.warning('%s: sources not delivered (%s)', screen.get('name') or inbox, error)
+                    # A session that just turned over (Resend needed, no acknowledgment yet) sorts itself out on the next turn.
+                    (LOG.debug if kachel_sources.passing(error) else LOG.warning)('%s: sources not delivered (%s)', screen.get('name') or inbox, error)
                 try:
                     if inbox not in self.layouts:
                         sender = self.page_senders.get(inbox)

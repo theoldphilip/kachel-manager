@@ -228,6 +228,8 @@ def view(manager, inbox):
     told = manager.kachel_functions.told.get(inbox)
     current = json.dumps(with_names(manager.kachel_functions.get(inbox), getattr(manager.ha, 'states', {}) or {}), sort_keys=True)
     return {'functions': manager.kachel_functions.get(inbox), 'supported': can,
+            # A device that is only away (an update, a restart) is not one that cannot take functions (0.1.18).
+            'online': bool(sender and getattr(sender, 'session', None)),
             'delivered': bool(told and told[1] == current and sender and told[0] == sender.session),
             'assistant': assistant_of(manager, screen)}
 

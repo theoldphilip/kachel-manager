@@ -12,7 +12,7 @@ import { useUiStore } from "../stores/ui";
 type Offered = { key: string; name: Record<string, string>; domains: string[]; device_class: string[]; required: boolean };
 type View = {
   kind: string; offered: Offered[]; sources: Record<string, string>; room: string | null; area: string | null;
-  choices: Record<string, [string, string][]>; supported: boolean; delivered: boolean;
+  choices: Record<string, [string, string][]>; supported: boolean; delivered: boolean; online?: boolean;
 };
 
 const scr = useScreenStore();
@@ -60,6 +60,7 @@ async function save() {
   <div v-if="view" class="kachel-sources" id="kachel-sources">
     <p class="hint">{{ t("editor.kachel_sources.intro") }}</p>
     <p v-if="scr.currentScreen?.kachel_bare" class="hint warn" data-sources="bare">{{ t("editor.kachel_bare.waiting") }}</p>
+    <p v-else-if="view.online === false" class="hint" data-sources="away">{{ t("editor.kachel_bare.away") }}</p>
     <p v-else-if="!view.supported" class="hint warn" data-sources="unsupported">{{ t("editor.kachel_sources.unsupported") }}</p>
 
     <section class="set-card" data-source="room">

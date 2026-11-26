@@ -68,6 +68,32 @@ class Clean(unittest.TestCase):
         self.assertEqual([entity for entity, _ in ks.choices(offered, states)['heart_rate']],
                          ['sensor.watch_hr', 'sensor.zz_puls', 'sensor.aaa_temp'], 'the likely ones first, then the rest')
 
+    def test_the_trainings_app_sensors_among_many(self):
+        # Philip, 2026-11-26: in a large Home Assistant the "Gym …" sensors were cut off by the 300 by name.
+        offered = ks.hello({'sources': [
+            {'key': 'plan_set', 'name': {'de': 'Trainings-App: Dauer je Satz'}, 'domains': ['sensor']},
+            {'key': 'remaining', 'name': {'de': 'Trainings-App: Restzeit'}, 'domains': ['sensor']},
+            {'key': 'plan_speed', 'name': {'de': 'Trainings-App: Soll-Tempo'}, 'domains': ['sensor']}]})['sources']
+        states = {f'sensor.a{i:04d}': {'state': '1', 'attributes': {'friendly_name': f'A {i:04d}'}} for i in range(1500)}
+        states.update({'sensor.gym_training_soll_satz': {'state': 'unknown', 'attributes': {'friendly_name': 'Gym Training Soll Satz'}},
+                       'sensor.gym_training_restzeit': {'state': 'unknown', 'attributes': {'friendly_name': 'Gym Training Restzeit'}},
+                       'sensor.gym_training_tempo': {'state': 'unknown', 'attributes': {'friendly_name': 'Gym Training Tempo'}},
+                       'sensor.gym_training_satz': {'state': 'unknown', 'attributes': {'friendly_name': 'Gym Training Satz'}},
+                       'sensor.gym_training_soll_gesamt': {'state': 'unknown', 'attributes': {'friendly_name': 'Gym Training Soll Gesamt'}}})
+        found = ks.choices(offered, states)
+        top = {key: [entity for entity, _ in found[key][:3]] for key in found}
+        # Among the first few, never behind the 1500 others: what a person sees without scrolling.
+        self.assertIn('sensor.gym_training_soll_satz', top['plan_set'])
+        self.assertEqual(top['remaining'][0], 'sensor.gym_training_restzeit')
+        self.assertIn('sensor.gym_training_tempo', top['plan_speed'])
+        chosen = ks.choices(offered, states, limit=5, chosen={'remaining': 'sensor.a1499'})
+        self.assertIn(['sensor.a1499', 'A 1499'], chosen['remaining'], 'what is chosen is always offered')
+
+    def test_passing_errors(self):
+        for error in ('', None, 'Resend needed', 'No matching screen acknowledgment'):
+            self.assertTrue(ks.passing(error), error)
+        self.assertFalse(ks.passing('The screen did not grant a session'))
+
     def test_choices_by_device_class(self):
         offered = ks.hello(LAUFBAND)['sources']
         found = ks.choices(offered, STATES)

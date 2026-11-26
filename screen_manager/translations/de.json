@@ -5126,7 +5126,8 @@
       "waiting": "Das Gerät bekommt es, sobald es verbunden ist"
     },
     "kachel_bare": {
-      "waiting": "Dieses Gerät meldet Home Assistant noch keine „Kachel inbox“. Gerät und Protokoll gehen schon; Funktionen und Quellen erreichen es, sobald es sie meldet (eine neuere Kachel-OS-Version bringt sie mit)."
+      "waiting": "Dieses Gerät meldet Home Assistant noch keine „Kachel inbox“. Gerät und Protokoll gehen schon; Funktionen und Quellen erreichen es, sobald es sie meldet (eine neuere Kachel-OS-Version bringt sie mit).",
+      "away": "Dieses Gerät ist gerade nicht verbunden (etwa bei einem Update oder Neustart). Was du hier speicherst, bekommt es, sobald es wieder da ist."
     }
   }
 }

@@ -4,18 +4,28 @@
 
 <p align="center"><b>Aus einem alten Android-Tablet oder -Handy wird ein Wandpanel für Home Assistant.</b></p>
 
-Kachel ersetzt Android auf dem Gerät durch ein kleines Linux (Alpine) mit einer eigenen Oberfläche. Das Gerät startet
+**Kachel OS** ersetzt Android auf dem Gerät durch ein kleines Linux mit einer eigenen Oberfläche. Das Gerät startet
 direkt in deine Seiten aus Kacheln: Licht, Heizung, Musik, Kameras, Kalender, Energie. Keine App, kein
 Browser, kein Google-Konto, keine Werbung. Der **Kachel Manager** ist das Add-on dazu: Hier legst du fest, was auf
 welcher Seite steht, und stellst das Gerät selbst ein.
 
 ## Was der Kachel Manager kann
 
-- 🧩 **Seiten aus Kacheln** zusammenstellen, per Ziehen und Ablegen, mit einer Vorschau, die zeigt, was Home Assistant
-  gerade meldet.
+- 🧩 **Seiten aus Kacheln** zusammenstellen, per Ziehen und Ablegen, mit einer Vorschau, die so aussieht wie das Tablet
+  und zeigt, was Home Assistant gerade meldet.
 - 🔋 **Das Gerät einstellen:** Updates, Akkuschutz, Helligkeit, Nachtmodus, Startseite. Alles, was das Gerät in
   Home Assistant anbietet, an einer Stelle.
+- 🎛️ **Funktionen einrichten:** Präsenz-Sensoren schalten den Bildschirm, Blättern per Wischen, Tasten oder Fernbedienung,
+  Sprachassistent mit Weckwort, Meldungen für Klingel, Post, Pakete, Müll und Wetter. Das Tablet zeigt nur, was hier
+  eingerichtet ist.
+- 🏃 **Spezialanzeigen:** Geräte mit eigener Anzeige für eine feste Aufgabe, etwa ein Laufband-Display. Sie sagen selbst,
+  was sie aus Home Assistant brauchen (Temperatur, Licht, Leistung, Puls …), und du wählst dafür die passenden Entitäten.
 - 🔔 **Hinweise auf alle Geräte schicken**, etwa wenn es klingelt, mit eigenen Ereignissen für Automationen.
+- 📋 **Protokoll des Geräts** ansehen und herunterladen, ohne SSH. Geheimnisse schwärzt das Gerät selbst.
+- 🔌 **Kachel-Integration mit an Bord:** verbindet die Geräte mit Home Assistant, mit Sprachassistent, Lautsprecher und
+  Bluetooth-Proxy. Der Kachel Manager installiert sie auf Knopfdruck.
+- ♻️ **Sauber weitergeben:** Beim Zurücksetzen auf Werkseinstellungen verschwindet das Gerät aus Home Assistant, seine Seiten
+  hebt der Kachel Manager auf.
 - 🔒 **Bleibt bei dir:** keine Cloud, kein Konto. Was du einstellst, bleibt in Home Assistant.
 
 ## Welche Geräte gehen?
@@ -27,9 +37,9 @@ der Bootloader gesperrt, startet das Gerät nur das System des Herstellers, und 
 
 | Gerät | Prozessor | Stand |
 |---|---|---|
-| Samsung Galaxy Tab A 10.1 (2019, SM-T510) | Exynos 7904 | ✅ läuft im Alltag |
-| Samsung Galaxy A12 (SM-A127F) | Exynos 850 | ✅ läuft im Alltag |
-| Amazon Fire HD 8 Plus (12. Generation) | MediaTek MT8169A | 🛠️ in Arbeit |
+| Amazon Fire HD 8 Plus (12. Generation) | MediaTek MT8169A | ✅ Kachel OS 1.0 stabil |
+| Samsung Galaxy A12 (SM-A127F) | Exynos 850 | ✅ Kachel OS 1.0 stabil, als Spezialanzeige (Laufband-Display) |
+| Samsung Galaxy Tab A 10.1 (2019, SM-T510) | Exynos 7904 | ✅ läuft im Alltag, Umzug auf Kachel OS 1.0 in Planung |
 
 **Prognose für weitere Geräte** (noch nicht ausprobiert):
 
@@ -46,7 +56,8 @@ der Bootloader gesperrt, startet das Gerät nur das System des Herstellers, und 
 
 Kachel ist jung. Ein neues Gerät einzurichten heißt heute vor allem: Bootloader entsperren, einen passenden Kernel
 bauen und das System von Hand aufspielen. Das ist nichts für einen Nachmittag ohne Vorkenntnisse, aber es wird mit
-jedem Gerät leichter.
+jedem Gerät leichter. Ist Kachel OS einmal drauf, kommen Updates über Home Assistant. Die Erstinstallation direkt aus dem
+Kachel Manager im Browser ist in Planung.
 
 **Du hast ein Gerät, das noch nicht in der Liste steht?** Ich prüfe neue Geräte gern. Schreib mir auf
 [GitHub](https://github.com/theoldphilip/kachel-manager/issues/new) das genaue Modell (zum Beispiel SM-T510), den

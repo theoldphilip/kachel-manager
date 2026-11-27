@@ -69,3 +69,7 @@ pako 2.x (https://github.com/nodeca/pako), a dependency of esptool-js
 
 atob-lite 2.x (https://github.com/hughsk/atob-lite), a dependency of esptool-js
   By Hugh Kennedy. MIT License.
+
+libmjolnir (https://github.com/lineageos-infra/libmjolnir), version 0.7.4
+  Copyright (c) 2023 Greg Willard. MIT License (as above). The Kachel Manager's installer page (web/src/kachel/odin-readonly.ts)
+  uses it to read a Samsung device's partition table over WebUSB.

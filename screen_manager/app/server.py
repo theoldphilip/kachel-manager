@@ -24,6 +24,7 @@ import kachel_keep
 import kachel_bare
 import kachel_board
 import kachel_functions
+import kachel_installer
 import kachel_remove
 import kachel_sources
 import calendar_feed
@@ -6398,6 +6399,7 @@ def create_app(manager, development=False):
     # Kachel Manager: a device's functions (kachel_functions.py).
     kachel_functions.routes(app, manager)
     kachel_sources.routes(app, manager)  # Kachel Manager: a Spezialanzeige's sources
+    kachel_installer.routes(app)  # Kachel Manager: the first install from the browser (read-only trial for now)
     app.router.add_get('/', index)
     app.router.add_get('/api/inventory', inventory)
     app.router.add_get('/api/capabilities', capabilities)

@@ -24,6 +24,8 @@ export const router = createRouter({
     { path: "/events/:kind(alerts|doorbell)?", name: "events", component: Nothing },
     { path: "/alerts", redirect: "/events/alerts" },
     { path: "/plugins", name: "plugins", component: Nothing },
+    // Kachel Manager: the first install of Kachel OS from this browser (src/kachel/InstallerView.vue).
+    { path: "/install", name: "install", component: Nothing },
     // The Override YAML of a screen's ESPHome profile (kitchen.yaml); without a profile the page says so.
     { path: "/override/:profile?", name: "override", component: Nothing },
     // The troubleshooting report of a screen ("My screen doesn't work right"), by the screen's inbox id as above.

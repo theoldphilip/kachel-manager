@@ -5128,6 +5128,46 @@
     "kachel_bare": {
       "waiting": "Dieses Gerät meldet Home Assistant noch keine „Kachel inbox“. Gerät und Protokoll gehen schon; Funktionen und Quellen erreichen es, sobald es sie meldet (eine neuere Kachel-OS-Version bringt sie mit).",
       "away": "Dieses Gerät ist gerade nicht verbunden (etwa bei einem Update oder Neustart). Was du hier speicherst, bekommt es, sobald es wieder da ist."
+    },
+    "kachel_install": {
+      "title": "Kachel OS installieren",
+      "card": "Ein Tablet per USB an diesem PC einrichten (Bootloader entsperrt)",
+      "intro": "Das Gerät hängt per USB an diesem PC. Der Browser spricht über WebUSB mit ihm. Vorher muss der Bootloader entsperrt sein. In dieser Stufe wird nur geprüft, nichts geschrieben.",
+      "browser": {
+        "title": "Browser",
+        "insecure": "Diese Seite ist nicht über HTTPS geöffnet. Ohne HTTPS gibt der Browser kein WebUSB frei. Öffne Home Assistant über seine HTTPS-Adresse (z. B. Nabu Casa).",
+        "no_usb": "Dieser Browser kann kein WebUSB. Nimm Chrome oder Edge am PC.",
+        "ok": "HTTPS und WebUSB sind da."
+      },
+      "profile": {
+        "title": "Gerät",
+        "none": "Im Home-Assistant-Spiegel liegt noch kein Installationsprofil (install-profile.json)."
+      },
+      "channel": {
+        "stable": "Stabil",
+        "dev": "Testversion"
+      },
+      "mode": {
+        "title": "Download-Modus herstellen"
+      },
+      "trial": {
+        "title": "Probelauf (liest nur)",
+        "hint": "Verbinden, Partitionstabelle lesen und mit dem Profil vergleichen. Es wird nichts geschrieben.",
+        "start": "Gerät verbinden und prüfen",
+        "busy": "Prüfe …",
+        "match": "Das Gerät passt zum Profil.",
+        "mismatch": "Das Gerät passt nicht zum Profil. Es wird nichts installiert.",
+        "name": "Partition",
+        "want": "erwartet",
+        "got": "Gerät",
+        "log": "Protokoll"
+      },
+      "no_device": "Kein Gerät gewählt. Steckt es im Download-Modus am USB?",
+      "leave": "Download-Modus verlassen:",
+      "write": {
+        "title": "Installieren",
+        "later": "Kommt im nächsten Schritt, sobald der Probelauf an einem echten Gerät geklappt hat."
+      }
     }
   }
 }

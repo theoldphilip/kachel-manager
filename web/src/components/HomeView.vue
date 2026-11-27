@@ -20,6 +20,7 @@ import Icon from "./ui/Icon.vue";
 import ProgressRing from "./ui/ProgressRing.vue";
 import BuildIndicator from "./BuildIndicator.vue";
 import BrokenNotice from "./BrokenNotice.vue";
+import { router } from "../router";
 import { JOIN } from "../kachel/links";
 import { useUiStore } from "../stores/ui";
 import { useBuildsStore } from "../stores/builds";
@@ -132,6 +133,10 @@ onMounted(entities.loadOverview);
       <a v-else class="home-new kachel-join" :href="JOIN" target="_blank" rel="noopener">
         <Icon name="plus" class="home-plus" /><span><b>{{ t("editor.home.kachel_join") }}</b><small>{{ t("editor.home.kachel_join_hint") }}</small></span>
       </a>
+      <!-- Kachel Manager: the first install of Kachel OS from this browser (src/kachel/InstallerView.vue). -->
+      <button v-if="!inv.espScreens" type="button" class="home-new kachel-join" id="kachel-install-open" @click="router.push('/install')">
+        <Icon name="plus" class="home-plus" /><span><b>{{ t("editor.kachel_install.title") }}</b><small>{{ t("editor.kachel_install.card") }}</small></span>
+      </button>
     </div>
     <!-- Kachel Manager: Tessera's funding request (FundingCard.vue, a mail to Max) is not shown; the support card is ours. -->
     <DonateCard />

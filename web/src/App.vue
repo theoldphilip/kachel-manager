@@ -8,6 +8,7 @@ import Toast from "./components/Toast.vue";
 import CommandPalette from "./components/CommandPalette.vue";
 import ConfirmDialog from "./components/ConfirmDialog.vue";
 import ConnectionBar from "./components/ConnectionBar.vue";
+import KachelInstallerView from "./kachel/InstallerView.vue";
 import ScreenView from "./components/ScreenView.vue";
 import EmptyState from "./components/EmptyState.vue";
 import HomeView from "./components/HomeView.vue";
@@ -44,6 +45,8 @@ const view = computed(() => {
   if (ui.route === "#report") return ReportPanel;
   if (ui.route === "#icons") return ScreenIconsPanel;
   if (ui.route === "#plugins" && plugins.pluginsEnabled) return PluginsView;
+  // Kachel Manager: the first install of Kachel OS from this browser (src/kachel/InstallerView.vue).
+  if ((ui.route as string) === "#install") return KachelInstallerView;
   // Nothing chosen is the overview of every screen (app 0.4.0); a house without screens starts with the first.
   if (scr.currentScreen && doc.layout) return ScreenView;
   return scr.selected || !inv.inventory.screens.length ? EmptyState : HomeView;

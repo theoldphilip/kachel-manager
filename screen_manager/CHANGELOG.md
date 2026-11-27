@@ -1,3 +1,13 @@
+## Kachel Manager 0.2.0
+
+- **Neu: „Kachel OS installieren“ (erste Stufe, nur prüfen).** In der Übersicht öffnet eine neue Karte die Installations-Seite. Das Gerät hängt per USB am PC, der Browser spricht über WebUSB mit ihm (Chrome oder Edge, Home Assistant über HTTPS).
+  - Die Seite prüft zuerst Browser und HTTPS.
+  - Sie zeigt das Gerät aus seinem signierten Installationsprofil im Home-Assistant-Spiegel. Profil, Signatur und Dateien prüft das Add-on mit dem fest eingetragenen Schlüssel des Geräts.
+  - Sie erklärt den Download-Modus.
+  - Im **Probelauf** liest sie die Partitionstabelle des Geräts und vergleicht sie mit dem Profil. **Es wird nichts geschrieben.** Installieren kommt im nächsten Schritt, sobald der Probelauf an einem echten Gerät geklappt hat.
+  - Welche Partitionen je beschrieben werden dürfen und welche nie, steht fest im Code. Ein Profil kann das nur einschränken.
+  - Für Samsung-Geräte (Odin) nutzt die Seite die Bibliothek libmjolnir von LineageOS (MIT).
+
 ## Kachel Manager 0.1.18
 
 - **Die passenden Sensoren lassen sich wieder wählen.** Die Auswahl einer Quelle zeigte nur die ersten 300 Sensoren nach dem Alphabet. In einem großen Home Assistant fehlten darum z. B. die „Gym …“-Sensoren für die Quellen der Trainings-App. Jetzt stehen oben die Sensoren, deren Name zur Quelle passt (etwa „Restzeit“, „Tempo“, „Satz“), danach die übrigen. Ein schon gewählter Sensor ist immer dabei.

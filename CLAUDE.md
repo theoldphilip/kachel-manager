@@ -161,6 +161,12 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   Sync-Schleife nie. Meldet es die Inbox, übernimmt `kachel_bare.adopt` Funktionen und Quellen. Test `tests/test_kachel_bare.py`.
   Der Eintrag braucht ein `source_grid` (ohne zeigt der Editor keine Reiter, 0.1.14); `web/tests/kachel-bare.spec.ts` öffnet genau
   den Eintrag aus `web/tests/kachel-bare-entry.json`, den `test_kachel_bare` gegen den Server prüft.
+- **Installer, Spur K** (27.11., Plan `kachel-installer-tool`, „los“ von `zentrale`): `kachel_installer.py` liest
+  `install-profile.json` (+ `.sig`, Base64 Ed25519) aus dem Spiegel `/homeassistant/www/kachel/` (Kanäle `latest/download`, `download/dev`),
+  prüft mit `KEYS` (fest im Code), `check` (Format v1, Erlaubt-/Nie-Liste `ALLOWED`/`NEVER`), Dateien erst nach size+sha256
+  (`/api/kachel/installer`, `…/{channel}/file/{name}`). Editor: `#/install` (`web/src/kachel/InstallerView.vue`, `installer.ts`
+  `comparePit`), Odin nur in `odin-readonly.ts` über `@lineageos-infra/libmjolnir` 0.7.4 – **nur lesen** (PIT); ein Test verbietet dort
+  jeden Schreibaufruf. Schreiben erst nach dem Probelauf am echten T510. Tests `tests/test_kachel_installer.py`, `web/tests/kachel-installer.spec.ts`.
 - **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
   darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit

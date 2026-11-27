@@ -5128,6 +5128,46 @@
     "kachel_bare": {
       "waiting": "This device does not report its “Kachel inbox” to Home Assistant yet. Device and Log work already; functions and sources reach it once it does (a newer Kachel OS brings it). What you save here waits until then.",
       "away": "This device is not connected right now (an update or a restart, say). What you save here reaches it as soon as it is back."
+    },
+    "kachel_install": {
+      "title": "Install Kachel OS",
+      "card": "Set up a tablet by USB on this PC (bootloader unlocked)",
+      "intro": "The device hangs by USB at this PC; the browser talks to it over WebUSB. Its bootloader must be unlocked first. This stage only checks, it writes nothing.",
+      "browser": {
+        "title": "Browser",
+        "insecure": "This page is not open over HTTPS. Without HTTPS the browser gives no WebUSB. Open Home Assistant at its HTTPS address (Nabu Casa, say).",
+        "no_usb": "This browser has no WebUSB. Use Chrome or Edge on a PC.",
+        "ok": "HTTPS and WebUSB are there."
+      },
+      "profile": {
+        "title": "Device",
+        "none": "There is no install profile (install-profile.json) in the Home Assistant mirror yet."
+      },
+      "channel": {
+        "stable": "Stable",
+        "dev": "Test version"
+      },
+      "mode": {
+        "title": "Enter the download mode"
+      },
+      "trial": {
+        "title": "Trial (read only)",
+        "hint": "Connect, read the partition table and compare it with the profile. Nothing is written.",
+        "start": "Connect and check the device",
+        "busy": "Checking …",
+        "match": "The device fits the profile.",
+        "mismatch": "The device does not fit the profile. Nothing is installed.",
+        "name": "Partition",
+        "want": "expected",
+        "got": "device",
+        "log": "Log"
+      },
+      "no_device": "No device chosen. Is it in download mode on USB?",
+      "leave": "Leave the download mode:",
+      "write": {
+        "title": "Install",
+        "later": "Comes in the next step, once the trial worked on a real device."
+      }
     }
   }
 }

@@ -1,3 +1,7 @@
+## Kachel Manager 0.2.1
+
+- **Installationsprofil: Dateiwege strenger geprüft.** Die Dateien eines Releases dürfen jetzt neben dem Profil in einem eigenen Ordner liegen (etwa `../../download/3.3.1/boot.img`). Der Weg muss auch nach dem Auflösen von Verknüpfungen im Spiegel `www/kachel/` bleiben. Wege mit `\`, `%`, Nullzeichen, leeren Teilen oder einem `/` am Anfang lehnt der Kachel Manager ab.
+
 ## Kachel Manager 0.2.0
 
 - **Neu: „Kachel OS installieren“ (erste Stufe, nur prüfen).** In der Übersicht öffnet eine neue Karte die Installations-Seite. Das Gerät hängt per USB am PC, der Browser spricht über WebUSB mit ihm (Chrome oder Edge, Home Assistant über HTTPS).

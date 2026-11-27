@@ -163,7 +163,7 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   den Eintrag aus `web/tests/kachel-bare-entry.json`, den `test_kachel_bare` gegen den Server prüft.
 - **Installer, Spur K** (27.11., Plan `kachel-installer-tool`, „los“ von `zentrale`): `kachel_installer.py` liest
   `install-profile.json` (+ `.sig`, Base64 Ed25519) aus dem Spiegel `/homeassistant/www/kachel/` (Kanäle `latest/download`, `download/dev`),
-  prüft mit `KEYS` (fest im Code), `check` (Format v1, Erlaubt-/Nie-Liste `ALLOWED`/`NEVER`), Dateien erst nach size+sha256
+  prüft mit `KEYS` (fest im Code), `check` (Format v1, Erlaubt-/Nie-Liste `ALLOWED`/`NEVER`), Dateien erst nach size+sha256; `files.url` relativ zum Profil-Ordner, `..` erlaubt, nach realpath nur innerhalb des Spiegels, kein `/`-Anfang, `\`, NUL, `%`, leere Teile (`relative_url`, Klarstellung 27.11.)
   (`/api/kachel/installer`, `…/{channel}/file/{name}`). Editor: `#/install` (`web/src/kachel/InstallerView.vue`, `installer.ts`
   `comparePit`), Odin nur in `odin-readonly.ts` über `@lineageos-infra/libmjolnir` 0.7.4 – **nur lesen** (PIT); ein Test verbietet dort
   jeden Schreibaufruf. Schreiben erst nach dem Probelauf am echten T510. Tests `tests/test_kachel_installer.py`, `web/tests/kachel-installer.spec.ts`.

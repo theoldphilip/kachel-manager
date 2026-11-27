@@ -136,7 +136,7 @@ def check(profile, mine=None):
         wrong.append('files missing')
         files = {}
     for name, entry in files.items():
-        if not _NAME.match(str(name)) or not isinstance(entry, dict) or not isinstance(entry.get('url'), str) \
+        if not _NAME.match(str(name)) or not isinstance(entry, dict) or not relative_url(entry.get('url')) \
                 or not _SHA.match(str(entry.get('sha256', ''))) or not isinstance(entry.get('size'), int) \
                 or isinstance(entry.get('size'), bool) or entry['size'] <= 0:
             wrong.append('file %s invalid (url, sha256 and a real size)' % name)
@@ -201,13 +201,24 @@ def load(channel, folder=None, mine=None):
     return out
 
 
+def relative_url(url):
+    """Whether `url` is a clean relative link (format v1, clarification 27.11.): `..` is allowed, but no leading `/`, no
+    `\\`, NUL or `%` (never decoded), no empty or `.` parts and no scheme. Absolute https URLs come later, with the Fire."""
+    if not isinstance(url, str) or not url or url.startswith('/') or re.match(r'^[A-Za-z][A-Za-z0-9+.-]*:', url):
+        return False
+    if any(bad in url for bad in ('\\', '\0', '%')):
+        return False
+    return all(part not in ('', '.') for part in url.split('/'))
+
+
 def file_path(channel, profile, name, folder=None):
-    """Where a profile's file lies in the mirror: its `url` relative to the profile's folder, never outside the mirror.
-    None for an absolute URL (public releases, later) or a path that leaves the mirror."""
+    """Where a profile's file lies in the mirror: its `url` resolved like a relative link against the profile's folder
+    (`..` allowed), symlinks followed, never outside the mirror. None for anything `relative_url` refuses or a path that
+    leaves the mirror."""
     folder = (folder or mirror()).resolve()
     entry = (profile.get('files') or {}).get(name)
     url = entry.get('url') if isinstance(entry, dict) else None
-    if not isinstance(url, str) or re.match(r'^[a-z]+://', url) or url.startswith('/'):
+    if not relative_url(url):
         return None
     path = (folder.joinpath(*CHANNELS[channel]) / url).resolve()
     return path if folder in path.parents else None

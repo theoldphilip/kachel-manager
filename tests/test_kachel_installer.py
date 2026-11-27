@@ -122,6 +122,41 @@ class Mirror(unittest.TestCase):
         escaping['files']['boot.img']['url'] = 'https://example.org/boot.img'
         self.assertIsNone(ki.file_path('dev', escaping, 'boot.img', self.folder))
 
+    def test_dot_dot_from_the_channel_folder_like_the_t510(self):
+        # Clarification of format v1 (kachel-installer-tool, 27.11.): files of a release in download/<tag without v>/,
+        # the profile in the channel folder, url relative to it with `..`. Same url from both channels (two levels deep).
+        release = self.folder / 'download' / '3.3.1-installer1'
+        release.mkdir(parents=True)
+        (release / 'boot.img').write_bytes(BOOT)
+        data = profile()
+        for entry in data['files'].values():
+            entry['url'] = '../../download/3.3.1-installer1/' + entry['url'].split('/')[-1]
+        self.assertEqual(ki.check(data, '0.2.0'), [])
+        for channel in ('dev', 'stable'):
+            path = ki.file_path(channel, data, 'boot.img', self.folder)
+            self.assertEqual(path, (release / 'boot.img').resolve(), channel)
+            self.assertTrue(ki.Files().checked(path, len(BOOT), hashlib.sha256(BOOT).hexdigest()))
+
+    def test_refused_urls(self):
+        for url in ('../../../etc/passwd', '/etc/passwd', '..\\boot.img', 'a%2e%2e/boot.img', 'boot.img\0',
+                    'a//boot.img', './boot.img', 'dir/', '', 'https://example.org/boot.img', 'file:boot.img'):
+            data = profile()
+            data['files']['boot.img']['url'] = url
+            self.assertIsNone(ki.file_path('dev', data, 'boot.img', self.folder), url)
+            if not url.startswith('../'):  # leaving the mirror only shows with the mirror (file_path), not in check
+                self.assertTrue(ki.check(data, '0.2.0'), url)
+
+    def test_a_symlink_out_of_the_mirror_is_refused(self):
+        outside = tempfile.TemporaryDirectory()
+        self.addCleanup(outside.cleanup)
+        (Path(outside.name) / 'boot.img').write_bytes(BOOT)
+        (self.folder / 'download').mkdir(parents=True)
+        (self.folder / 'download' / 'out').symlink_to(outside.name)
+        data = profile()
+        data['files']['boot.img']['url'] = '../../download/out/boot.img'
+        self.assertEqual(ki.check(data, '0.2.0'), [])
+        self.assertIsNone(ki.file_path('dev', data, 'boot.img', self.folder))
+
 
 if __name__ == '__main__':
     unittest.main()

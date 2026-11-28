@@ -167,6 +167,9 @@ Was dieser Fork anders macht, steht an einer Stelle: `screen_manager/app/kachel.
   (`/api/kachel/installer`, `…/{channel}/file/{name}`). Editor: `#/install` (`web/src/kachel/InstallerView.vue`, `installer.ts`
   `comparePit`), Odin nur in `odin-readonly.ts` über `@lineageos-infra/libmjolnir` 0.7.4 – **nur lesen** (PIT); ein Test verbietet dort
   jeden Schreibaufruf. Schreiben erst nach dem Probelauf am echten T510. Tests `tests/test_kachel_installer.py`, `web/tests/kachel-installer.spec.ts`.
+- **Symbol in der Seitenleiste** (28.11., Philip: Entwurf A): `panel_icon: kachel:mark`. HA zeichnet nur `mdi:` oder ein per Frontend-Modul
+  angemeldetes Icon-Set (`window.customIcons`); das Modul `kachel-icons.js` liefert die Kachel-Integration ab 0.7.0 (`icons.py`). Die Pfade
+  macht `tools/kachel_sidebar_icon.py` (Entwürfe und Vorschau in `design/seitenleiste/`). Ohne geladene Integration bleibt das Symbol leer.
 - **Kopplung:** `ha_pairing` (nur `handler == 'esphome'`) läuft nur mit `ESP_SCREENS`; Kachel-Geräte nimmt HA selbst auf,
   darum braucht `_kachel._tcp` hier nichts. „Aktionen erlauben“ geht unter beiden Plattformen (gleiches Feld, gleiche Repair-ID).
 - Eigene Änderungen möglichst in eigenen Dateien (`kachel*.py`, später `web/src/kachel/`) und kleinen, mit

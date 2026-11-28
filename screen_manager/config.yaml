@@ -1,7 +1,7 @@
 # This app is a fork of Tessera 0.4.98 (MaxGramser/homeassistant_espscreen) for the Kachel screens: Alpine Linux
 # and kacheld on tablets (Kachel OS). Real ESP32 screens stay with Tessera, which may run beside it (screen_manager/app/kachel.py).
 name: Kachel Manager
-version: "0.2.1"
+version: "0.2.2"
 slug: kachel_manager
 description: "Pages of tiles for the Kachel screens (Kachel OS on tablets). Based on Tessera."
 url: https://github.com/theoldphilip/kachel-manager
@@ -21,7 +21,7 @@ ingress_port: 8099
 # the app again when it stops unexpectedly, and with this address also when it stops answering: the one address the
 # app answers from anywhere (server.py guard, the same as Docker's health check).
 watchdog: http://[HOST]:[PORT:8099]/health
-panel_icon: mdi:view-grid
+panel_icon: kachel:mark
 panel_title: Kachel
 panel_admin: true
 options: {}

@@ -1,3 +1,8 @@
+## Kachel Manager 0.2.2
+
+- **Das Kachel-Zeichen in der Seitenleiste.** Der Kachel Manager zeigt in der Home-Assistant-Seitenleiste jetzt das Kachel-Zeichen (`kachel:mark`) statt der vier Quadrate. Das Zeichen kommt aus der Kachel-Integration. Darum: unter Einstellungen → Kachel-Integration die neue Version installieren, Home Assistant neu starten und den Browser neu laden. Bis dahin bleibt das Symbol in der Seitenleiste leer.
+- **Kachel-Integration 0.7.0** wird mitgeliefert. Sie meldet das Icon-Set `kachel:` (`mark`, `duo`, `tablet`) in Home Assistant an; es ist auch in Karten nutzbar.
+
 ## Kachel Manager 0.2.1
 
 - **Installationsprofil: Dateiwege strenger geprüft.** Die Dateien eines Releases dürfen jetzt neben dem Profil in einem eigenen Ordner liegen (etwa `../../download/3.3.1/boot.img`). Der Weg muss auch nach dem Auflösen von Verknüpfungen im Spiegel `www/kachel/` bleiben. Wege mit `\`, `%`, Nullzeichen, leeren Teilen oder einem `/` am Anfang lehnt der Kachel Manager ab.

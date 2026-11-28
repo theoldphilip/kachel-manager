@@ -11,6 +11,7 @@
     "assist_pipeline",
     "bluetooth",
     "ffmpeg",
+    "frontend",
     "http",
     "intent"
   ],
@@ -27,7 +28,7 @@
     "aioesphomeapi>=46.25.0",
     "bleak-esphome>=4.0.0"
   ],
-  "version": "0.6.1",
+  "version": "0.7.0",
   "zeroconf": [
     {
       "type": "_esphomelib._tcp.local.",

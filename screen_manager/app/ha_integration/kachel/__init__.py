@@ -13,7 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
-from . import assist_satellite, ffmpeg_proxy
+from . import assist_satellite, ffmpeg_proxy, icons
 from .bluetooth import async_remove_entry_scanner
 from .const import CONF_ADOPTION_ID, DOMAIN
 from .manager import KachelData, KachelManager, async_zeroconf, client_from_entry
@@ -40,9 +40,10 @@ CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Once for all devices: the ffmpeg proxy (speakers) and the wake word models (voice assistants)."""
+    """Once for all devices: ffmpeg proxy (speakers), wake word models (voice), icon set `kachel:`."""
     ffmpeg_proxy.async_setup(hass)
     await assist_satellite.async_setup(hass)
+    await icons.async_setup(hass)
     return True
 
 
